@@ -19,7 +19,6 @@ class Proyeccion {
         this.pelicula = pelicula;
     }
 }
-function init(){
     const app=new Vue({
         el:'#app',
         data:{
@@ -51,5 +50,4 @@ function init(){
             this.cargarPeliculas();
         },
     });
-}
-$(window).on('load',init);
+
