@@ -41,7 +41,21 @@
             </div>
           </nav>
         <div id="app" class="container-fluid container-lg container-md container-sm container-xl mt-5">
-         <div  class="text-black row justify-content-center" id="cartelera">
+         <div  class="text-black row justify-content-center">
+          <div v-for="item in peliculas" class="col col-sm-8 col-md-4 col-xl-4 mb-5 border-dark">
+            <div class="card" >
+              <div class="embed-responsive embed-responsive-16by9" id="zoom">
+                  <img :src="item.img"  class="card-img-top embed-responsive-item" alt="...">
+              </div>
+              <div class="card-body border justify-content-center">
+                  <h5 class="card-title"> Nombre:</h5>
+                  <p class="card-text text-black">
+                      Nombre:{{ item.nombre }}
+                  </p>
+              </div>
+          </div>
+          </div>
+          </div>
         </div>
         </div>
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" Integeregrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
