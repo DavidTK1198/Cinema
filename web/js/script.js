@@ -25,7 +25,7 @@ class Proyeccion {
             peliculas:[]
         },
         methods: {
-            cargarPeliculas() {
+            Cargar() {
                 spiderman = new Pelicula("Spider-man");
                 Batman = new Pelicula("Batman");
                 boku = new Pelicula("Boku no Hero");
@@ -35,19 +35,15 @@ class Proyeccion {
                 for(i=0;i<3;i++){
                     p=new Proyeccion(spiderman);
                     spiderman.funciones.push(p);
-                }
-                for(i=0;i<3;i++){
                     p=new Proyeccion(Batman);
                     Batman.funciones.push(p);
-                }
-                for(i=0;i<3;i++){
                     p=new Proyeccion(boku);
                     boku.funciones.push(p);
                 }
             }
         },
         created() {
-            this.cargarPeliculas();
+            this.Cargar();
         },
     });
 
