@@ -13,8 +13,7 @@ import Data.UserDao;
  */
 public class Service {
     public static int contador = 0;
-       private static Service my_instance = null; //Singleton
-    //private PDFMaker my_pdf;
+       private static Service my_instance = null;
     UserDao users;
 
     public Service() {

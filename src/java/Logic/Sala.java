@@ -5,25 +5,43 @@
  */
 package Logic;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 /**
  *
  * @author Daniel Madrigal
  */
 public class Sala {
     private String codigo;
-    private List<Butaca> butacas;
+    private int fila;
+    private int col;
 
-    public Sala(String codigo) {
+    public int getFila() {
+        return fila;
+    }
+
+    public void setFila(int fila) {
+        this.fila = fila;
+    }
+
+    public int getCol() {
+        return col;
+    }
+
+    public void setCol(int col) {
+        this.col = col;
+    }
+    
+
+    public Sala(String codigo,int fil,int col) {
         this.codigo = codigo;
-        this.butacas =  new ArrayList<>();
+        this.fila=fil;
+        this.col=col;
+   
     }
     public Sala(){
         this.codigo = "";
-        this.butacas = new ArrayList<>();
+          this.fila=0;
+        this.col=0;
+
     }
 
     public String getCodigo() {
@@ -33,13 +51,6 @@ public class Sala {
     public void setCodigo(String codigo) {
         this.codigo = codigo;
     }
-
-    public List<Butaca> getButacas() {
-        return butacas;
-    }
-
-    public void setButacas(List<Butaca> butacas) {
-        this.butacas = butacas;
-    }
-  
+    
 }
+

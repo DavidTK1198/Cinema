@@ -15,16 +15,27 @@ public class Proyeccion {
     private Pelicula pelicula;
     private Sala sala;
     private Date date;
+   private float precio;
 
-    public Proyeccion(Pelicula pelicula, Sala sala, Date date) {
+    public Proyeccion(Pelicula pelicula, Sala sala, Date date,float pre) {
         this.pelicula = pelicula;
         this.sala = sala;
         this.date = date;
+        this.precio=pre;
     }
     public Proyeccion(){
         this.pelicula = new Pelicula();
         this.sala = new Sala();
         this.date = new Date();
+        this.precio=0.0f;
+    }
+
+    public float getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(float precio) {
+        this.precio = precio;
     }
 
     public Pelicula getPelicula() {

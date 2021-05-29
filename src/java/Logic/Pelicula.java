@@ -11,5 +11,34 @@ package Logic;
  * @author DavidTK1198
  */
 public class Pelicula {
+    private String Nombre;
+    private boolean estado;
+
+    public String getNombre() {
+        return Nombre;
+    }
+
+    public void setNombre(String Nombre) {
+        this.Nombre = Nombre;
+    }
+
+    public boolean isEstado() {
+        return estado;
+    }
+
+    public void setEstado(boolean estado) {
+        this.estado = estado;
+    }
+
+    public Pelicula() {
+        this.Nombre="";
+        this.estado=false;
+    }
+
+    public Pelicula(String Nombre, boolean estado) {
+        this.Nombre = Nombre;
+        this.estado = estado;
+    }
+    
     
 }

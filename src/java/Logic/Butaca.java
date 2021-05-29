@@ -5,8 +5,6 @@
  */
 package Logic;
 
-import java.util.Random;
-
 /**
  *
  * @author Daniel Madrigal
@@ -14,73 +12,33 @@ import java.util.Random;
 
 public class Butaca {
     
-    private String codigo;
-    private boolean estado;
-    private Sala sala;
+    private int fila;
+    private int col;
 
-    public Butaca(String codigo, boolean estado, Sala sala) {
-        this.codigo = codigo;
-        this.estado = estado;
-        this.sala = sala;
+    public Butaca(int fil,int col) {
+        this.fila=fil;
+        this.col=col;
+      
     }
     public Butaca(){
-        this.codigo = this.codigoAutomatico();
-        this.estado = false;
-        this.sala = new Sala();
+         this.fila=0;
+        this.col=0;
     }
 
-    public String getCodigo() {
-        return codigo;
+    public int getFila() {
+        return fila;
     }
 
-    public void setCodigo(String codigo) {
-        this.codigo = codigo;
+    public void setFila(int fila) {
+        this.fila = fila;
     }
 
-    public boolean isEstado() {
-        return estado;
+    public int getCol() {
+        return col;
     }
 
-    public void setEstado(boolean estado) {
-        this.estado = estado;
-    }
-
-    public Sala getSala() {
-        return sala;
-    }
-
-    public void setSala(Sala sala) {
-        this.sala = sala;
-    }
-      private String codigoAutomatico(){
-        Random rand = new Random();
-        String contra = "";
-      
-        int n;
-        char caracter;
-        int i=0;
-        boolean bandera = false;
-        while (true) {
-            n = 1 + rand.nextInt(100);
-            if(i==2){
-                break;
-            }
-            caracter = (char) n;
-            if (Character.isAlphabetic(caracter) && bandera == false) {
-                contra = contra + caracter;
-                contra = contra.toUpperCase();
-                bandera = true;
-                i++;
-                Service.contador++;
-            }else{
-                if(bandera == true){
-                    contra = contra + Service.contador;
-                 
-                }
-               
-            }
-        }
-       return contra;
-    }
+    public void setCol(int col) {
+        this.col = col;
+    }  
     
 }

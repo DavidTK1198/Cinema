@@ -22,7 +22,7 @@ import java.util.List;
 public class UserDao {
 
       public void create(Usuario o) throws Exception {
-        String sql = "insert into Usuario (id_usu,,clave,Rol,Nombre) "
+        String sql = "insert into Usuario (id_usu,clave,Rol,Nombre)"
                 + "values(?,?,?,?)";
         PreparedStatement stm = DataBase.instance().prepareStatement(sql);
         stm.setString(1, o.getIdUsu());
