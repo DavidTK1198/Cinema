@@ -5,6 +5,9 @@
  */
 package Logic;
 
+import Data.PeliculaDao;
+import Data.ProyeccionDao;
+import Data.SalaDao;
 import Data.UserDao;
 
 /**
@@ -15,9 +18,15 @@ public class Service {
     public static int contador = 0;
        private static Service my_instance = null;
     UserDao users;
+    PeliculaDao peliculas;
+    SalaDao salas;
+    ProyeccionDao proyecciones;
 
     public Service() {
         users = new UserDao();
+        peliculas = new PeliculaDao();
+        salas = new SalaDao();
+        proyecciones = new ProyeccionDao();
     }
 
     public static Service getInstance() {
@@ -29,5 +38,23 @@ public class Service {
     }
     public void agregarProyeccion(Proyeccion pr)throws Exception{
         
+    }
+    public Pelicula buscarPelicula(String nom) throws Exception{
+        return peliculas.read(nom);
+    }
+    public Sala buscarSala(String cod)throws Exception{
+        return salas.read(cod);
+    }
+    public int buscarProyeccionPorNombre(String nom)throws Exception{
+        return proyecciones.buscarIdProyeccion(nom);
+    }
+    public Proyeccion buscarProyeccionDevuelvePro(String nom)throws Exception{
+        return proyecciones.read(nom);
+    }
+     public Proyeccion buscarProyeccionDevuelvePro(int n)throws Exception{
+        return proyecciones.buscarProyeccionPorNumero(n);
+    }
+    public Usuario buscarUsuario(String id)throws Exception{
+        return users.busquedaPorId(id);
     }
 }

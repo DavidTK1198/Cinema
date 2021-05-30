@@ -5,6 +5,8 @@
  */
 package Logic;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -12,22 +14,24 @@ import java.util.Date;
  * @author Daniel Madrigal
  */
 public class Proyeccion {
+
     private Pelicula pelicula;
     private Sala sala;
     private Date date;
-   private float precio;
+    private float precio;
 
-    public Proyeccion(Pelicula pelicula, Sala sala, Date date,float pre) {
+    public Proyeccion(Pelicula pelicula, Sala sala, Date date, float pre) {
         this.pelicula = pelicula;
         this.sala = sala;
         this.date = date;
-        this.precio=pre;
+        this.precio = pre;
     }
-    public Proyeccion(){
+
+    public Proyeccion() {
         this.pelicula = new Pelicula();
         this.sala = new Sala();
-        this.date = new Date();
-        this.precio=0.0f;
+        this.date = new Date();//
+        this.precio = 0.0f;
     }
 
     public float getPrecio() {
@@ -61,5 +65,14 @@ public class Proyeccion {
     public void setDate(Date date) {
         this.date = date;
     }
-    
+
+    public String transformarFormatoDato() {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+        String format = formatter.format(date);
+        return format;
+    }
+    public void transformarFormatoADate(String fe) throws ParseException{
+        this.date = new SimpleDateFormat("yyyy/MM/dd hh:mm").parse(fe);
+    }
+
 }

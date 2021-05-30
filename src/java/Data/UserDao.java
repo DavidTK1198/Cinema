@@ -63,6 +63,20 @@ public class UserDao {
         }
         return r;
     }
+    public Usuario busquedaPorId(String id){
+        
+        String sql = "select * from Usuario where id_usu = ?";
+        try {
+            PreparedStatement stm = DataBase.instance().prepareStatement(sql);
+            stm.setString(1,id);
+            ResultSet rs = DataBase.instance().executeQuery(stm);
+            while (rs.next()) {
+                return from(rs);
+            }
+        } catch (SQLException ex) {
+        }
+        return null;
+    }
     
     public Usuario read(String id,String cla) throws Exception{
         String sql="select * from Usuario where id_usu=? AND clave=?";

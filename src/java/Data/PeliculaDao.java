@@ -74,11 +74,10 @@ public class PeliculaDao {
         return r;
     }
 
-    public Pelicula read(String id, String cla) throws Exception {
-        String sql = "select * from Pelicula where id_usu=? AND clave=?";
+    public Pelicula read(String nom) throws Exception {
+        String sql = "select * from Pelicula where  Nombre=?";
         PreparedStatement stm = DataBase.instance().prepareStatement(sql);
-        stm.setString(1, id);
-        stm.setString(2, cla);
+        stm.setString(1, nom);
         ResultSet rs = DataBase.instance().executeQuery(stm);
         if (rs.next()) {
 

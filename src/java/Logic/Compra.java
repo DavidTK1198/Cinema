@@ -5,8 +5,6 @@
  */
 package Logic;
 
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
@@ -15,13 +13,12 @@ import java.util.List;
 public class Compra {
 
     private Proyeccion p;
-    private List<Butaca> lista;
+ 
     private Usuario user;
     private float total;
 
     public Compra(Proyeccion p, Usuario user) {
         this.p = p;
-        this.lista = new ArrayList<>();
         this.user = user;
         this.total = 0.0f;
     }
@@ -29,7 +26,6 @@ public class Compra {
     public Compra() {
         this.total = 0.0f;
         this.p = new Proyeccion();
-        this.lista = new ArrayList<>();
         this.user = new Usuario();
     }
 
@@ -41,14 +37,7 @@ public class Compra {
         this.p = p;
     }
 
-    public List<Butaca> getLista() {
-        return lista;
-    }
-
-    public void setLista(List<Butaca> lista) {
-        this.lista = lista;
-    }
-
+ 
     public Usuario getUser() {
         return user;
     }
@@ -61,10 +50,7 @@ public class Compra {
         return total;
     }
         
-    void CalcularTotal(){
-        float pp=p.getPrecio()*lista.size();
-        this.setTotal(pp);
-    }
+   
     public void setTotal(float total) {
         this.total = total;
     }

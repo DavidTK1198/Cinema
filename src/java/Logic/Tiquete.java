@@ -10,19 +10,41 @@ package Logic;
  * @author Daniel Madrigal
  */
 
-public class Butaca {
-    
+public class Tiquete {
+    private String codigo;
     private int fila;
     private int col;
+    Compra compra;
 
-    public Butaca(int fil,int col) {
+    public Tiquete(int fil,int col,Compra c) {
         this.fila=fil;
         this.col=col;
+        this.codigo = ""; 
+        this.compra = c;
       
     }
-    public Butaca(){
+    public Tiquete(){
          this.fila=0;
         this.col=0;
+        this.codigo = "";
+        this.compra = new Compra();
+    }
+
+    public Compra getCompra() {
+        return compra;
+    }
+
+    public void setCompra(Compra compra) {
+        this.compra = compra;
+    }
+    
+
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
     }
 
     public int getFila() {
