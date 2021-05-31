@@ -5,6 +5,9 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
 -- -----------------------------------------------------
+-- Schema mydb
+-- -----------------------------------------------------
+-- -----------------------------------------------------
 -- Schema cinema
 -- -----------------------------------------------------
 
@@ -15,100 +18,105 @@ CREATE SCHEMA IF NOT EXISTS `cinema` DEFAULT CHARACTER SET utf8 ;
 USE `cinema` ;
 
 -- -----------------------------------------------------
--- Table `cinema`.`Pelicula`
+-- Table `cinema`.`sala`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `cinema`.`Pelicula` (
-  `Nombre` VARCHAR(200) NOT NULL,
-  `id_pelicula` INT NOT NULL AUTO_INCREMENT,
-  PRIMARY KEY (`id_pelicula`))
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `cinema`.`Sala`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `cinema`.`Sala` (
-  `Codigo` VARCHAR(45) NULL,
+CREATE TABLE IF NOT EXISTS `cinema`.`sala` (
+  `Codigo` VARCHAR(45) NULL DEFAULT NULL,
   `id_sala` INT NOT NULL AUTO_INCREMENT,
+  `fila` INT NOT NULL,
+  `col` INT NULL,
   PRIMARY KEY (`id_sala`))
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `cinema`.`Proyeccion`
+-- Table `cinema`.`pelicula`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `cinema`.`Proyeccion` (
+CREATE TABLE IF NOT EXISTS `cinema`.`pelicula` (
+  `Nombre` VARCHAR(200) NOT NULL,
+  `estado` TINYINT NOT NULL,
+  PRIMARY KEY (`Nombre`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `cinema`.`proyeccion`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `cinema`.`proyeccion` (
   `idProyeccion` INT NOT NULL AUTO_INCREMENT,
-  `Pelicula_Nombre` VARCHAR(200) NOT NULL,
   `Sala_id` INT NOT NULL,
-  `Date` DATE NULL,
-  PRIMARY KEY (`idProyeccion`),
-  INDEX `fk_Proyeccion_Pelicula_idx` (`Pelicula_Nombre` ASC) VISIBLE,
+  `Date` DATE NOT NULL,
+  `Precio` FLOAT NULL,
+  `pelicula_Nombre` VARCHAR(200) NOT NULL,
   INDEX `fk_Proyeccion_Sala1_idx` (`Sala_id` ASC) VISIBLE,
-  CONSTRAINT `fk_Proyeccion_Pelicula`
-    FOREIGN KEY (`Pelicula_Nombre`)
-    REFERENCES `cinema`.`Pelicula` (`Nombre`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+  INDEX `fk_proyeccion_pelicula1_idx` (`pelicula_Nombre` ASC) VISIBLE,
+  PRIMARY KEY (`pelicula_Nombre`, `Date`, `Sala_id`),
   CONSTRAINT `fk_Proyeccion_Sala1`
     FOREIGN KEY (`Sala_id`)
-    REFERENCES `cinema`.`Sala` (`id_sala`)
+    REFERENCES `cinema`.`sala` (`id_sala`),
+  CONSTRAINT `fk_proyeccion_pelicula1`
+    FOREIGN KEY (`pelicula_Nombre`)
+    REFERENCES `cinema`.`pelicula` (`Nombre`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `cinema`.`Butaca`
+-- Table `cinema`.`usuario`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `cinema`.`Butaca` (
-  `Codigo` VARCHAR(45) NOT NULL,
-  `Estado` TINYINT NULL,
-  `id_butacas` INT NOT NULL AUTO_INCREMENT,
-  `Sala_id` INT NOT NULL,
-  PRIMARY KEY (`id_butacas`),
-  INDEX `fk_Butaca_Sala1_idx` (`Sala_id` ASC) VISIBLE,
-  CONSTRAINT `fk_Butaca_Sala1`
-    FOREIGN KEY (`Sala_id`)
-    REFERENCES `cinema`.`Sala` (`id_sala`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `cinema`.`Usuario`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `cinema`.`Usuario` (
+CREATE TABLE IF NOT EXISTS `cinema`.`usuario` (
   `id_usu` VARCHAR(200) NOT NULL,
   `clave` VARCHAR(45) NOT NULL,
   `Rol` INT NOT NULL,
   `Nombre` VARCHAR(200) NOT NULL,
   PRIMARY KEY (`id_usu`))
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `cinema`.`Historial`
+-- Table `cinema`.`compra`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `cinema`.`Historial` (
-  `idHistorial` INT NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS `cinema`.`compra` (
+  `id_com` INT NOT NULL AUTO_INCREMENT,
   `Proyeccion_id` INT NOT NULL,
   `Usuario_id` VARCHAR(200) NOT NULL,
-  PRIMARY KEY (`idHistorial`),
+  `Precio` FLOAT NULL,
+  PRIMARY KEY (`id_com`),
   INDEX `fk_Historial_Proyeccion1_idx` (`Proyeccion_id` ASC) VISIBLE,
   INDEX `fk_Historial_Usuario1_idx` (`Usuario_id` ASC) VISIBLE,
   CONSTRAINT `fk_Historial_Proyeccion1`
     FOREIGN KEY (`Proyeccion_id`)
-    REFERENCES `cinema`.`Proyeccion` (`idProyeccion`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    REFERENCES `cinema`.`proyeccion` (`idProyeccion`),
   CONSTRAINT `fk_Historial_Usuario1`
     FOREIGN KEY (`Usuario_id`)
-    REFERENCES `cinema`.`Usuario` (`id_usu`)
+    REFERENCES `cinema`.`usuario` (`id_usu`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `cinema`.`Tiquete`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `cinema`.`Tiquete` (
+  `Fila` INT NOT NULL,
+  `col` INT NULL,
+  `codigo` VARCHAR(30) NOT NULL,
+  `id_bu` INT NOT NULL AUTO_INCREMENT,
+  `compra_id` INT NOT NULL,
+  PRIMARY KEY (`id_bu`),
+  INDEX `fk_Tiquete_compra1_idx` (`compra_id` ASC) VISIBLE,
+  CONSTRAINT `fk_Tiquete_compra1`
+    FOREIGN KEY (`compra_id`)
+    REFERENCES `cinema`.`compra` (`id_com`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
 
 
 SET SQL_MODE=@OLD_SQL_MODE;

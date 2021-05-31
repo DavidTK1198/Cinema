@@ -57,4 +57,8 @@ public class Service {
     public Usuario buscarUsuario(String id)throws Exception{
         return users.busquedaPorId(id);
     }
+
+    public void agregarUsuario(Usuario p) throws Exception {
+        users.create(p);
+    }
 }
