@@ -15,8 +15,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.sql.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -55,15 +53,13 @@ public class ProyeccionDao {
         return r;
     }
 
-    public List<Proyeccion> findByNombreFecha(Proyeccion o) {
+    public List<Proyeccion> findByNombreSala(Proyeccion o) {
         List<Proyeccion> r = new ArrayList<>();
-        String sql = "select * from Proyeccion where Pelicula_Nombre = ? AND Date = ?";
+        String sql = "select * from Proyeccion where Pelicula_Nombre = ? AND Sala_id = ?";
         try {
             PreparedStatement stm = DataBase.instance().prepareStatement(sql);
             stm.setString(1, o.getPelicula().getNombre());
-            String fechaa = o.transformarFormatoDato();
-            Date fecha = Date.valueOf(fechaa);
-            stm.setDate(2, fecha);
+            stm.setString(2, o.getSala().getCodigo());
             ResultSet rs = DataBase.instance().executeQuery(stm);
             while (rs.next()) {
                 r.add(from(rs));

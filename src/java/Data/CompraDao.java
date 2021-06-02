@@ -9,6 +9,7 @@ import Logic.Compra;
 import Logic.Proyeccion;
 import Logic.Service;
 import Logic.Usuario;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -22,16 +23,17 @@ import java.util.List;
 public class CompraDao {
 
     public void create(Compra o) throws Exception {
-        String sql = "insert into Compra (Proyeccion_id,Usuario_id,Precio)"
-                + "values(?,?,?)";
+        String sql = "insert into Compra (id_com,Proyeccion_id,Usuario_id,Precio)"
+                + "values(?,?,?,?)";
         PreparedStatement stm = DataBase.instance().prepareStatement(sql);
+        stm.setString(1, o.getCodigo());
         Proyeccion proyeccionId = Service.getInstance().buscarProyeccionDevuelvePro(o.getP().getPelicula().getNombre());
         if (proyeccionId == null) {
             throw new Exception("No existe proyeccion");
         }
-        stm.setString(1, proyeccionId.getPelicula().getNombre());
-        stm.setString(2, o.getUser().getIdUsu());
-        stm.setFloat(3, o.getTotal());
+        stm.setString(2, proyeccionId.getPelicula().getNombre());
+        stm.setString(3, o.getUser().getIdUsu());
+        stm.setFloat(4, o.getTotal());
         int count = DataBase.instance().executeUpdate(stm);
         if (count == 0) {
             throw new Exception("La compra ya existe");
@@ -70,16 +72,19 @@ public class CompraDao {
 
     public List<Compra> read(Proyeccion pr) throws Exception {
         List<Compra> lc = new ArrayList<>();
-        String sql = "select c.Proyeccion_id proyeccion, c.Usuario_id usuario from Compra c, proyeccion p, sala s where c.Proyeccion_id=p.idProyeccion AND "
-                + "p.pelicula_Nombre = ? AND p.Sala_id = s.id_sala";
+        String sql = "select c.Proyeccion_id proyeccion, c.Usuario_id usuario, c.id_com cod from Compra c, proyeccion p, sala s where c.Proyeccion_id=p.idProyeccion AND "
+                + "p.pelicula_Nombre = ? AND p.Sala_id = s.Codigo AND p.Date = ?";
         PreparedStatement stm = DataBase.instance().prepareStatement(sql);
         stm.setString(1, pr.getPelicula().getNombre());
+        String fechaa = pr.transformarFormatoDato();
+        Date fecha = Date.valueOf(fechaa);
+        stm.setDate(2, fecha);
         ResultSet rs = DataBase.instance().executeQuery(stm);
         if (rs.next()) {
             lc.add(from(rs, false));
-            
+
         } else {
-            throw new Exception("El usuario no Existe");
+            throw new Exception("La compra no existe");
         }
         return lc;
     }
@@ -90,13 +95,15 @@ public class CompraDao {
         try {
             Compra r = new Compra(); //creamos el usuario
             if (bandera == true) {
-                 p = Service.getInstance().buscarProyeccionDevuelvePro(rs.getString("Proyeccion_id"));
-                 us = Service.getInstance().buscarUsuario(rs.getString("Usuario_id"));
+                r.setCodigo(rs.getString("id_com"));
+                p = Service.getInstance().buscarProyeccionDevuelvePro(rs.getString("Proyeccion_id"));
+                us = Service.getInstance().buscarUsuario(rs.getString("Usuario_id"));
             } else {
+                r.setCodigo(rs.getString("cod"));
                 p = Service.getInstance().buscarProyeccionDevuelvePro(rs.getInt("proyeccion"));
                 us = Service.getInstance().buscarUsuario(rs.getString("usuario"));
             }
-           
+
             r.setP(p);
             r.setUser(us);
 
@@ -106,5 +113,19 @@ public class CompraDao {
         } catch (Exception ex) {
             return null;
         }
+    }
+
+    public Compra buscarCompraPorCodigo(String cod) throws SQLException, Exception {
+        String sql = "select * from Compra where id_com = ?";
+        PreparedStatement stm = DataBase.instance().prepareStatement(sql);
+        stm.setString(1, cod);
+        ResultSet rs = DataBase.instance().executeQuery(stm);
+         if (rs.next()) {
+            return from(rs,true);
+
+        } else {
+            throw new Exception("El usuario no Existe");
+        }
+        
     }
 }

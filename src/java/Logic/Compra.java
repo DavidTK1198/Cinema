@@ -13,20 +13,22 @@ package Logic;
 public class Compra {
 
     private Proyeccion p;
- 
     private Usuario user;
     private float total;
+    private String codigo;
 
     public Compra(Proyeccion p, Usuario user) {
         this.p = p;
         this.user = user;
         this.total = 0.0f;
+        this.codigo = "";
     }
 
     public Compra() {
         this.total = 0.0f;
         this.p = new Proyeccion();
         this.user = new Usuario();
+        this.codigo = "";
     }
 
     public Proyeccion getP() {
@@ -53,6 +55,14 @@ public class Compra {
    
     public void setTotal(float total) {
         this.total = total;
+    }
+
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
     }
 
 }

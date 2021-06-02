@@ -14,7 +14,7 @@ public class Tiquete {
     private String codigo;
     private int fila;
     private int col;
-    Compra compra;
+    private Compra compra;
 
     public Tiquete(int fil,int col,Compra c) {
         this.fila=fil;
