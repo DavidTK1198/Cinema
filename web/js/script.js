@@ -19,6 +19,37 @@ class Proyeccion {
         this.pelicula = pelicula;
     }
 }
+
+const usuario ={
+    rol:1,
+    idUsu:'1234',
+    clave:'12346',
+    nombre:'Panita'
+}
+
+
+function probar(){
+    $.ajax({type: "POST",
+        url: "/Cinema/web/api/test",
+        data: JSON.stringify(usuario),
+        contentType: "application/json"
+    }).then((usuario) => {
+            console.log(`${usuario} pura vida`)
+    },
+    (error) => {
+        console.log(error);
+    });
+
+    
+}
+
+
+
+
+
+
+
+
     const app=new Vue({
         el:'#app',
         data:{
@@ -47,3 +78,8 @@ class Proyeccion {
         },
     });
 
+    function loaded() {
+        $("#loginButton").click(probar);
+    }
+    $(loaded);
+      

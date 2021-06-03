@@ -13,13 +13,16 @@ import javax.ws.rs.core.MediaType;
 import Logic.Service;
 import Logic.Usuario;
 import java.util.ArrayList;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.NotAcceptableException;
 import javax.ws.rs.POST;
+import javax.ws.rs.core.Context;
 
-@Path("/personas")
+@Path("/test")
 public class Usuarios {
+     
    // @GET
     //@Produces({MediaType.APPLICATION_JSON})
     //public List<Persona> search(@DefaultValue("") @QueryParam("nombre") String nombre) { 
