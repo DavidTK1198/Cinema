@@ -16,10 +16,10 @@ public class Tiquete {
     private int col;
     private Compra compra;
 
-    public Tiquete(int fil,int col,Compra c) {
+    public Tiquete(int fil,int col,String cod,Compra c) {
         this.fila=fil;
         this.col=col;
-        this.codigo = ""; 
+        this.codigo = cod; 
         this.compra = c;
       
     }

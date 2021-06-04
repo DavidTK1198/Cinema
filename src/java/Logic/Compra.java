@@ -22,12 +22,12 @@ public class Compra {
     private String codigo;
     private List<Tiquete> tiquetes;
 
-    public Compra(Proyeccion p, Usuario user) {
+    public Compra(Proyeccion p, Usuario user, List<Tiquete> tiquete) {
         this.p = p;
         this.user = user;
         this.total = 0.0f;
         this.codigo = this.generarCodigo();
-        this.tiquetes = new ArrayList<>();
+        this.tiquetes = tiquete;
     }
 
     public Compra() {

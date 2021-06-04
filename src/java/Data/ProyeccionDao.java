@@ -23,14 +23,13 @@ import java.sql.Date;
 public class ProyeccionDao {
 
     public void create(Proyeccion o) throws Exception {
-        String sql = "insert into Proyeccion (Pelicula_Nombre,Sala_id,Date)"
-                + "values(?,?,?)";
+        String sql = "insert into Proyeccion (Pelicula_Nombre,Sala_id,Date,Precio)"
+                + "values(?,?,?,?)";
         PreparedStatement stm = DataBase.instance().prepareStatement(sql);
         stm.setString(1, o.getPelicula().getNombre());
-        stm.setString(2, o.getSala().getCodigo());
-        String fechaa = o.transformarFormatoDato();
-        Date fecha = Date.valueOf(fechaa);
+        Date fecha = new Date(o.getDate().getTime());
         stm.setDate(3, fecha);
+        stm.setFloat(4, o.getPrecio());
         int count = DataBase.instance().executeUpdate(stm);
         if (count == 0) {
             throw new Exception("La proyeccion ya existe");
