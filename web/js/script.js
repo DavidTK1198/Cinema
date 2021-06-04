@@ -25,8 +25,12 @@ const usuario ={
     idUsu:'1234',
     clave:'12346',
     nombre:'Panita'
-}
-
+};
+const pelicula = {
+    Nombre: 'Spiderman',
+    estado: true
+   
+};
 
 function probar(){
     $.ajax({type: "POST",
@@ -38,9 +42,19 @@ function probar(){
     },
     (error) => {
         console.log(error);
-    });
-
-    
+    });  
+}
+function probar1(){
+    $.ajax({type: "POST",
+        url: "/Cinema/web/api/agregarP",
+        data: JSON.stringify(pelicula),
+        contentType: "application/json"
+    }).then((peli) => {
+            console.log(`${peli} pura vida`)
+    },
+    (error) => {
+        console.log(error);
+    });  
 }
 
 
@@ -79,7 +93,7 @@ function probar(){
     });
 
     function loaded() {
-        $("#loginButton").click(probar);
+        $("#loginButton").click(probar1);
     }
     $(loaded);
       

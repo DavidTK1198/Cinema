@@ -18,6 +18,30 @@ CREATE SCHEMA IF NOT EXISTS `cinema` DEFAULT CHARACTER SET utf8 ;
 USE `cinema` ;
 
 -- -----------------------------------------------------
+-- Table `cinema`.`Butaca`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `cinema`.`Butaca` (
+  `Fila` INT NOT NULL,
+  `col` INT NULL,
+  `id_bu` INT NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY (`id_bu`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
+-- Table `cinema`.`pelicula`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `cinema`.`pelicula` (
+  `Nombre` VARCHAR(200) NOT NULL,
+  `id_pelicula` INT NOT NULL AUTO_INCREMENT,
+  `estado` TINYINT NOT NULL,
+  PRIMARY KEY (`id_pelicula`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
 -- Table `cinema`.`sala`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `cinema`.`sala` (
@@ -31,36 +55,23 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `cinema`.`pelicula`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `cinema`.`pelicula` (
-  `Nombre` VARCHAR(200) NOT NULL,
-  `estado` TINYINT NOT NULL,
-  PRIMARY KEY (`Nombre`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
 -- Table `cinema`.`proyeccion`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `cinema`.`proyeccion` (
   `idProyeccion` INT NOT NULL AUTO_INCREMENT,
+  `id_pelicula` INT NOT NULL,
   `Sala_id` INT NOT NULL,
-  `Date` DATE NOT NULL,
+  `Date` DATE NULL DEFAULT NULL,
   `Precio` FLOAT NULL,
-  `pelicula_Nombre` VARCHAR(200) NOT NULL,
+  PRIMARY KEY (`idProyeccion`),
+  INDEX `fk_Proyeccion_Pelicula_idx` (`id_pelicula` ASC) VISIBLE,
   INDEX `fk_Proyeccion_Sala1_idx` (`Sala_id` ASC) VISIBLE,
-  INDEX `fk_proyeccion_pelicula1_idx` (`pelicula_Nombre` ASC) VISIBLE,
-  PRIMARY KEY (`pelicula_Nombre`, `Date`, `Sala_id`),
+  CONSTRAINT `fk_Proyeccion_Pelicula`
+    FOREIGN KEY (`id_pelicula`)
+    REFERENCES `cinema`.`pelicula` (`id_pelicula`),
   CONSTRAINT `fk_Proyeccion_Sala1`
     FOREIGN KEY (`Sala_id`)
-    REFERENCES `cinema`.`sala` (`id_sala`),
-  CONSTRAINT `fk_proyeccion_pelicula1`
-    FOREIGN KEY (`pelicula_Nombre`)
-    REFERENCES `cinema`.`pelicula` (`Nombre`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    REFERENCES `cinema`.`sala` (`id_sala`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
@@ -86,33 +97,20 @@ CREATE TABLE IF NOT EXISTS `cinema`.`compra` (
   `Proyeccion_id` INT NOT NULL,
   `Usuario_id` VARCHAR(200) NOT NULL,
   `Precio` FLOAT NULL,
+  `Butaca_id` INT NOT NULL,
   PRIMARY KEY (`id_com`),
   INDEX `fk_Historial_Proyeccion1_idx` (`Proyeccion_id` ASC) VISIBLE,
   INDEX `fk_Historial_Usuario1_idx` (`Usuario_id` ASC) VISIBLE,
+  INDEX `fk_compra_Butaca1_idx` (`Butaca_id` ASC) VISIBLE,
   CONSTRAINT `fk_Historial_Proyeccion1`
     FOREIGN KEY (`Proyeccion_id`)
     REFERENCES `cinema`.`proyeccion` (`idProyeccion`),
   CONSTRAINT `fk_Historial_Usuario1`
     FOREIGN KEY (`Usuario_id`)
-    REFERENCES `cinema`.`usuario` (`id_usu`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
--- Table `cinema`.`Tiquete`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `cinema`.`Tiquete` (
-  `Fila` INT NOT NULL,
-  `col` INT NULL,
-  `codigo` VARCHAR(30) NOT NULL,
-  `id_bu` INT NOT NULL AUTO_INCREMENT,
-  `compra_id` INT NOT NULL,
-  PRIMARY KEY (`id_bu`),
-  INDEX `fk_Tiquete_compra1_idx` (`compra_id` ASC) VISIBLE,
-  CONSTRAINT `fk_Tiquete_compra1`
-    FOREIGN KEY (`compra_id`)
-    REFERENCES `cinema`.`compra` (`id_com`)
+    REFERENCES `cinema`.`usuario` (`id_usu`),
+  CONSTRAINT `fk_compra_Butaca1`
+    FOREIGN KEY (`Butaca_id`)
+    REFERENCES `cinema`.`Butaca` (`id_bu`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB

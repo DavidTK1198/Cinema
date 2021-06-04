@@ -11,15 +11,15 @@ package Logic;
  * @author DavidTK1198
  */
 public class Pelicula {
-    private String Nombre;
+    private String nombre;
     private boolean estado;
 
     public String getNombre() {
-        return Nombre;
+        return nombre;
     }
 
     public void setNombre(String Nombre) {
-        this.Nombre = Nombre;
+        this.nombre = Nombre;
     }
 
     public boolean isEstado() {
@@ -31,12 +31,12 @@ public class Pelicula {
     }
 
     public Pelicula() {
-        this.Nombre="";
+        this.nombre="";
         this.estado=false;
     }
 
-    public Pelicula(String Nombre, boolean estado) {
-        this.Nombre = Nombre;
+    public Pelicula(String nom, boolean estado) {
+        this.nombre = nom;
         this.estado = estado;
     }
     
