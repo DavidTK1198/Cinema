@@ -94,6 +94,7 @@ public class CompraDao {
         Usuario us;
         try {
             Compra r = new Compra(); //creamos el usuario
+            
             if (bandera == true) {
                 r.setCodigo(rs.getString("id_com"));
                 p = Service.getInstance().buscarProyeccionDevuelvePro(rs.getString("Proyeccion_id"));
