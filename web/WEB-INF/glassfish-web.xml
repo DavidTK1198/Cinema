@@ -23,4 +23,11 @@
       <description>Keep a copy of the generated servlet class' java code.</description>
     </property>
   </jsp-config>
+  <dependency>
+    <groupId>com.sun.jersey</groupId>
+    <artifactId>jersey-json</artifactId>
+    <version>1.17</version>
+    <scope>compile</scope>
+</dependency>
+
 </glassfish-web-app>

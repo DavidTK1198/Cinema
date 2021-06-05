@@ -1,3 +1,4 @@
+"use strict";
 var data = {
   /*  Esta variable guarda la  id del usuario.
    *  Se actualiza de manera automática.
