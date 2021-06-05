@@ -232,3 +232,8 @@ input:focus{
 .btn-home:active{
     border: 0px solid #E50914;
 }
+input[type="text"]:valid.focus {box-shadow: 0 0 2px 2px blue;}
+
+input[type="text"]:valid.nofocus {box-shadow:none;}
+
+input.invalid {box-shadow: 0 0 2px 2px red;}

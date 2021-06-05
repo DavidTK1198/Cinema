@@ -98,15 +98,15 @@ public class CompraDao {
             if (bandera == true) {
                 r.setCodigo(rs.getString("id_com"));
                 p = Service.getInstance().buscarProyeccionDevuelvePro(rs.getString("Proyeccion_id"));
-                us = Service.getInstance().buscarUsuario(rs.getString("Usuario_id"));
+              //  us = Service.getInstance().buscarUsuario(rs.getString("Usuario_id"));
             } else {
                 r.setCodigo(rs.getString("cod"));
                 p = Service.getInstance().buscarProyeccionDevuelvePro(rs.getInt("proyeccion"));
-                us = Service.getInstance().buscarUsuario(rs.getString("usuario"));
+                //us = Service.getInstance().buscarUsuario(rs.getString("usuario"));
             }
 
             r.setP(p);
-            r.setUser(us);
+            //r.setUser(us);
 
             return r;
         } catch (SQLException ex) {

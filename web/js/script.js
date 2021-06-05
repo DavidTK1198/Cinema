@@ -154,7 +154,7 @@ function probar4(){
     });
 
     function loaded() {
-        $("#loginButton").click(probar4);
+        $("#loginButton1").click(probar4);
     }
     $(loaded);
       

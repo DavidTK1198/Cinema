@@ -20,7 +20,7 @@ import javax.ws.rs.NotAcceptableException;
 import javax.ws.rs.POST;
 import javax.ws.rs.core.Context;
 
-@Path("/test")
+@Path("/usuarios")
 public class Usuarios {
      
    // @GET
@@ -45,6 +45,16 @@ public class Usuarios {
     public void add(Usuario p) {  
         try {
             Service.getInstance().agregarUsuario(p);
+        } catch (Exception ex) {
+            throw new NotAcceptableException(); 
+        }
+    }
+      @POST
+      @Path("{login}")
+    @Consumes(MediaType.APPLICATION_JSON) 
+    public void login(Usuario p) {  
+        try {
+            Service.getInstance().buscarUsuario(p);
         } catch (Exception ex) {
             throw new NotAcceptableException(); 
         }
