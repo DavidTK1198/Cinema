@@ -22,6 +22,9 @@ import javax.ws.rs.core.Context;
 
 @Path("/usuarios")
 public class Usuarios {
+    
+     @Context
+    HttpServletRequest request;
 
     // @GET
     //@Produces({MediaType.APPLICATION_JSON})
@@ -56,12 +59,23 @@ public class Usuarios {
         try {
             Usuario us = null;
             us = Service.getInstance().buscarUsuario(p);
+             request.getSession(true).setAttribute("current", us);
             return us;
         } catch (Exception ex) {
             throw new NotAcceptableException();
         }
     }
 
+     @GET 
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Usuario getCurrent() {
+        try {
+            Usuario us = (Usuario) request.getSession(true).getAttribute("current");
+            return us;
+        } catch (Exception ex) {
+            throw new NotAcceptableException(); 
+        }
+    }
 
     /* @PUT
     @Consumes(MediaType.APPLICATION_JSON)
@@ -84,15 +98,7 @@ public class Usuarios {
         }
     }
 
-    @GET
-    @Produces({MediaType.APPLICATION_JSON})
-    @Path("mujeres")
-    public List<Persona> searchMujeres() { 
-        List<Persona> todos=Model.instance().personaSearch("");
-        List<Persona> mujeres = new ArrayList<>();
-        for(Persona p: todos){ if(p.getSexo().equals("F")) mujeres.add(p);};
-        return mujeres;
-    }  
+  
     
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
