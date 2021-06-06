@@ -22,45 +22,48 @@ import javax.ws.rs.core.Context;
 
 @Path("/usuarios")
 public class Usuarios {
-     
-   // @GET
+
+    // @GET
     //@Produces({MediaType.APPLICATION_JSON})
     //public List<Persona> search(@DefaultValue("") @QueryParam("nombre") String nombre) { 
-     //   return Model.instance().personaSearch(nombre);
+    //   return Model.instance().personaSearch(nombre);
     //} 
-    
     //@GET
     //@Path("{cedula}")
     //@Produces({MediaType.APPLICATION_JSON})
     //public Persona get(@PathParam("cedula") String cedula) {
-       // try {
-         //   return Model.instance().personaEdit(cedula);
-        //} catch (Exception ex) {
-          //  throw new NotFoundException(); 
-        //}
+    // try {
+    //   return Model.instance().personaEdit(cedula);
+    //} catch (Exception ex) {
+    //  throw new NotFoundException(); 
     //}
-    
+    //}
     @POST
-    @Consumes(MediaType.APPLICATION_JSON) 
-    public void add(Usuario p) {  
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void add(Usuario p) {
         try {
             Service.getInstance().agregarUsuario(p);
         } catch (Exception ex) {
-            throw new NotAcceptableException(); 
-        }
-    }
-      @POST
-      @Path("{login}")
-    @Consumes(MediaType.APPLICATION_JSON) 
-    public void login(Usuario p) {  
-        try {
-            Service.getInstance().buscarUsuario(p);
-        } catch (Exception ex) {
-            throw new NotAcceptableException(); 
+            throw new NotAcceptableException();
         }
     }
 
-   /* @PUT
+    @POST
+    @Path("{login}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces({MediaType.APPLICATION_JSON})
+    public Usuario login(Usuario p) {
+        try {
+            Usuario us = null;
+            us = Service.getInstance().buscarUsuario(p);
+            return us;
+        } catch (Exception ex) {
+            throw new NotAcceptableException();
+        }
+    }
+
+
+    /* @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     public void update(Persona p) {  
         try {
@@ -105,5 +108,5 @@ public class Usuarios {
         };
         return filtrados;
     } 
-*/
+     */
 }
