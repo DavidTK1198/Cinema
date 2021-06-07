@@ -34,7 +34,7 @@ function cargar() {
 }
 function addImagen() {
     var imagenData = new FormData();
-    imagenData.append("peli", pelicula.nombre);
+    imagenData.append("Peli", pelicula.nombre);
     imagenData.append("imagen", $("#imagen").get(0).files[0]);
     let request = new Request(url + 'api/Peliculas/' + pelicula.nombre + "/imagen", {method: 'POST', body: imagenData});
     (async () => {
@@ -60,7 +60,7 @@ export function agregarPelicula() {
         data: JSON.stringify(pelicula),
         contentType: "application/json"
     }).then((response) => {
-        
+       
         
          
         

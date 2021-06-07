@@ -92,6 +92,10 @@ public class Service {
     public List<Proyeccion> buscarProyeccionesPorNombreSala(Proyeccion s){
         return proyecciones.findByNombreSala(s);
     }
+     public List<Pelicula> devolverPeliculas(){
+        return peliculas.findAll();
+    }
+    
     public Usuario buscarUsuario(Usuario p) throws Exception {
         return users.read(p.getIdUsu(),p.getClave());
     }

@@ -50,7 +50,7 @@
                             <input type="password" class="form-control" name="password" id="contra" placeholder="Contraseña" required="required">
                         </div> 
                     <div class="form-group">
-					 <input type="button" class="btn btn-success btn-lg btn-block" id="RegButton" value="Registrarse">
+			<input type="button" class="btn btn-success btn-lg btn-block" id="RegButton" value="Registrarse">
                         </div>
                     </form>
                 </div>
@@ -108,20 +108,8 @@
     </form>
   </nav>
   <div id="app" class="container-fluid container-lg container-md container-sm container-xl mt-5">
-    <div class="text-black row justify-content-center">
-      <div v-for="item in peliculas" class="col col-sm-8 col-md-4 col-xl-4 mb-5 border-dark">
-        <div class="card">
-          <div class="embed-responsive embed-responsive-16by9" id="zoom">
-            <img :src="item.img" class="card-img-top embed-responsive-item" alt="...">
-          </div>
-          <div class="card-body border justify-content-center">
-            <h5 class="card-title"> Nombre:</h5>
-            <p class="card-text text-black">
-              Nombre:{{ item.nombre }}
-            </p>
-          </div>
-        </div>
-      </div>
+    <div class="text-black row justify-content-center" id="lista">
+     
       <!-- Button trigger modal -->
       <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
         Comprar
@@ -234,8 +222,8 @@
     Integeregrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
     crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
-  <script src="js/script.js"></script>
   <script src="js/inicio.js"></script>
+  <script src ="js/administrador.js"></script>
 </body>
 <footer id="footer" class="bg-dark">
   <div class="d-flex justify-content-center">

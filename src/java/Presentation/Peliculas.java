@@ -14,6 +14,7 @@ import javax.ws.rs.core.MediaType;
 import Logic.Service;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ import javax.ws.rs.DefaultValue;
 import javax.ws.rs.NotAcceptableException;
 import javax.ws.rs.POST;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Response;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
 @Path("/Peliculas")
@@ -34,16 +36,24 @@ public class Peliculas{
      //   return Model.instance().personaSearch(nombre);
     //} 
     
-    //@GET
-    //@Path("{cedula}")
-    //@Produces({MediaType.APPLICATION_JSON})
-    //public Persona get(@PathParam("cedula") String cedula) {
-       // try {
-         //   return Model.instance().personaEdit(cedula);
-        //} catch (Exception ex) {
-          //  throw new NotFoundException(); 
-        //}
-    //}
+    @GET
+    @Path("listar")
+    @Produces({MediaType.APPLICATION_JSON})
+    public List<Pelicula> getPeliculas() {
+        try {
+           return Service.getInstance().devolverPeliculas();
+        } catch (Exception ex) {
+            throw new NotFoundException(); 
+        }
+    }
+     @GET
+    @Path("{nombre}/imagen")
+    @Produces("image/png")
+    public Response getImge(@PathParam("nombre") String cedula) throws IOException {
+        File file = new File(location+cedula);
+        Response.ResponseBuilder response = Response.ok((Object) file);
+        return response.build();
+    }    
     
     @POST
     @Consumes(MediaType.APPLICATION_JSON) 
@@ -56,8 +66,8 @@ public class Peliculas{
     }
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA) 
-    @Path("{Peli}/img")
-    public void addImage(@PathParam("Peli") String cedula, @FormDataParam("imagen") InputStream imagenStream) {  
+    @Path("{nombre}/imagen")
+    public void addImage(@PathParam("nombre") String cedula, @FormDataParam("imagen") InputStream imagenStream) {  
         try{
                 int read = 0;
                 byte[] bytes = new byte[1024];

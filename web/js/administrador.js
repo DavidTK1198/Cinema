@@ -1,6 +1,6 @@
-
 "use strict";
 var usuario;
+var peliculas = [];
 function setUsu(id, clav, nomb, ro) {
     usuario = {idUsu: id, clave: clav, nombre: nomb, rol: ro};
 }
@@ -43,14 +43,15 @@ function draw_movie() {
             </div>
         </div>
     </div>
-       
+         <div class="form-group" style="margin-left: 10px; margin-right: 10px;">
+        <label for="imagen">Imagen</label>
+        <input type="file" accept="image/*" class="form-control" name="imagen" id="imagen" placeholder="Imagen" val="">
+       </div>
 </div>
     <input type="button" value="Registrar" class="btn btn-danger" id="RegPeli">
+      
 </form>
-        <div class="form-group" style="margin-left: 10px; margin-right: 10px;">
-            <label for="imagen">Imagen</label>
-            <input type="file" accept="image/*" class="form-control" name="imagen" id="imagen" placeholder="Imagen">
-       </div>
+       
 </div>`
                     );
             fila.appendChild(d);
@@ -87,7 +88,8 @@ function loaded() {
     $("#home").click(draw_home);
 
 
-    getCurrentUser();
+    recuperarPeliculas();
+    //getCurrentUser();
 }
 function mandarAgregarP() {
 
@@ -96,7 +98,7 @@ function mandarAgregarP() {
 $(loaded);
 var pelicula;
 "use strict";
- var url="http://localhost:8080/Cinema/";
+var url = "http://localhost:8080/Cinema/web/";
 function resetPelicula() {
     pelicula = {nombre: '', estado: false};
 }
@@ -130,9 +132,10 @@ function cargar() {
 }
 function addImagen() {
     var imagenData = new FormData();
-    imagenData.append("Peli", pelicula.nombre);
-    imagenData.append("imagen", $("#imagen").get(0).files[0]);
-    let request = new Request(url + 'api/Peliculas/' + pelicula.nombre + "/img", {method: 'POST', body: imagenData});
+    imagenData.append("nombre", pelicula.nombre);
+    var file = $("#imagen").get(0).files[0];
+    imagenData.append("imagen", file);
+    let request = new Request(url + 'api/Peliculas/' + pelicula.nombre + "/imagen", {method: 'POST', body: imagenData});
     (async () => {
         const response = await fetch(request);
         if (!response.ok) {
@@ -143,6 +146,7 @@ function addImagen() {
 
 
 }
+
 
 function agregarPelicula() {
     cargar();
@@ -156,17 +160,71 @@ function agregarPelicula() {
         data: JSON.stringify(pelicula),
         contentType: "application/json"
     }).then((response) => {
-        
+
         addImagen();
-         
-        
+        // prueba();
+
+
     },
             (error) => {
         console.log("fallo pelicula");
         console.log(error.text);
 
     });
-    
+
+}
+function recuperarPeliculas() {
+
+    $.ajax({
+        type: "GET",
+        url: "/Cinema/web/api/Peliculas/listar",
+    }).then((response) => {
+        peliculas = [...response];
+        cargarPeliculas();
+    },
+            (error) => {
+        console.log("fallo listar");
+        console.log(error.text);
+
+    });
+}
+
+function cargarPeliculas() {
+
+    var row = document.getElementById("lista");
+
+    if (peliculas.length == 0) {
+        row.innerHTML = (`<span id="mensaje">NO EXISTEN PELICULAS DISPONIBLES</span>`);
+    } else {
+
+        $("#mensaje").remove();
+        peliculas.forEach((p) => {
+            var nueva = document.createElement("div");
+            nueva.id = "colums";
+            nueva.classList.add("col", "col-sm-8", "col-md-4", "col-xl-4", "mb-5", "border-dark");
+            nueva.innerHTML = (
+                    `
+                <div class="card">
+                <div class="embed-responsive embed-responsive-16by9" id="zoom">
+                <img src="${url}api/Peliculas/${p.nombre}/imagen" class="card-img-top embed-responsive-item" alt="...">
+            </div>
+          <div class="card-body border justify-content-center">
+            <h5 class="card-title"> Nombre:</h5>
+            <p class="card-text text-black" >
+              Nombre:${p.nombre}
+            </p>
+          </div>
+        </div>
+      </div>`
+                    );
+            row.appendChild(nueva);
+        });
+
+    }
+
+
+
+
 
 
 }
