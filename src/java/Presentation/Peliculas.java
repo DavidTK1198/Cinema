@@ -12,6 +12,10 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import Logic.Service;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.DELETE;
@@ -19,10 +23,11 @@ import javax.ws.rs.DefaultValue;
 import javax.ws.rs.NotAcceptableException;
 import javax.ws.rs.POST;
 import javax.ws.rs.core.Context;
+import org.glassfish.jersey.media.multipart.FormDataParam;
 
-@Path("/agregarP")
+@Path("/Peliculas")
 public class Peliculas{
-     
+    String location="C:/AAA/images/";
    // @GET
     //@Produces({MediaType.APPLICATION_JSON})
     //public List<Persona> search(@DefaultValue("") @QueryParam("nombre") String nombre) { 
@@ -48,6 +53,22 @@ public class Peliculas{
         } catch (Exception ex) {
             throw new NotAcceptableException(); 
         }
+    }
+    /*@POST
+    @Consumes(MediaType.MULTIPART_FORM_DATA) 
+    @Path("{Peli}/imagen")
+    public void addImage(@PathParam("Peli") String cedula, @FormDataParam("imagen") InputStream imagenStream) {  
+        try{
+                int read = 0;
+                byte[] bytes = new byte[1024];
+
+                OutputStream out = new FileOutputStream(new File(location + cedula));
+                while ((read = imagenStream.read(bytes)) != -1){out.write(bytes, 0, read);}
+                out.flush();
+                out.close();
+            } catch (Exception ex) {
+                throw new NotAcceptableException(); 
+            }
     }
 
    /* @PUT
