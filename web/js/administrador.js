@@ -29,23 +29,23 @@ function draw_movie() {
         <div class="campo"><input class="form-control" placeholder="Nombre de la Pelicula" type="text" name="cedulaFld" id="nombP"></div>
     </div>
     <div class="mb-2">
-    <div class="flex-container">
+    <div>
         <label>Estado de la Pelicula</label>
         <div id="flex">
-            <div class="flex-item">
+            <div>
                 <input type="radio" name="oferta" value="1" checked>Pelicula en Cartelera
             </div>
         </div>
 
         <div id="flex">
-            <div class="flex-item">
+            <div>
                 <input type="radio" name="oferta" value="0">Proximamente
             </div>
         </div>
     </div>
        
 </div>
-    <button class="btn btn-success btn-lg btn-block" id="RegPeli">Registrar</button>
+    <input type="button" value="Registrar" class="btn btn-danger" id="RegPeli">
 </form>
         <div class="form-group" style="margin-left: 10px; margin-right: 10px;">
             <label for="imagen">Imagen</label>
@@ -130,9 +130,9 @@ function cargar() {
 }
 function addImagen() {
     var imagenData = new FormData();
-    imagenData.append("peli", pelicula.nombre);
+    imagenData.append("Peli", pelicula.nombre);
     imagenData.append("imagen", $("#imagen").get(0).files[0]);
-    let request = new Request(url + 'api/Peliculas/' + pelicula.nombre + "/imagen", {method: 'POST', body: imagenData});
+    let request = new Request(url + 'api/Peliculas/' + pelicula.nombre + "/img", {method: 'POST', body: imagenData});
     (async () => {
         const response = await fetch(request);
         if (!response.ok) {
@@ -157,7 +157,7 @@ function agregarPelicula() {
         contentType: "application/json"
     }).then((response) => {
         
-        
+        addImagen();
          
         
     },

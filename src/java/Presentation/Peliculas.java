@@ -54,9 +54,9 @@ public class Peliculas{
             throw new NotAcceptableException(); 
         }
     }
-    /*@POST
+    @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA) 
-    @Path("{Peli}/imagen")
+    @Path("{Peli}/img")
     public void addImage(@PathParam("Peli") String cedula, @FormDataParam("imagen") InputStream imagenStream) {  
         try{
                 int read = 0;
