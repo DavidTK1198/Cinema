@@ -71,9 +71,32 @@ a:hover {
   height: 100vh;
   padding-bottom: 5rem;
 }
+.embed-responsive .card-img-top {
+  object-fit: cover;
+}
+#zoom{
+  overflow: hidden;
+}
+#zoom img{
+  transition: all 1.5s ease;
+}
 
+#zoom:hover img{
+  transform: scale(1.5);
+}
+.card-body{
+  display: none!important;
+}
+.card:hover .card-body{
+  display: inline!important;
+}
 .avatar {
   max-width: 35px;
+}
+
+.container {
+  perspective: 1000px;
+  margin-bottom: 30px;
 }
 
 .btn-search {
@@ -93,7 +116,3 @@ a:hover {
   }
 }
 
-#change{
-    position: fixed!important;
-    z-index: 100!important;
-}

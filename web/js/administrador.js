@@ -1,7 +1,6 @@
 
 import {sala} from "../js/Salas.js"
-        import {agregarSala} from "../js/Salas.js"
-
+import {agregarSala} from "../js/Salas.js"
         "use strict";
 var usuario;
 var peliculas = [];
@@ -113,6 +112,7 @@ function drawSala() {
 function drawProyeccion() {
     $("#cambiar").hide();
     $("#barra").hide();
+     $("#change").remove();
 
     try {
         let bandera = !!document.getElementById("change");
@@ -134,12 +134,19 @@ function drawProyeccion() {
                 peliculas.forEach((p) => {
                     var nueva = document.createElement("div");
                     nueva.id = "colums";
-                    nueva.classList.add("col", "col-sm-8", "col-md-4", "col-xl-4", "mb-5", "border-dark");
+                    nueva.classList.add("col", "col-sm-8", "col-md-4", "col-xl-4", "mb-5", "border-dark","ml-2");
                     nueva.innerHTML = (
                             `
                 <div class="card">
                 <div class="embed-responsive embed-responsive-16by9" id="zoom">
                 <img src="${url}api/Peliculas/${p.nombre}/imagen" class="card-img-top embed-responsive-item" alt="..." id="imag" data-toggle="modal" data-target="#staticBackdrop2">
+            </div>
+            <div class="card-body border justify-content-center">
+            <h5 class="card-title"> Nombre:</h5>
+            <p class="card-text text-black" >
+              Nombre:${p.nombre}
+            </p>
+          </div>
             </div>
                 <div class="modal fade signup-form" id="staticBackdrop2" data-backdrop="static" data-keyboard="false" tabindex="-1"
             aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -178,14 +185,12 @@ function drawProyeccion() {
         
         </div>
       </div>`
-                            );
-                    row.appendChild(nueva);
+       );
+       fila.appendChild(nueva);
+         $("#imag").click(console.log("si sirve"));
                 });
 
             }
-            fila.appendChild(d);
-            $("#imag").click(console.log("si sirve"));
-
         }
     }
 }
@@ -340,7 +345,7 @@ function cargarPeliculas() {
         peliculas.forEach((p) => {
             var nueva = document.createElement("div");
             nueva.id = "colums";
-            nueva.classList.add("col", "col-sm-8", "col-md-4", "col-xl-4", "mb-5", "border-dark");
+            nueva.classList.add("col", "col-sm-8", "col-md-4", "col-xl-4", "mb-5", "border-dark","ml-5");
             nueva.innerHTML = (
                     `
                 <div class="card">
