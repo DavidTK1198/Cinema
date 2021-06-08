@@ -1,3 +1,7 @@
+
+import {sala} from "../js/Salas.js"
+import {agregarSala} from "../js/Salas.js"
+
 "use strict";
 var usuario;
 var peliculas = [];
@@ -60,6 +64,52 @@ function draw_movie() {
         }
     }
 }
+function drawSala(){
+    $("#cambiar").hide();
+    $("#barra").hide();
+
+    try {
+        let bandera = !!document.getElementById("change");
+        throw bandera;
+    } catch (error) {
+        if (!error) {
+            var contenedor = document.getElementById("content");
+            var fila = document.createElement("div");
+            fila.classList.add("text-black", "row", "justify-content-center");
+            contenedor.appendChild(fila);
+            contenedor.classList.add("text-black", "justify-content-center");
+            var d = document.createElement("div");
+            d.id = 'change';
+            d.classList.add("col", "col-sm-8", "col-md-4", "col-xl-4", "d-flex");
+            d.innerHTML = (`<div class="d-flex">
+    <form> 
+    <h3>Registrar Sala</h2>
+    <div class="mb-2">
+        <div class="font-weight-bold mb-0">Codigo</div>
+        <div class="campo"><input class="form-control" placeholder="Codigo de la sala" type="text" name="salaFld" id="sala"></div>
+    </div>
+        <div class="mb-2">
+        <div class="font-weight-bold mb-0">Filas</div>
+        <div class="campo"><input class="form-control" placeholder="# de filas" type="number" name="filaFld" id="fila" min=1 max=20></div>
+    </div>
+       
+        <div class="mb-2">
+        <div class="font-weight-bold mb-0">Columnas</div>
+        <div class="campo"><input class="form-control" placeholder="# de columnas" type="number" name="columnaFld" id="columna" min=1 max=20></div>
+    </div>
+   
+    <input type="button" value="Registrar" class="btn btn-danger" id="RegSala">
+      
+</form>
+       
+</div>`
+                    );
+            fila.appendChild(d);
+            $("#RegSala").click(agregarSala);
+
+        }
+    }
+}
 function getCurrentUser() {
     $.ajax({
         type: "GET",
@@ -86,10 +136,10 @@ function draw_home() {
 function loaded() {
     $("#pelicula").click(draw_movie);
     $("#home").click(draw_home);
-
+    $("#salita").click(drawSala);
 
     recuperarPeliculas();
-    //getCurrentUser();
+    getCurrentUser();
 }
 function mandarAgregarP() {
 
@@ -101,6 +151,10 @@ var pelicula;
 var url = "http://localhost:8080/Cinema/web/";
 function resetPelicula() {
     pelicula = {nombre: '', estado: false};
+}
+function reinicioCamposPelicula(){
+    $("#nombP").val("");
+    $("#imagen").val("");
 }
 
 function setPelicula(nom, estad) {
@@ -162,7 +216,9 @@ function agregarPelicula() {
     }).then((response) => {
 
         addImagen();
-        // prueba();
+        peliculaAgregadaCorrectamente();
+        resetPelicula();
+        reinicioCamposPelicula();
 
 
     },
@@ -188,7 +244,10 @@ function recuperarPeliculas() {
 
     });
 }
-
+function peliculaAgregadaCorrectamente(){
+    alert("La pelicula" + pelicula.nombre+ " ha sido correctamente ingresada");
+    
+   }
 function cargarPeliculas() {
 
     var row = document.getElementById("lista");
@@ -221,10 +280,4 @@ function cargarPeliculas() {
         });
 
     }
-
-
-
-
-
-
 }

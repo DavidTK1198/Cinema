@@ -15,6 +15,7 @@ public class RegistroApplication extends Application {
         System.out.println("added multipart feature");
         classes.add(Peliculas.class);
         classes.add(Usuarios.class);
+        classes.add(Salas.class);
         return classes;
     }   
 }

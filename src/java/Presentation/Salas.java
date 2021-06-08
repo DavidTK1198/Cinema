@@ -20,9 +20,9 @@ import javax.ws.rs.NotAcceptableException;
 import javax.ws.rs.POST;
 import javax.ws.rs.core.Context;
 
-@Path("/salaA")
+@Path("/Salas")
 public class Salas {
-     
+    
    // @GET
     //@Produces({MediaType.APPLICATION_JSON})
     //public List<Persona> search(@DefaultValue("") @QueryParam("nombre") String nombre) { 
