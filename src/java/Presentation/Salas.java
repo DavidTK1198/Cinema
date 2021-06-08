@@ -22,35 +22,44 @@ import javax.ws.rs.core.Context;
 
 @Path("/Salas")
 public class Salas {
-    
-   // @GET
+
+    // @GET
     //@Produces({MediaType.APPLICATION_JSON})
     //public List<Persona> search(@DefaultValue("") @QueryParam("nombre") String nombre) { 
-     //   return Model.instance().personaSearch(nombre);
+    //   return Model.instance().personaSearch(nombre);
     //} 
-    
     //@GET
     //@Path("{cedula}")
     //@Produces({MediaType.APPLICATION_JSON})
     //public Persona get(@PathParam("cedula") String cedula) {
-       // try {
-         //   return Model.instance().personaEdit(cedula);
-        //} catch (Exception ex) {
-          //  throw new NotFoundException(); 
-        //}
+    // try {
+    //   return Model.instance().personaEdit(cedula);
+    //} catch (Exception ex) {
+    //  throw new NotFoundException(); 
     //}
-    
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON) 
-    public void add(Sala s) {  
+    //}
+    @GET
+    @Path("listar")
+    @Produces({MediaType.APPLICATION_JSON})
+    public List<Sala> getSalas() {
         try {
-            Service.getInstance().agregarSala(s);
+            return Service.getInstance().devolverSalas();
         } catch (Exception ex) {
-            throw new NotAcceptableException(); 
+            throw new NotFoundException();
         }
     }
 
-   /* @PUT
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void add(Sala s) {
+        try {
+            Service.getInstance().agregarSala(s);
+        } catch (Exception ex) {
+            throw new NotAcceptableException();
+        }
+    }
+
+    /* @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     public void update(Persona p) {  
         try {
@@ -95,5 +104,5 @@ public class Salas {
         };
         return filtrados;
     } 
-*/
+     */
 }

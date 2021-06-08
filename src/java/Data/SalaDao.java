@@ -9,6 +9,8 @@ import Logic.Sala;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -40,7 +42,22 @@ public class SalaDao {
             throw new Exception ("La sala no Existe");
         }
     }
-    
+    public List<Sala> findAll() throws SQLException, Exception{
+        List<Sala> sala= new ArrayList<>();
+        String sql="select * from Sala";
+        PreparedStatement stm = DataBase.instance().prepareStatement(sql);
+        
+        ResultSet rs =  DataBase.instance().executeQuery(stm);           
+        if (rs.next()) {
+            sala.add(from(rs));
+            
+        }
+        else{
+            throw new Exception ("La sala no Existe");
+        }
+        return sala;
+        
+    }
   
       
 

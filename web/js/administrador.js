@@ -1,9 +1,10 @@
 
 import {sala} from "../js/Salas.js"
-import {agregarSala} from "../js/Salas.js"
+        import {agregarSala} from "../js/Salas.js"
         "use strict";
 var usuario;
 var peliculas = [];
+var salas = [];
 function setUsu(id, clav, nomb, ro) {
     usuario = {idUsu: id, clave: clav, nombre: nomb, rol: ro};
 }
@@ -112,7 +113,7 @@ function drawSala() {
 function drawProyeccion() {
     $("#cambiar").hide();
     $("#barra").hide();
-     $("#change").remove();
+    $("#change").remove();
 
     try {
         let bandera = !!document.getElementById("change");
@@ -134,7 +135,7 @@ function drawProyeccion() {
                 peliculas.forEach((p) => {
                     var nueva = document.createElement("div");
                     nueva.id = "colums";
-                    nueva.classList.add("col", "col-sm-8", "col-md-4", "col-xl-4", "mb-5", "border-dark","ml-2");
+                    nueva.classList.add("col", "col-sm-8", "col-md-4", "col-xl-4", "mb-5", "border-dark", "ml-2");
                     nueva.innerHTML = (
                             `
                 <div class="card">
@@ -153,7 +154,7 @@ function drawProyeccion() {
             <div class="modal-dialog">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title" id="staticBackdropLabel">Crear Cuenta</h5>
+                  <h5 class="modal-title" id="staticBackdropLabel">AGREGAR PROYECCION</h5>
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>
@@ -162,19 +163,16 @@ function drawProyeccion() {
                   <div class="signup-form">
                     <form>
                     <h2>Registro de proyecciones</h2>
-                        <div class="form-group">
-                      <div class="row">
-                        <div class="col"><input type="text" id="nombre" class="form-control" name="first_name" placeholder="Nombre de usuario" required="required"></div>
-                      </div>        	
+                        <div class="form-group" id="s">
+                    <p>Elegir sala</p>
+                    
                         </div>
-                        <div class="form-group">
-                          <input type="text" class="form-control" id="cedula" name="Cedula" placeholder="Cedula" required="required">
-                        </div>
+                       
                     <div class="form-group">
-                            <input type="password" class="form-control" name="password" id="contra" placeholder="Contraseña" required="required">
+                            <input type="number" class="form-control" name="precio" id="precio" placeholder="Precio" required="required" min=0 max=200000>
                         </div> 
                     <div class="form-group">
-			<input type="button" class="btn btn-success btn-lg btn-block" id="RegButton" value="Registrarse">
+			<input type="button" class="btn btn-success btn-lg btn-block" id="RegProyeccion" value="RegistrarProyeccion">
                         </div>
                     </form>
                 </div>
@@ -185,14 +183,39 @@ function drawProyeccion() {
         
         </div>
       </div>`
-       );
-       fila.appendChild(nueva);
-         $("#imag").click(console.log("si sirve"));
+                            );
+                    fila.appendChild(nueva);
+                    recuperarSalas();
+                    listarSalas();
+                    $("#RegProyeccion").click(console.log("excelente"));
+                    $("#imag").click(console.log("si sirve"));
                 });
 
             }
         }
     }
+}
+function listarSalas() {
+    var ayuda = document.getElementById("s");
+    if (salas.lenght == 0) {
+        ayuda.innerHTML = (`<span id="men">No hay salas disponibles</span>`);
+    } else {
+        $("#men").remove();
+        var nueva = document.createElement("div");
+        nueva.classList.add("select","text-black");  
+        var select = document.createElement("select");
+        select.classList.add("text-white"); 
+        nueva.appendChild(select);
+        salas.forEach((s) => {
+            var nuev = document.createElement("option");
+            nuev.value = `${s.codigo}`; 
+            select.appendChild(nuev);
+        });
+       
+        ayuda.appendChild(nueva);
+        
+    }
+
 }
 function getCurrentUser() {
     $.ajax({
@@ -318,10 +341,25 @@ function recuperarPeliculas() {
 
     $.ajax({
         type: "GET",
-        url: "/Cinema/web/api/Peliculas/listar",
+        url: "/Cinema/web/api/Peliculas/listar"
     }).then((response) => {
         peliculas = [...response];
         cargarPeliculas();
+    },
+            (error) => {
+        console.log("fallo listar");
+        console.log(error.text);
+
+    });
+}
+function recuperarSalas() {
+
+    $.ajax({
+        type: "GET",
+        url: "/Cinema/web/api/Salas/listar"
+    }).then((response) => {
+        salas = [...response];
+
     },
             (error) => {
         console.log("fallo listar");
@@ -345,7 +383,7 @@ function cargarPeliculas() {
         peliculas.forEach((p) => {
             var nueva = document.createElement("div");
             nueva.id = "colums";
-            nueva.classList.add("col", "col-sm-8", "col-md-4", "col-xl-4", "mb-5", "border-dark","ml-5");
+            nueva.classList.add("col", "col-sm-8", "col-md-4", "col-xl-4", "mb-5", "border-dark", "ml-5");
             nueva.innerHTML = (
                     `
                 <div class="card">

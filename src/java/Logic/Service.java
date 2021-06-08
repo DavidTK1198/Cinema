@@ -109,4 +109,8 @@ public class Service {
     public List<Tiquete> tiquetesPorCompras(List<Compra> lc)throws Exception{
         return tiquetes.tiquetesPorCompra(lc);
     }
+     public List<Sala> devolverSalas()throws Exception{
+        return salas.findAll();
+    }
+    
 }
