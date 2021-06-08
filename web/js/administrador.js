@@ -1,8 +1,8 @@
 
 import {sala} from "../js/Salas.js"
-import {agregarSala} from "../js/Salas.js"
+        import {agregarSala} from "../js/Salas.js"
 
-"use strict";
+        "use strict";
 var usuario;
 var peliculas = [];
 function setUsu(id, clav, nomb, ro) {
@@ -64,7 +64,7 @@ function draw_movie() {
         }
     }
 }
-function drawSala(){
+function drawSala() {
     $("#cambiar").hide();
     $("#barra").hide();
 
@@ -110,6 +110,85 @@ function drawSala(){
         }
     }
 }
+function drawProyeccion() {
+    $("#cambiar").hide();
+    $("#barra").hide();
+
+    try {
+        let bandera = !!document.getElementById("change");
+        throw bandera;
+    } catch (error) {
+        if (!error) {
+            var contenedor = document.getElementById("content");
+            var fila = document.createElement("div");
+            fila.classList.add("text-black", "row", "justify-content-center");
+            contenedor.appendChild(fila);
+            contenedor.classList.add("text-black", "justify-content-center");
+            fila.id = "change";
+
+            if (peliculas.length == 0) {
+                fila.innerHTML = (`<span id="mensaje">NO EXISTEN PELICULAS DISPONIBLES PARA AGREGAR PROYECCION</span>`);
+            } else {
+
+                $("#mensaje").remove();
+                peliculas.forEach((p) => {
+                    var nueva = document.createElement("div");
+                    nueva.id = "colums";
+                    nueva.classList.add("col", "col-sm-8", "col-md-4", "col-xl-4", "mb-5", "border-dark");
+                    nueva.innerHTML = (
+                            `
+                <div class="card">
+                <div class="embed-responsive embed-responsive-16by9" id="zoom">
+                <img src="${url}api/Peliculas/${p.nombre}/imagen" class="card-img-top embed-responsive-item" alt="..." id="imag" data-toggle="modal" data-target="#staticBackdrop2">
+            </div>
+                <div class="modal fade signup-form" id="staticBackdrop2" data-backdrop="static" data-keyboard="false" tabindex="-1"
+            aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="staticBackdropLabel">Crear Cuenta</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <div class="signup-form">
+                    <form>
+                    <h2>Registro de proyecciones</h2>
+                        <div class="form-group">
+                      <div class="row">
+                        <div class="col"><input type="text" id="nombre" class="form-control" name="first_name" placeholder="Nombre de usuario" required="required"></div>
+                      </div>        	
+                        </div>
+                        <div class="form-group">
+                          <input type="text" class="form-control" id="cedula" name="Cedula" placeholder="Cedula" required="required">
+                        </div>
+                    <div class="form-group">
+                            <input type="password" class="form-control" name="password" id="contra" placeholder="Contraseña" required="required">
+                        </div> 
+                    <div class="form-group">
+			<input type="button" class="btn btn-success btn-lg btn-block" id="RegButton" value="Registrarse">
+                        </div>
+                    </form>
+                </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        
+        </div>
+      </div>`
+                            );
+                    row.appendChild(nueva);
+                });
+
+            }
+            fila.appendChild(d);
+            $("#imag").click(console.log("si sirve"));
+
+        }
+    }
+}
 function getCurrentUser() {
     $.ajax({
         type: "GET",
@@ -137,6 +216,7 @@ function loaded() {
     $("#pelicula").click(draw_movie);
     $("#home").click(draw_home);
     $("#salita").click(drawSala);
+    $("#proyeccion").click(drawProyeccion);
 
     recuperarPeliculas();
     getCurrentUser();
@@ -152,7 +232,7 @@ var url = "http://localhost:8080/Cinema/web/";
 function resetPelicula() {
     pelicula = {nombre: '', estado: false};
 }
-function reinicioCamposPelicula(){
+function reinicioCamposPelicula() {
     $("#nombP").val("");
     $("#imagen").val("");
 }
@@ -244,10 +324,10 @@ function recuperarPeliculas() {
 
     });
 }
-function peliculaAgregadaCorrectamente(){
-    alert("La pelicula" + pelicula.nombre+ " ha sido correctamente ingresada");
-    
-   }
+function peliculaAgregadaCorrectamente() {
+    alert("La pelicula" + pelicula.nombre + " ha sido correctamente ingresada");
+
+}
 function cargarPeliculas() {
 
     var row = document.getElementById("lista");
