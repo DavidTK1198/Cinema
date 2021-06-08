@@ -1,16 +1,17 @@
 
-import {sala} from "../js/Salas.js"
-        import {agregarSala} from "../js/Salas.js"
-        "use strict";
+import { sala } from "../js/Salas.js"
+import { agregarSala } from "../js/Salas.js"
+"use strict";
 var usuario;
 var peliculas = [];
 var salas = [];
 function setUsu(id, clav, nomb, ro) {
-    usuario = {idUsu: id, clave: clav, nombre: nomb, rol: ro};
+    usuario = { idUsu: id, clave: clav, nombre: nomb, rol: ro };
 }
 function draw_movie() {
     $("#cambiar").hide();
     $("#barra").hide();
+    $("#change").remove();
 
     try {
         let bandera = !!document.getElementById("change");
@@ -57,7 +58,7 @@ function draw_movie() {
 </form>
        
 </div>`
-                    );
+            );
             fila.appendChild(d);
             $("#RegPeli").click(mandarAgregarP);
 
@@ -67,6 +68,7 @@ function draw_movie() {
 function drawSala() {
     $("#cambiar").hide();
     $("#barra").hide();
+    $("#change").remove();
 
     try {
         let bandera = !!document.getElementById("change");
@@ -103,7 +105,7 @@ function drawSala() {
 </form>
        
 </div>`
-                    );
+            );
             fila.appendChild(d);
             $("#RegSala").click(agregarSala);
 
@@ -114,6 +116,7 @@ function drawProyeccion() {
     $("#cambiar").hide();
     $("#barra").hide();
     $("#change").remove();
+    recuperarSalas();
 
     try {
         let bandera = !!document.getElementById("change");
@@ -121,31 +124,41 @@ function drawProyeccion() {
     } catch (error) {
         if (!error) {
             var contenedor = document.getElementById("content");
+            var container=document.createElement("div");
             var fila = document.createElement("div");
-            fila.classList.add("text-black", "row", "justify-content-center");
-            contenedor.appendChild(fila);
+            var h=document.createElement("h2");
+            h.classList.add("ml-5","mt-5");
+            h.textContent="Peliculas Disponibles"
+            container.appendChild(h);
+            h=document.createElement("br");
+            container.appendChild(h);
+            fila.classList.add("text-black", "row", "justify-content-center","mt-5");
             contenedor.classList.add("text-black", "justify-content-center");
-            fila.id = "change";
+            container.appendChild(fila);
+            container.id = "change";
+            contenedor.appendChild(container);
+            container.classList.add("text-black", "justify-content-center");
 
             if (peliculas.length == 0) {
                 fila.innerHTML = (`<span id="mensaje">NO EXISTEN PELICULAS DISPONIBLES PARA AGREGAR PROYECCION</span>`);
             } else {
-
+                
                 $("#mensaje").remove();
                 peliculas.forEach((p) => {
+                    let name=p.nombre.split(" ").join("-");
                     var nueva = document.createElement("div");
                     nueva.id = "colums";
                     nueva.classList.add("col", "col-sm-8", "col-md-4", "col-xl-4", "mb-5", "border-dark", "ml-2");
                     nueva.innerHTML = (
-                            `
+                        `
                 <div class="card">
                 <div class="embed-responsive embed-responsive-16by9" id="zoom">
-                <img src="${url}api/Peliculas/${p.nombre}/imagen" class="card-img-top embed-responsive-item" alt="..." id="imag" data-toggle="modal" data-target="#staticBackdrop2">
+                <img src="${url}api/Peliculas/${p.nombre}/imagen" class="card-img-top embed-responsive-item" alt="..." id="${name}" data-toggle="modal" data-target="#staticBackdrop2">
             </div>
             <div class="card-body border justify-content-center">
             <h5 class="card-title"> Nombre:</h5>
             <p class="card-text text-black" >
-              Nombre:${p.nombre}
+                  ${p.nombre}
             </p>
           </div>
             </div>
@@ -162,17 +175,23 @@ function drawProyeccion() {
                 <div class="modal-body">
                   <div class="signup-form">
                     <form>
-                    <h2>Registro de proyecciones</h2>
+                    <h2>Registro de Proyecciones</h2>
+                    <h2 id="nameP" class="d-none"></h2>
                         <div class="form-group" id="s">
                     <p>Elegir sala</p>
                     
                         </div>
-                       
+                        <div class="form-group">
+                        <input type="date" class="form-control" name="fecha" id="precio" placeholder="fecha" required="required">
+                    </div> 
+                    <div class="form-group">
+                    <input type="time" class="form-control" name="fecha" id="precio" placeholder="fecha" required="required">
+                </div> 
                     <div class="form-group">
                             <input type="number" class="form-control" name="precio" id="precio" placeholder="Precio" required="required" min=0 max=200000>
                         </div> 
                     <div class="form-group">
-			<input type="button" class="btn btn-success btn-lg btn-block" id="RegProyeccion" value="RegistrarProyeccion">
+			<input type="button" class="btn btn-success btn-lg btn-block" id="RegProyeccion" value="Registrar Proyeccion">
                         </div>
                     </form>
                 </div>
@@ -183,12 +202,11 @@ function drawProyeccion() {
         
         </div>
       </div>`
-                            );
+                    );
+                    let nombre=p.nombre.split(" ").join("-");
                     fila.appendChild(nueva);
-                    recuperarSalas();
-                    listarSalas();
                     $("#RegProyeccion").click(console.log("excelente"));
-                    $("#imag").click(console.log("si sirve"));
+                    $(`#${nombre}`).click(listarSalas);
                 });
 
             }
@@ -196,24 +214,36 @@ function drawProyeccion() {
     }
 }
 function listarSalas() {
+    recuperarSalas();
+    var contador = 0;
     var ayuda = document.getElementById("s");
-    if (salas.lenght == 0) {
+    if (salas.length == 0) {
         ayuda.innerHTML = (`<span id="men">No hay salas disponibles</span>`);
     } else {
         $("#men").remove();
+        $("#sele").remove();
         var nueva = document.createElement("div");
-        nueva.classList.add("select","text-black");  
+        nueva.classList.add("select", "text-black");
         var select = document.createElement("select");
-        select.classList.add("text-white"); 
-        nueva.appendChild(select);
+        select.classList.add("text-black");
+        select.id = "sele";
         salas.forEach((s) => {
+            contador++;
             var nuev = document.createElement("option");
-            nuev.value = `${s.codigo}`; 
+            nuev.value = `${s.codigo}`;
+            nuev.textContent = `${s.codigo}`;
+            if (contador == 1) {
+                nuev.selected = "selected";
+            }
             select.appendChild(nuev);
         });
-       
+        nueva.appendChild(select);
         ayuda.appendChild(nueva);
-        
+        nueva=document.getElementById("nameP");
+        nueva.textContent=`${event.target.id}`;
+        nueva.classList.remove("d-none");
+        nueva.classList.add("d-block");
+
     }
 
 }
@@ -223,14 +253,14 @@ function getCurrentUser() {
         url: "/Cinema/web/api/usuarios",
         contentType: "application/json"
     }).then(
-            (response) => {
-        setUsu(response.idUsu, response.clave, response.nombre, response.rol);
-        document.getElementById('navbarDropdown').textContent = `${response.nombre}`;
-        document.getElementById('usu').textContent = ` Bienvenido ${response.nombre}`;
-    },
-            (error) => {
+        (response) => {
+            setUsu(response.idUsu, response.clave, response.nombre, response.rol);
+            document.getElementById('navbarDropdown').textContent = `${response.nombre}`;
+            document.getElementById('usu').textContent = ` Bienvenido ${response.nombre}`;
+        },
+        (error) => {
 
-    }
+        }
     );
 }
 
@@ -245,20 +275,20 @@ function loaded() {
     $("#home").click(draw_home);
     $("#salita").click(drawSala);
     $("#proyeccion").click(drawProyeccion);
-
     recuperarPeliculas();
     getCurrentUser();
 }
 function mandarAgregarP() {
 
     agregarPelicula();
+    recuperarPeliculas();
 }
 $(loaded);
 var pelicula;
 "use strict";
 var url = "http://localhost:8080/Cinema/web/";
 function resetPelicula() {
-    pelicula = {nombre: '', estado: false};
+    pelicula = { nombre: '', estado: false };
 }
 function reinicioCamposPelicula() {
     $("#nombP").val("");
@@ -266,7 +296,7 @@ function reinicioCamposPelicula() {
 }
 
 function setPelicula(nom, estad) {
-    pelicula = {nombre: nom, estado: estad};
+    pelicula = { nombre: nom, estado: estad };
 }
 
 function validarDatos() {
@@ -283,7 +313,7 @@ function cargar() {
     pelicula = {
         nombre: document.getElementById("nombP").value,
         estado: (document.querySelector("input[name='oferta']:checked")) ?
-                document.querySelector("input[name='oferta']:checked").value : ""
+            document.querySelector("input[name='oferta']:checked").value : ""
 
     };
     if (pelicula.estado == 1) {
@@ -297,7 +327,7 @@ function addImagen() {
     imagenData.append("nombre", pelicula.nombre);
     var file = $("#imagen").get(0).files[0];
     imagenData.append("imagen", file);
-    let request = new Request(url + 'api/Peliculas/' + pelicula.nombre + "/imagen", {method: 'POST', body: imagenData});
+    let request = new Request(url + 'api/Peliculas/' + pelicula.nombre + "/imagen", { method: 'POST', body: imagenData });
     (async () => {
         const response = await fetch(request);
         if (!response.ok) {
@@ -330,11 +360,11 @@ function agregarPelicula() {
 
 
     },
-            (error) => {
-        console.log("fallo pelicula");
-        console.log(error.text);
+        (error) => {
+            console.log("fallo pelicula");
+            console.log(error.text);
 
-    });
+        });
 
 }
 function recuperarPeliculas() {
@@ -346,11 +376,11 @@ function recuperarPeliculas() {
         peliculas = [...response];
         cargarPeliculas();
     },
-            (error) => {
-        console.log("fallo listar");
-        console.log(error.text);
+        (error) => {
+            console.log("fallo listar");
+            console.log(error.text);
 
-    });
+        });
 }
 function recuperarSalas() {
 
@@ -359,13 +389,14 @@ function recuperarSalas() {
         url: "/Cinema/web/api/Salas/listar"
     }).then((response) => {
         salas = [...response];
+        console.log("????");
 
     },
-            (error) => {
-        console.log("fallo listar");
-        console.log(error.text);
+        (error) => {
+            console.log("fallo listar");
+            console.log(error.text);
 
-    });
+        });
 }
 function peliculaAgregadaCorrectamente() {
     alert("La pelicula" + pelicula.nombre + " ha sido correctamente ingresada");
@@ -385,7 +416,7 @@ function cargarPeliculas() {
             nueva.id = "colums";
             nueva.classList.add("col", "col-sm-8", "col-md-4", "col-xl-4", "mb-5", "border-dark", "ml-5");
             nueva.innerHTML = (
-                    `
+                `
                 <div class="card">
                 <div class="embed-responsive embed-responsive-16by9" id="zoom">
                 <img src="${url}api/Peliculas/${p.nombre}/imagen" class="card-img-top embed-responsive-item" alt="...">
@@ -398,7 +429,7 @@ function cargarPeliculas() {
           </div>
         </div>
       </div>`
-                    );
+            );
             row.appendChild(nueva);
         });
 

@@ -48,12 +48,12 @@ public class SalaDao {
         PreparedStatement stm = DataBase.instance().prepareStatement(sql);
         
         ResultSet rs =  DataBase.instance().executeQuery(stm);           
-        if (rs.next()) {
+        while(rs.next()) {
             sala.add(from(rs));
             
         }
-        else{
-            throw new Exception ("La sala no Existe");
+        if(sala.isEmpty()){
+            throw new Exception();
         }
         return sala;
         
