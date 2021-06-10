@@ -37,25 +37,31 @@ export function agregarProyeccion(){
 }
 
 export function listarProyecciones(ay){
-     $.ajax({
-        type: "GET",
-        url: "/Cinema/web/api/Proyecciones/"+ay,
-        contentType: "application/json"
+
+    return new Promise(function(sol,rechazo){
+        $.ajax({
+            type: "GET",
+            url: "/Cinema/web/api/Proyecciones/"+ay,
+            contentType: "application/json"
+          
+        }).then((response) =>{
+            console.log(response);
+            proyecciones = [...response];
+            console.log(proyecciones);
+            console.log("-");
+            console.log(ay);
+            console.log("-------------");
+            sol("ok");
+        }, 
+        (error) =>{
+           console.log("fallo listar proyecciones");
+            console.log(",");
+           console.log(ay);
+           rechazo("error");
+        });
       
-    }).then((response) =>{
-        console.log(response);
-        proyecciones = [...response];
-        console.log(proyecciones);
-        console.log("-");
-        console.log(ay);
-        console.log("-------------");
-       
-    }, 
-    (error) =>{
-       console.log("fallo listar proyecciones");
-        console.log(",");
-       console.log(ay);
     });
+   
     
     
     

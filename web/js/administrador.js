@@ -444,12 +444,10 @@ function cargarPeliculas() {
     }
 }
 
-function proyeccionesApeliculas(nom){
-   
-    
+async function proyeccionesApeliculas(nom){
     var ayuda = document.getElementById(`${nom}`);
     var pel = nom.split("-pro").join("");
-    listarProyecciones(pel);
+    var x= await listarProyecciones(pel);
     console.log("Administrador");
     console.log(proyecciones);
     console.log(nom);
