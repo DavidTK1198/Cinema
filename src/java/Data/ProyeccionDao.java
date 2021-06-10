@@ -27,6 +27,7 @@ public class ProyeccionDao {
                 + "values(?,?,?,?)";
         PreparedStatement stm = DataBase.instance().prepareStatement(sql);
         stm.setString(1, o.getPelicula().getNombre());
+        stm.setString(2, o.getSala().getCodigo());
         Date fecha = new Date(o.getDate().getTime());
         stm.setDate(3, fecha);
         stm.setFloat(4, o.getPrecio());
@@ -41,6 +42,23 @@ public class ProyeccionDao {
         String sql = "select * from Proyeccion";
         try {
             PreparedStatement stm = DataBase.instance().prepareStatement(sql);
+            ResultSet rs = DataBase.instance().executeQuery(stm);
+            while (rs.next()) {
+                r.add(from(rs));
+            }
+        } catch (SQLException ex) {
+        } catch (Exception ex) {
+            
+        }
+        return r;
+    }
+     public List<Proyeccion> findbyNombre(String pe) {
+        List<Proyeccion> r = new ArrayList<>();
+        String sql = "select * from Proyeccion where Pelicula_Nombre = ?";
+        try {
+            
+            PreparedStatement stm = DataBase.instance().prepareStatement(sql);
+            stm.setString(1, pe);
             ResultSet rs = DataBase.instance().executeQuery(stm);
             while (rs.next()) {
                 r.add(from(rs));
@@ -113,8 +131,8 @@ public class ProyeccionDao {
             Pelicula peli = Service.getInstance().buscarPelicula(rs.getString("Pelicula_Nombre"));
             r.setPelicula(peli);
             Date fecha = rs.getDate("Date");
-            String fe = fecha.toString();
-            r.transformarFormatoADate(fe);
+           java.util.Date utilDate = new java.util.Date(fecha.getTime());
+            r.setDate(utilDate);
             Sala sala = Service.getInstance().buscarSala(rs.getString("Sala_id"));
             r.setSala(sala);
             return r;

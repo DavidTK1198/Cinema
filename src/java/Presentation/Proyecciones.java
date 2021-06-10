@@ -20,7 +20,7 @@ import javax.ws.rs.NotAcceptableException;
 import javax.ws.rs.POST;
 import javax.ws.rs.core.Context;
 
-@Path("/proyeccionesA")
+@Path("/Proyecciones")
 public class Proyecciones{
      
    // @GET
@@ -29,16 +29,26 @@ public class Proyecciones{
      //   return Model.instance().personaSearch(nombre);
     //} 
     
-    //@GET
-    //@Path("{cedula}")
-    //@Produces({MediaType.APPLICATION_JSON})
-    //public Persona get(@PathParam("cedula") String cedula) {
-       // try {
-         //   return Model.instance().personaEdit(cedula);
-        //} catch (Exception ex) {
-          //  throw new NotFoundException(); 
-        //}
-    //}
+    @GET
+    @Path("listar")
+    @Produces({MediaType.APPLICATION_JSON})
+    public List<Proyeccion> get() {
+        try {
+           return Service.getInstance().devolverProyecciones();
+        } catch (Exception ex) {
+           throw new NotFoundException(); 
+        }
+    }
+    @GET
+    @Path("{nombre}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public List<Proyeccion> get2(@PathParam("nombre") String nombre) {
+        try {
+           return Service.getInstance().devolverProyeccionesPorNombre(nombre);
+        } catch (Exception ex) {
+           throw new NotFoundException(); 
+        }
+    }
     
     @POST
     @Consumes(MediaType.APPLICATION_JSON) 

@@ -95,6 +95,12 @@ public class Service {
      public List<Pelicula> devolverPeliculas(){
         return peliculas.findAll();
     }
+    public List<Proyeccion> devolverProyecciones(){
+        return proyecciones.findAll();
+    }
+     public List<Proyeccion> devolverProyeccionesPorNombre(String nom){
+        return proyecciones.findbyNombre(nom);
+    }
     
     public Usuario buscarUsuario(Usuario p) throws Exception {
         return users.read(p.getIdUsu(),p.getClave());

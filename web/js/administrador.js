@@ -1,10 +1,12 @@
 
 import { sala } from "../js/Salas.js"
 import { agregarSala } from "../js/Salas.js"
+import {proyeccion, agregarProyeccion, proyecciones,listarProyecciones} from "../js/Proyecciones.js"
+
 "use strict";
 var usuario;
-var peliculas = [];
-var salas = [];
+export var peliculas = [];
+export var salas = [];
 function setUsu(id, clav, nomb, ro) {
     usuario = { idUsu: id, clave: clav, nombre: nomb, rol: ro };
 }
@@ -117,7 +119,7 @@ function drawProyeccion() {
     $("#barra").hide();
     $("#change").remove();
     recuperarSalas();
-
+    var ban = false;
     try {
         let bandera = !!document.getElementById("change");
         throw bandera;
@@ -182,16 +184,16 @@ function drawProyeccion() {
                     
                         </div>
                         <div class="form-group">
-                        <input type="date" class="form-control" name="fecha" id="precio" placeholder="fecha" required="required">
+                        <input type="date" class="form-control" name="fecha" id="fecha" placeholder="fecha" required="required">
                     </div> 
                     <div class="form-group">
-                    <input type="time" class="form-control" name="fecha" id="precio" placeholder="fecha" required="required">
+                    <input type="time" class="form-control" name="fecha" id="hora" placeholder="fecha" required="required">
                 </div> 
                     <div class="form-group">
                             <input type="number" class="form-control" name="precio" id="precio" placeholder="Precio" required="required" min=0 max=200000>
                         </div> 
                     <div class="form-group">
-			<input type="button" class="btn btn-success btn-lg btn-block" id="RegProyeccion" value="Registrar Proyeccion">
+			<input type="button" class="btn btn-success btn-lg btn-block" id="${name}-RegProyeccion" value="Registrar Proyeccion">
                         </div>
                     </form>
                 </div>
@@ -205,8 +207,12 @@ function drawProyeccion() {
                     );
                     let nombre=p.nombre.split(" ").join("-");
                     fila.appendChild(nueva);
-                    $("#RegProyeccion").click(console.log("excelente"));
+                    
                     $(`#${nombre}`).click(listarSalas);
+                    
+                    $(`#${name}-RegProyeccion`).click(agregarProyeccion);
+                    
+                    
                 });
 
             }
@@ -421,7 +427,7 @@ function cargarPeliculas() {
                 <div class="embed-responsive embed-responsive-16by9" id="zoom">
                 <img src="${url}api/Peliculas/${p.nombre}/imagen" class="card-img-top embed-responsive-item" alt="...">
             </div>
-          <div class="card-body border justify-content-center">
+          <div class="card-body border justify-content-center" id="${p.nombre}-pro">
             <h5 class="card-title"> Nombre:</h5>
             <p class="card-text text-black" >
               Nombre:${p.nombre}
@@ -430,8 +436,38 @@ function cargarPeliculas() {
         </div>
       </div>`
             );
+    
             row.appendChild(nueva);
+            proyeccionesApeliculas(`${p.nombre}-pro`);
         });
 
     }
+}
+
+function proyeccionesApeliculas(nom){
+   
+    
+    var ayuda = document.getElementById(`${nom}`);
+    var pel = nom.split("-pro").join("");
+    listarProyecciones(pel);
+    console.log("Administrador");
+    console.log(proyecciones);
+    console.log(nom);
+    console.log("-----------------");
+    if (proyecciones.length == 0) {
+        ayuda.innerHTML = (`<span id="nop">No hay proyecciones disponibles</span>`);
+    } else {
+        $("#nop").remove();
+        proyecciones.forEach((p) => {
+            var nueva = document.createElement("div");
+            nueva.textContent = `${p.date.toString()}/${p.sala.codigo}`;
+             ayuda.appendChild(nueva);
+        }        
+        );
+    }
+
+    
+    
+    
+    
 }
