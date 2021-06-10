@@ -1,7 +1,7 @@
 
 import { sala } from "../js/Salas.js"
 import { agregarSala } from "../js/Salas.js"
-import {proyeccion, agregarProyeccion, proyecciones,listarProyecciones} from "../js/Proyecciones.js"
+import { proyeccion, agregarProyeccion, proyecciones, listarProyecciones } from "../js/Proyecciones.js"
 
 "use strict";
 var usuario;
@@ -30,7 +30,7 @@ function draw_movie() {
             d.classList.add("col", "col-sm-8", "col-md-4", "col-xl-4", "d-flex");
             d.innerHTML = (`<div class="d-flex">
     <form> 
-    <h3>Registrar Pelicula</h2>
+    <h3 class="mt-5">Registrar Pelicula</h2>
     <div class="mb-2">
         <div class="font-weight-bold mb-0">Nombre</div>
         <div class="campo"><input class="form-control" placeholder="Nombre de la Pelicula" type="text" name="cedulaFld" id="nombP"></div>
@@ -49,10 +49,13 @@ function draw_movie() {
                 <input type="radio" name="oferta" value="0">Proximamente
             </div>
         </div>
+        <div class="embed-responsive embed-responsive-16by9 d-none" id="hnone">
+        <img src="" class="card-img-top embed-responsive-item" alt="..." id="prueba">
+    </div>
     </div>
          <div class="form-group" style="margin-left: 10px; margin-right: 10px;">
-        <label for="imagen">Imagen</label>
-        <input type="file" accept="image/*" class="form-control" name="imagen" id="imagen" placeholder="Imagen" val="">
+        <label for="imagenl">Imagen</label>
+        <input type="file" accept="image/*" class="form-control"  id="imagen" placeholder="Imagen" val="">
        </div>
 </div>
     <input type="button" value="Registrar" class="btn btn-danger" id="RegPeli">
@@ -63,10 +66,18 @@ function draw_movie() {
             );
             fila.appendChild(d);
             $("#RegPeli").click(mandarAgregarP);
-
+            document.getElementById("imagen").addEventListener("change", () => {
+                var file = $("#imagen").get(0).files[0];
+                var img = document.getElementById("prueba");
+                img.src = window.URL.createObjectURL(file);
+                img = document.getElementById("hnone");
+                img.classList.remove("d-none");
+                img.classList.add("d-block");
+            });
         }
     }
 }
+
 function drawSala() {
     $("#cambiar").hide();
     $("#barra").hide();
@@ -126,15 +137,15 @@ function drawProyeccion() {
     } catch (error) {
         if (!error) {
             var contenedor = document.getElementById("content");
-            var container=document.createElement("div");
+            var container = document.createElement("div");
             var fila = document.createElement("div");
-            var h=document.createElement("h2");
-            h.classList.add("ml-5","mt-5");
-            h.textContent="Peliculas Disponibles"
+            var h = document.createElement("h2");
+            h.classList.add("ml-5", "mt-5");
+            h.textContent = "Peliculas Disponibles"
             container.appendChild(h);
-            h=document.createElement("br");
+            h = document.createElement("br");
             container.appendChild(h);
-            fila.classList.add("text-black", "row", "justify-content-center","mt-5");
+            fila.classList.add("text-black", "row", "justify-content-center", "mt-5");
             contenedor.classList.add("text-black", "justify-content-center");
             container.appendChild(fila);
             container.id = "change";
@@ -144,10 +155,10 @@ function drawProyeccion() {
             if (peliculas.length == 0) {
                 fila.innerHTML = (`<span id="mensaje">NO EXISTEN PELICULAS DISPONIBLES PARA AGREGAR PROYECCION</span>`);
             } else {
-                
+
                 $("#mensaje").remove();
                 peliculas.forEach((p) => {
-                    let name=p.nombre.split(" ").join("-");
+                    let name = p.nombre.split(" ").join("-");
                     var nueva = document.createElement("div");
                     nueva.id = "colums";
                     nueva.classList.add("col", "col-sm-8", "col-md-4", "col-xl-4", "mb-5", "border-dark", "ml-2");
@@ -205,14 +216,14 @@ function drawProyeccion() {
         </div>
       </div>`
                     );
-                    let nombre=p.nombre.split(" ").join("-");
+                    let nombre = p.nombre.split(" ").join("-");
                     fila.appendChild(nueva);
-                    
+
                     $(`#${nombre}`).click(listarSalas);
-                    
+
                     $(`#${name}-RegProyeccion`).click(agregarProyeccion);
-                    
-                    
+
+
                 });
 
             }
@@ -245,8 +256,8 @@ function listarSalas() {
         });
         nueva.appendChild(select);
         ayuda.appendChild(nueva);
-        nueva=document.getElementById("nameP");
-        nueva.textContent=`${event.target.id}`;
+        nueva = document.getElementById("nameP");
+        nueva.textContent = `${event.target.id}`;
         nueva.classList.remove("d-none");
         nueva.classList.add("d-block");
 
@@ -436,7 +447,7 @@ function cargarPeliculas() {
         </div>
       </div>`
             );
-    
+
             row.appendChild(nueva);
             proyeccionesApeliculas(`${p.nombre}-pro`);
         });
@@ -444,10 +455,10 @@ function cargarPeliculas() {
     }
 }
 
-async function proyeccionesApeliculas(nom){
+async function proyeccionesApeliculas(nom) {
     var ayuda = document.getElementById(`${nom}`);
     var pel = nom.split("-pro").join("");
-    var x= await listarProyecciones(pel);
+    var x = await listarProyecciones(pel);
     console.log("Administrador");
     console.log(proyecciones);
     console.log(nom);
@@ -459,13 +470,13 @@ async function proyeccionesApeliculas(nom){
         proyecciones.forEach((p) => {
             var nueva = document.createElement("div");
             nueva.textContent = `${p.date.toString()}/${p.sala.codigo}`;
-             ayuda.appendChild(nueva);
-        }        
+            ayuda.appendChild(nueva);
+        }
         );
     }
 
-    
-    
-    
-    
+
+
+
+
 }
