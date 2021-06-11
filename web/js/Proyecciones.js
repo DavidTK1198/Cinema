@@ -1,5 +1,6 @@
 export var proyeccion;
 export var proyecciones = [];
+export var fecha = "";
 import {peliculas} from '../js/administrador.js'
 import {salas} from '../js/administrador.js'
 
@@ -45,18 +46,14 @@ export function listarProyecciones(ay){
             contentType: "application/json"
           
         }).then((response) =>{
-            console.log(response);
+          
             proyecciones = [...response];
-            console.log(proyecciones);
-            console.log("-");
-            console.log(ay);
-            console.log("-------------");
+            cambiarFormatoFecha();
+            
             sol("ok");
         }, 
         (error) =>{
            console.log("fallo listar proyecciones");
-            console.log(",");
-           console.log(ay);
            rechazo("error");
         });
       
@@ -65,6 +62,35 @@ export function listarProyecciones(ay){
     
     
     
+}
+function cambiarFormatoFecha(){
+    
+    proyecciones.forEach((p)=>{
+        p.date = format(p.date);
+        
+        
+    });
+}
+function format(fe){
+    var nueva = "";
+    var contador = 0;
+    var i;
+    for(i=0;i<fe.length;i++){
+        if(fe[i] == ":"){
+            contador++;
+        }
+        if(contador == 2){
+            break;
+        }
+        if(fe[i] != "T"){
+          fecha = fecha + fe[i];  
+        }else{
+            fecha = fecha + " ";
+        }
+        nueva = nueva + fe[i];
+        
+    }
+    return new Date(nueva);
 }
 function mensaje(){
     alert("La proyeccion relacionada a la pelicula " + proyeccion.pelicula.nombre+ " ha sido correctamente ingresada");

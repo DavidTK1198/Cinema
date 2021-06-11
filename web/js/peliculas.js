@@ -1,14 +1,18 @@
+import {proyeccionesApeliculas} from "../js/administrador.js"
 export var  peliculas = [];
 "use strict";
 var pelicula;
- var url="http://localhost:8080/Cinema/";
+var url = "http://localhost:8080/Cinema/web/";
 function resetPelicula() {
     pelicula = {nombre: '', estado: false};
 }
 function setPelicula(nom, estad) {
     pelicula = {nombre: nom, estado: estad};
 }
-
+function reinicioCamposPelicula() {
+    $("#nombP").val("");
+    $("#imagen").val("");
+}
 function validarDatos() {
     var nom = document.getElementById("nombP");
     var error = false;
@@ -64,6 +68,9 @@ export function agregarPelicula() {
     }).then((response) => {
 
         addImagen();
+        peliculaAgregadaCorrectamente();
+        resetPelicula();
+        reinicioCamposPelicula();
     },
             (error) => {
         console.log("fallo pelicula");
@@ -88,7 +95,7 @@ export function recuperarPeliculas() {
     });
 }
 
-function cargarPeliculas() {
+export function cargarPeliculas() {
 
     var row = document.getElementById("lista");
 
@@ -100,25 +107,27 @@ function cargarPeliculas() {
         peliculas.forEach((p) => {
             var nueva = document.createElement("div");
             nueva.id = "colums";
-            nueva.classList.add("col", "col-sm-8", "col-md-4", "col-xl-4", "mb-5", "border-dark");
+            nueva.classList.add("col", "col-sm-8", "col-md-4", "col-xl-4", "mb-5", "border-dark", "ml-5");
             nueva.innerHTML = (
-                    `
+                `
                 <div class="card">
                 <div class="embed-responsive embed-responsive-16by9" id="zoom">
                 <img src="${url}api/Peliculas/${p.nombre}/imagen" class="card-img-top embed-responsive-item" alt="...">
             </div>
-          <div class="card-body border justify-content-center">
-            <h5 class="card-title"> Nombre:</h5>
-            <p class="card-text text-black" >
-              Nombre:${p.nombre}
-            </p>
+          <div class="card-body border justify-content-center" id="${p.nombre}-pro">
+            
           </div>
         </div>
       </div>`
-                    );
+            );
+
             row.appendChild(nueva);
+            proyeccionesApeliculas(`${p.nombre}-pro`);
         });
 
     }
+}
+function peliculaAgregadaCorrectamente() {
+    alert("La pelicula" + pelicula.nombre + " ha sido correctamente ingresada");
 
 }

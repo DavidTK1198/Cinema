@@ -1,8 +1,8 @@
 
 import { sala } from "../js/Salas.js"
 import { agregarSala } from "../js/Salas.js"
-import { proyeccion, agregarProyeccion, proyecciones, listarProyecciones } from "../js/Proyecciones.js"
-
+import { proyeccion, agregarProyeccion, proyecciones, listarProyecciones,fecha } from "../js/Proyecciones.js"
+import {agregarPelicula,cargarPeliculas,recuperarPeliculas} from "../js/peliculas.js"
 "use strict";
 var usuario;
 export var peliculas = [];
@@ -169,7 +169,7 @@ function drawProyeccion() {
                 <img src="${url}api/Peliculas/${p.nombre}/imagen" class="card-img-top embed-responsive-item" alt="..." id="${name}" data-toggle="modal" data-target="#staticBackdrop2">
             </div>
             <div class="card-body border justify-content-center">
-            <h5 class="card-title"> Nombre:</h5>
+           
             <p class="card-text text-black" >
                   ${p.nombre}
             </p>
@@ -301,104 +301,7 @@ function mandarAgregarP() {
     recuperarPeliculas();
 }
 $(loaded);
-var pelicula;
-"use strict";
-var url = "http://localhost:8080/Cinema/web/";
-function resetPelicula() {
-    pelicula = { nombre: '', estado: false };
-}
-function reinicioCamposPelicula() {
-    $("#nombP").val("");
-    $("#imagen").val("");
-}
 
-function setPelicula(nom, estad) {
-    pelicula = { nombre: nom, estado: estad };
-}
-
-function validarDatos() {
-    var nom = document.getElementById("nombP");
-    var error = false;
-    if (pelicula.nombre.length == 0) {
-        nom.classList.add("invalid");
-        error = true;
-    }
-    return !error;
-
-}
-function cargar() {
-    pelicula = {
-        nombre: document.getElementById("nombP").value,
-        estado: (document.querySelector("input[name='oferta']:checked")) ?
-            document.querySelector("input[name='oferta']:checked").value : ""
-
-    };
-    if (pelicula.estado == 1) {
-        pelicula.estado = true;
-    } else {
-        pelicula.estado = false;
-    }
-}
-function addImagen() {
-    var imagenData = new FormData();
-    imagenData.append("nombre", pelicula.nombre);
-    var file = $("#imagen").get(0).files[0];
-    imagenData.append("imagen", file);
-    let request = new Request(url + 'api/Peliculas/' + pelicula.nombre + "/imagen", { method: 'POST', body: imagenData });
-    (async () => {
-        const response = await fetch(request);
-        if (!response.ok) {
-            console.log("fallo imagen");
-            return;
-        }
-    })();
-
-
-}
-
-
-function agregarPelicula() {
-    cargar();
-
-    if (!validarDatos()) {
-        return;
-    }
-    $.ajax({
-        type: "POST",
-        url: "/Cinema/web/api/Peliculas",
-        data: JSON.stringify(pelicula),
-        contentType: "application/json"
-    }).then((response) => {
-
-        addImagen();
-        peliculaAgregadaCorrectamente();
-        resetPelicula();
-        reinicioCamposPelicula();
-
-
-    },
-        (error) => {
-            console.log("fallo pelicula");
-            console.log(error.text);
-
-        });
-
-}
-function recuperarPeliculas() {
-
-    $.ajax({
-        type: "GET",
-        url: "/Cinema/web/api/Peliculas/listar"
-    }).then((response) => {
-        peliculas = [...response];
-        cargarPeliculas();
-    },
-        (error) => {
-            console.log("fallo listar");
-            console.log(error.text);
-
-        });
-}
 function recuperarSalas() {
 
     $.ajax({
@@ -415,47 +318,9 @@ function recuperarSalas() {
 
         });
 }
-function peliculaAgregadaCorrectamente() {
-    alert("La pelicula" + pelicula.nombre + " ha sido correctamente ingresada");
 
-}
-function cargarPeliculas() {
 
-    var row = document.getElementById("lista");
-
-    if (peliculas.length == 0) {
-        row.innerHTML = (`<span id="mensaje">NO EXISTEN PELICULAS DISPONIBLES</span>`);
-    } else {
-
-        $("#mensaje").remove();
-        peliculas.forEach((p) => {
-            var nueva = document.createElement("div");
-            nueva.id = "colums";
-            nueva.classList.add("col", "col-sm-8", "col-md-4", "col-xl-4", "mb-5", "border-dark", "ml-5");
-            nueva.innerHTML = (
-                `
-                <div class="card">
-                <div class="embed-responsive embed-responsive-16by9" id="zoom">
-                <img src="${url}api/Peliculas/${p.nombre}/imagen" class="card-img-top embed-responsive-item" alt="...">
-            </div>
-          <div class="card-body border justify-content-center" id="${p.nombre}-pro">
-            <h5 class="card-title"> Nombre:</h5>
-            <p class="card-text text-black" >
-              Nombre:${p.nombre}
-            </p>
-          </div>
-        </div>
-      </div>`
-            );
-
-            row.appendChild(nueva);
-            proyeccionesApeliculas(`${p.nombre}-pro`);
-        });
-
-    }
-}
-
-async function proyeccionesApeliculas(nom) {
+export async function proyeccionesApeliculas(nom) {
     var ayuda = document.getElementById(`${nom}`);
     var pel = nom.split("-pro").join("");
     var x = await listarProyecciones(pel);
@@ -469,14 +334,123 @@ async function proyeccionesApeliculas(nom) {
         $("#nop").remove();
         proyecciones.forEach((p) => {
             var nueva = document.createElement("div");
-            nueva.textContent = `${p.date.toString()}/${p.sala.codigo}`;
+            nueva.id = fecha.split(" ").join("");
+            nueva.textContent = `${fecha}/${p.sala.codigo}`;
+           
+            nueva.addEventListener("click",sillas);
+            
             ayuda.appendChild(nueva);
         }
         );
     }
 
-
-
-
-
+}
+function sillas(){
+    var n = document.createElement("div");
+   
+    var nue =document.getElementById(`${event.target.id}`);
+    
+    n.innerHTML = (` 
+      <!-- Modal -->
+      <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Comprar boletos</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="loginButton">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="container justify-content-center">
+                <ul class="showcase">
+                  <li>
+                    <div id="seat" class="seat"></div>
+                    <small class="status" style="font-size: 1em;">N/A</small>
+                  </li>
+                  <li>
+                    <div id="seat" class="seat selected"></div>
+                    <small class="status" style="font-size: 1em;">Selected</small>
+                  </li>
+                  <li>
+                    <div id="seat" class="seat occupied"></div>
+                    <small class="status" style="font-size: 1em;">Occupied</small>
+                  </li>
+                </ul>
+                <div class="w-50 move">
+                  <div class="screen"></div>
+                  <div class="row pl-4">
+                    <div id="seat" class="seat"></div>
+                    <div id="seat" class="seat"></div>
+                    <div id="seat" class="seat"></div>
+                    <div id="seat" class="seat"></div>
+                    <div id="seat" class="seat"></div>
+                    <div id="seat" class="seat"></div>
+                    <div id="seat" class="seat"></div>
+                    <div id="seat" class="seat"></div>
+                  </div>
+                  <div class="row pl-4">
+                    <div id="seat" class="seat"></div>
+                    <div id="seat" class="seat"></div>
+                    <div id="seat" class="seat"></div>
+                    <div id="seat" class="seat occupied"></div>
+                    <div id="seat" class="seat occupied"></div>
+                    <div id="seat" class="seat"></div>
+                    <div id="seat" class="seat"></div>
+                    <div id="seat" class="seat"></div>
+                  </div>
+                  <div class="row pl-4">
+                    <div id="seat" class="seat"></div>
+                    <div id="seat" class="seat"></div>
+                    <div id="seat" class="seat"></div>
+                    <div id="seat" class="seat"></div>
+                    <div id="seat" class="seat"></div>
+                    <div id="seat" class="seat"></div>
+                    <div id="seat" class="seat occupied"></div>
+                    <div id="seat" class="seat occupied"></div>
+                  </div>
+                  <div class="row pl-4">
+                    <div id="seat" class="seat"></div>
+                    <div id="seat" class="seat"></div>
+                    <div id="seat" class="seat"></div>
+                    <div id="seat" class="seat"></div>
+                    <div id="seat" class="seat"></div>
+                    <div id="seat" class="seat"></div>
+                    <div id="seat" class="seat"></div>
+                    <div id="seat" class="seat"></div>
+                  </div>
+                  <div class="row pl-4">
+                    <div id="seat" class="seat"></div>
+                    <div id="seat" class="seat"></div>
+                    <div id="seat" class="seat"></div>
+                    <div id="seat" class="seat occupied"></div>
+                    <div id="seat" class="seat occupied"></div>
+                    <div id="seat" class="seat"></div>
+                    <div id="seat" class="seat"></div>
+                    <div id="seat" class="seat"></div>
+                  </div>
+                  <div class="row pl-4">
+                    <div id="seat" class="seat"></div>
+                    <div id="seat" class="seat"></div>
+                    <div id="seat" class="seat"></div>
+                    <div id="seat" class="seat"></div>
+                    <div id="seat" class="seat occupied"></div>
+                    <div id="seat" class="seat occupied"></div>
+                    <div id="seat" class="seat occupied"></div>
+                    <div id="seat" class="seat"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+          </div>
+        </div>
+      </div>`);
+    nue.appendChild(n);
+    $("#exampleModal").modal();
+    
+    
 }
