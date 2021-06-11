@@ -1,7 +1,7 @@
 export var proyeccion;
 export var proyecciones = [];
 export var fecha = "";
-import {peliculas} from '../js/administrador.js'
+import {peliculas} from "../js/peliculas.js"
 import {salas} from '../js/administrador.js'
 
 export function resetProyeccion(){
@@ -47,34 +47,24 @@ export function listarProyecciones(ay){
           
         }).then((response) =>{
           
-            proyecciones = [...response];
-            cambiarFormatoFecha();
-            
+            proyecciones = [...response];            
             sol("ok");
         }, 
         (error) =>{
            console.log("fallo listar proyecciones");
            rechazo("error");
         });
+        
       
     });
-   
-    
-    
     
 }
-function cambiarFormatoFecha(){
-    
-    proyecciones.forEach((p)=>{
-        p.date = format(p.date);
-        
-        
-    });
-}
-function format(fe){
+
+export function format(fe){
     var nueva = "";
     var contador = 0;
     var i;
+    fecha="";
     for(i=0;i<fe.length;i++){
         if(fe[i] == ":"){
             contador++;

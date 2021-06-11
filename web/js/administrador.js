@@ -1,11 +1,10 @@
 
 import { sala } from "../js/Salas.js"
 import { agregarSala } from "../js/Salas.js"
-import { proyeccion, agregarProyeccion, proyecciones, listarProyecciones,fecha } from "../js/Proyecciones.js"
-import {agregarPelicula,cargarPeliculas,recuperarPeliculas} from "../js/peliculas.js"
+import { proyeccion, agregarProyeccion, proyecciones, listarProyecciones,fecha,format} from "../js/Proyecciones.js"
+import {agregarPelicula,cargarPeliculas,recuperarPeliculas,peliculas,url} from "../js/peliculas.js"
 "use strict";
 var usuario;
-export var peliculas = [];
 export var salas = [];
 function setUsu(id, clav, nomb, ro) {
     usuario = { idUsu: id, clave: clav, nombre: nomb, rol: ro };
@@ -287,12 +286,12 @@ function draw_home() {
     $("#change").remove();
 }
 
-function loaded() {
+async function loaded() {
     $("#pelicula").click(draw_movie);
     $("#home").click(draw_home);
     $("#salita").click(drawSala);
     $("#proyeccion").click(drawProyeccion);
-    recuperarPeliculas();
+    await recuperarPeliculas();
     getCurrentUser();
 }
 function mandarAgregarP() {
@@ -335,10 +334,10 @@ export async function proyeccionesApeliculas(nom) {
         proyecciones.forEach((p) => {
             var nueva = document.createElement("div");
             nueva.id = fecha.split(" ").join("");
+            format(p.date);
             nueva.textContent = `${fecha}/${p.sala.codigo}`;
-           
+            nueva.classList.add("pointer");
             nueva.addEventListener("click",sillas);
-            
             ayuda.appendChild(nueva);
         }
         );

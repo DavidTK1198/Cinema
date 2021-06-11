@@ -2,7 +2,7 @@ import {proyeccionesApeliculas} from "../js/administrador.js"
 export var  peliculas = [];
 "use strict";
 var pelicula;
-var url = "http://localhost:8080/Cinema/web/";
+export var url = "http://localhost:8080/Cinema/web/";
 function resetPelicula() {
     pelicula = {nombre: '', estado: false};
 }
@@ -80,20 +80,26 @@ export function agregarPelicula() {
 
 }
 export function recuperarPeliculas() {
-
+    return new Promise(function(sol,rechazo){
     $.ajax({
         type: "GET",
         url: "/Cinema/web/api/Peliculas/listar",
     }).then((response) => {
         peliculas = [...response];
         cargarPeliculas();
+        sol("ok")
     },
             (error) => {
         console.log("fallo listar");
         console.log(error.text);
+        rechazo("error");
 
     });
+})
 }
+
+
+
 
 export function cargarPeliculas() {
 
