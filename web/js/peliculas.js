@@ -110,7 +110,7 @@ export function cargarPeliculas() {
             nueva.classList.add("col", "col-sm-8", "col-md-4", "col-xl-4", "mb-5", "border-dark", "ml-5");
             nueva.innerHTML = (
                 `
-                <div class="card">
+                <div class="card" id="tarjeta">
                 <div class="embed-responsive embed-responsive-16by9" id="zoom">
                 <img src="${url}api/Peliculas/${p.nombre}/imagen" class="card-img-top embed-responsive-item" alt="...">
             </div>

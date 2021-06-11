@@ -347,9 +347,9 @@ export async function proyeccionesApeliculas(nom) {
 }
 function sillas(){
     var n = document.createElement("div");
-   
-    var nue =document.getElementById(`${event.target.id}`);
-    
+    n.id="del-comp";
+    $("#del-comp").remove();
+    var nue =document.getElementById("tarjeta");
     n.innerHTML = (` 
       <!-- Modal -->
       <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
