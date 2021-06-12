@@ -15,67 +15,111 @@ import javax.ws.rs.core.MediaType;
 import Logic.Service;
 import Logic.Tiquete;
 import Logic.Usuario;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.NotAcceptableException;
 import javax.ws.rs.POST;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Response;
+import com.itextpdf.io.font.constants.StandardFonts;//hola
+import com.itextpdf.io.image.ImageData;
+import com.itextpdf.kernel.colors.Color;
+import com.itextpdf.kernel.colors.ColorConstants;
+import com.itextpdf.kernel.font.PdfFont;
+import com.itextpdf.kernel.font.PdfFontFactory;
+import com.itextpdf.kernel.geom.PageSize;
+import com.itextpdf.kernel.pdf.*;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Cell;
+import com.itextpdf.layout.element.Image;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Table;
+import com.itextpdf.layout.property.TextAlignment;
+import java.io.*;
+import com.itextpdf.io.image.ImageDataFactory;
+import com.itextpdf.layout.property.UnitValue;
 
 @Path("/Compras")
 public class Compras {
-     
-   @POST
-   @Consumes({MediaType.APPLICATION_JSON})
+
+    String path = "C:/AAA/";
+
+    @POST
+    @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
-   @Path("{listarT}")
-    public List<Tiquete> search(Proyeccion pr)
-    { 
-        try{
-             return Service.getInstance().cargaTiquets(pr);
-        }catch(Exception ex){
-            throw new NotAcceptableException(); 
+    @Path("{listarT}")
+    public List<Tiquete> search(Proyeccion pr) {
+        try {
+            return Service.getInstance().cargaTiquets(pr);
+        } catch (Exception ex) {
+            throw new NotAcceptableException();
         }
-    } 
-    
+    }
+
     //@GET
     //@Path("{cedula}")
     //@Produces({MediaType.APPLICATION_JSON})
     //public Persona get(@PathParam("cedula") String cedula) {
-       // try {
-         //   return Model.instance().personaEdit(cedula);
-        //} catch (Exception ex) {
-          //  throw new NotFoundException(); 
-        //}
+    // try {
+    //   return Model.instance().personaEdit(cedula);
+    //} catch (Exception ex) {
+    //  throw new NotFoundException(); 
     //}
-    
+    //}
     @POST
-    @Consumes(MediaType.APPLICATION_JSON) 
-    public void add(Compra p) {  
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void add(Compra p) {
         try {
-        
+
             Service.getInstance().agregarUsuario(p.getUser());
             Service.getInstance().agregarCompra(p);
-            
+
         } catch (Exception ex) {
-            throw new NotAcceptableException(); 
+            throw new NotAcceptableException();
         }
     }
+
     @POST
     @Path("tiquetes")
-    @Consumes(MediaType.APPLICATION_JSON) 
-    public void lista(List<Tiquete> lt) {  
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void lista(List<Tiquete> lt) {
         try {
-          Service.getInstance().TiquetesAlaBase(lt);
-            
+            Service.getInstance().TiquetesAlaBase(lt);
+
         } catch (Exception ex) {
-            throw new NotAcceptableException(); 
+            throw new NotAcceptableException();
         }
     }
-    
 
-   /* @PUT
+    @GET
+    @Path("/pdf")
+    @Produces("application/pdf")
+    public Response GenerarComprasAdmin() throws IOException {
+
+        ByteArrayOutputStream salida = new ByteArrayOutputStream();
+        PdfDocument pdfDoc = new PdfDocument(new PdfWriter(salida));
+        Document document = new Document(pdfDoc);
+        document.add(new Paragraph("Hola:"));
+        document.add(new Paragraph("Hola:"));
+        document.add(new Paragraph("Madrigal:"));
+        document.add(new Paragraph("Mamadisimo:"));
+        document.add(new Paragraph("Proga IV:"));
+        document.close();
+        ByteArrayInputStream pdf = new ByteArrayInputStream(salida.toByteArray());
+        Response.ResponseBuilder response = Response.ok().entity(pdf);
+        response.header("Content-Disposition", "filename=datalle.pdf");
+        return response.build();
+    }
+
+    /* @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     public void update(Persona p) {  
         try {
@@ -104,21 +148,6 @@ public class Compras {
         List<Persona> mujeres = new ArrayList<>();
         for(Persona p: todos){ if(p.getSexo().equals("F")) mujeres.add(p);};
         return mujeres;
-    }  
-    
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces({MediaType.APPLICATION_JSON})  
-    @Path("filtrar")    
-    public List<Persona> filtrar(Persona filtro) {  
-        List<Persona> todos=Model.instance().personaSearch("");
-        List<Persona> filtrados = new ArrayList<>();
-        for(Persona p: todos){ 
-            if (    p.getCedula().contains(filtro.getCedula())
-                  && p.getNombre().contains(filtro.getNombre())
-                  && p.getSexo().contains(filtro.getSexo()))  filtrados.add(p);
-        };
-        return filtrados;
     } 
-*/
+     */
 }
