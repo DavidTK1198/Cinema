@@ -74,7 +74,7 @@ public class Compra {
     public void agregarTiquete(Tiquete tiq){
         this.tiquetes.add(tiq);
     }
-     private String generarCodigo() {
+     public String generarCodigo() {
         Random rand = new Random();
         String contra = "";
         int n;

@@ -21,7 +21,7 @@ import javax.ws.rs.NotAcceptableException;
 import javax.ws.rs.POST;
 import javax.ws.rs.core.Context;
 
-@Path("/com")
+@Path("/Compras")
 public class Compras {
      
    // @GET
@@ -45,7 +45,9 @@ public class Compras {
     @Consumes(MediaType.APPLICATION_JSON) 
     public void add(Compra p) {  
         try {
+            p.setCodigo(p.generarCodigo());
             Service.getInstance().agregarCompra(p);
+            
         } catch (Exception ex) {
             throw new NotAcceptableException(); 
         }

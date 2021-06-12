@@ -18,6 +18,17 @@ CREATE SCHEMA IF NOT EXISTS `cinema` DEFAULT CHARACTER SET utf8 ;
 USE `cinema` ;
 
 -- -----------------------------------------------------
+-- Table `cinema`.`pelicula`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `cinema`.`pelicula` (
+  `Nombre` VARCHAR(200) NOT NULL,
+  `estado` TINYINT NOT NULL,
+  PRIMARY KEY (`Nombre`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
 -- Table `cinema`.`sala`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `cinema`.`sala` (
@@ -30,34 +41,25 @@ DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `cinema`.`pelicula`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `cinema`.`pelicula` (
-  `Nombre` VARCHAR(200) NOT NULL,
-  `estado` TINYINT NOT NULL,
-  PRIMARY KEY (`Nombre`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
 -- Table `cinema`.`proyeccion`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `cinema`.`proyeccion` (
   `idProyeccion` INT NOT NULL AUTO_INCREMENT,
-  `Sala_id` VARCHAR(45) NOT NULL,
   `Date` DATE NOT NULL,
   `Precio` FLOAT NULL,
-  `pelicula_Nombre` VARCHAR(200) NOT NULL,
-  INDEX `fk_Proyeccion_Sala1_idx` (`Sala_id` ASC) VISIBLE,
-  INDEX `fk_proyeccion_pelicula1_idx` (`pelicula_Nombre` ASC) VISIBLE,
-  PRIMARY KEY (`idProyeccion`, `pelicula_Nombre`, `Date`, `Sala_id`),
-  CONSTRAINT `fk_Proyeccion_Sala1`
-    FOREIGN KEY (`Sala_id`)
-    REFERENCES `cinema`.`sala` (`Codigo`),
+  `Pelicula_Nombre` VARCHAR(200) NOT NULL,
+  `Sala_id` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`idProyeccion`),
+  INDEX `fk_proyeccion_pelicula1_idx` (`Pelicula_Nombre` ASC) VISIBLE,
+  INDEX `fk_proyeccion_sala1_idx` (`Sala_id` ASC) VISIBLE,
   CONSTRAINT `fk_proyeccion_pelicula1`
-    FOREIGN KEY (`pelicula_Nombre`)
+    FOREIGN KEY (`Pelicula_Nombre`)
     REFERENCES `cinema`.`pelicula` (`Nombre`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_proyeccion_sala1`
+    FOREIGN KEY (`Sala_id`)
+    REFERENCES `cinema`.`sala` (`Codigo`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -115,8 +117,7 @@ CREATE TABLE IF NOT EXISTS `cinema`.`tiquete` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
-
-
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+insert into usuario  (id_usu,clave,Rol,Nombre) values (111,111,1,'ElCopias');

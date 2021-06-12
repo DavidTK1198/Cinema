@@ -1,13 +1,15 @@
 
 import { sala } from "../js/Salas.js"
 import { agregarSala } from "../js/Salas.js"
-import { proyeccion, agregarProyeccion, proyecciones, listarProyecciones,fecha,format} from "../js/Proyecciones.js"
-import {agregarPelicula,cargarPeliculas,recuperarPeliculas,peliculas,url} from "../js/peliculas.js"
+import { proyeccion, agregarProyeccion, proyecciones, listarProyecciones, fecha, format} from "../js/Proyecciones.js"
+import {agregarPelicula, cargarPeliculas, recuperarPeliculas, peliculas, url} from "../js/peliculas.js"
+import {cargarCompra,agregarCompra} from "../js/compras.js"
 "use strict";
 var usuario;
+export var total;
 export var salas = [];
 function setUsu(id, clav, nomb, ro) {
-    usuario = { idUsu: id, clave: clav, nombre: nomb, rol: ro };
+    usuario = {idUsu: id, clave: clav, nombre: nomb, rol: ro};
 }
 function draw_movie() {
     $("#cambiar").hide();
@@ -62,7 +64,7 @@ function draw_movie() {
 </form>
        
 </div>`
-            );
+                    );
             fila.appendChild(d);
             $("#RegPeli").click(mandarAgregarP);
             document.getElementById("imagen").addEventListener("change", () => {
@@ -117,7 +119,7 @@ function drawSala() {
 </form>
        
 </div>`
-            );
+                    );
             fila.appendChild(d);
             $("#RegSala").click(agregarSala);
 
@@ -162,7 +164,7 @@ function drawProyeccion() {
                     nueva.id = "colums";
                     nueva.classList.add("col", "col-sm-8", "col-md-4", "col-xl-4", "mb-5", "border-dark", "ml-2");
                     nueva.innerHTML = (
-                        `
+                            `
                 <div class="card">
                 <div class="embed-responsive embed-responsive-16by9" id="zoom">
                 <img src="${url}api/Peliculas/${p.nombre}/imagen" class="card-img-top embed-responsive-item" alt="..." id="${name}" data-toggle="modal" data-target="#staticBackdrop2">
@@ -214,7 +216,7 @@ function drawProyeccion() {
         
         </div>
       </div>`
-                    );
+                            );
                     let nombre = p.nombre.split(" ").join("-");
                     fila.appendChild(nueva);
 
@@ -269,14 +271,14 @@ function getCurrentUser() {
         url: "/Cinema/web/api/usuarios",
         contentType: "application/json"
     }).then(
-        (response) => {
-            setUsu(response.idUsu, response.clave, response.nombre, response.rol);
-            document.getElementById('navbarDropdown').textContent = `${response.nombre}`;
-            document.getElementById('usu').textContent = ` Bienvenido ${response.nombre}`;
-        },
-        (error) => {
+            (response) => {
+        setUsu(response.idUsu, response.clave, response.nombre, response.rol);
+        document.getElementById('navbarDropdown').textContent = `${response.nombre}`;
+        document.getElementById('usu').textContent = ` Bienvenido ${response.nombre}`;
+    },
+            (error) => {
 
-        }
+    }
     );
 }
 
@@ -302,20 +304,24 @@ function mandarAgregarP() {
 $(loaded);
 
 function recuperarSalas() {
-
-    $.ajax({
-        type: "GET",
-        url: "/Cinema/web/api/Salas/listar"
-    }).then((response) => {
-        salas = [...response];
-        console.log("????");
-
-    },
-        (error) => {
+    return new Promise(function (sol, rechazo) {
+        $.ajax({
+            type: "GET",
+            url: "/Cinema/web/api/Salas/listar"
+        }).then((response) => {
+            salas = [...response];
+            console.log("????");
+            sol("ok");
+        },
+                (error) => {
             console.log("fallo listar");
             console.log(error.text);
-
+            rechazo("error");
         });
+
+
+    })
+
 }
 
 
@@ -333,22 +339,27 @@ export async function proyeccionesApeliculas(nom) {
         $("#nop").remove();
         proyecciones.forEach((p) => {
             var nueva = document.createElement("div");
-            nueva.id = fecha.split(" ").join("");
-            format(p.date);
+
+           
+            var ayuda2 = fecha.split(" ").join("");
+            
+            nueva.id = `${ayuda2}/${p.sala.codigo}`;
             nueva.textContent = `${fecha}/${p.sala.codigo}`;
             nueva.classList.add("pointer");
-            nueva.addEventListener("click",sillas);
+
+            nueva.addEventListener("click", sillas);
             ayuda.appendChild(nueva);
         }
         );
     }
 
 }
-function sillas(){
+function sillas() {
     var n = document.createElement("div");
-    n.id="del-comp";
+    var sala = event.target.id;
+    n.id = "del-comp";
     $("#del-comp").remove();
-    var nue =document.getElementById("tarjeta");
+    var nue = document.getElementById("tarjeta");
     n.innerHTML = (` 
       <!-- Modal -->
       <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -376,80 +387,138 @@ function sillas(){
                     <small class="status" style="font-size: 1em;">Occupied</small>
                   </li>
                 </ul>
-                <div class="w-50 move">
+                <div class="w-50 move" id="asientos" >
                   <div class="screen"></div>
-                  <div class="row pl-4">
-                    <div id="seat" class="seat"></div>
-                    <div id="seat" class="seat"></div>
-                    <div id="seat" class="seat"></div>
-                    <div id="seat" class="seat"></div>
-                    <div id="seat" class="seat"></div>
-                    <div id="seat" class="seat"></div>
-                    <div id="seat" class="seat"></div>
-                    <div id="seat" class="seat"></div>
-                  </div>
-                  <div class="row pl-4">
-                    <div id="seat" class="seat"></div>
-                    <div id="seat" class="seat"></div>
-                    <div id="seat" class="seat"></div>
-                    <div id="seat" class="seat occupied"></div>
-                    <div id="seat" class="seat occupied"></div>
-                    <div id="seat" class="seat"></div>
-                    <div id="seat" class="seat"></div>
-                    <div id="seat" class="seat"></div>
-                  </div>
-                  <div class="row pl-4">
-                    <div id="seat" class="seat"></div>
-                    <div id="seat" class="seat"></div>
-                    <div id="seat" class="seat"></div>
-                    <div id="seat" class="seat"></div>
-                    <div id="seat" class="seat"></div>
-                    <div id="seat" class="seat"></div>
-                    <div id="seat" class="seat occupied"></div>
-                    <div id="seat" class="seat occupied"></div>
-                  </div>
-                  <div class="row pl-4">
-                    <div id="seat" class="seat"></div>
-                    <div id="seat" class="seat"></div>
-                    <div id="seat" class="seat"></div>
-                    <div id="seat" class="seat"></div>
-                    <div id="seat" class="seat"></div>
-                    <div id="seat" class="seat"></div>
-                    <div id="seat" class="seat"></div>
-                    <div id="seat" class="seat"></div>
-                  </div>
-                  <div class="row pl-4">
-                    <div id="seat" class="seat"></div>
-                    <div id="seat" class="seat"></div>
-                    <div id="seat" class="seat"></div>
-                    <div id="seat" class="seat occupied"></div>
-                    <div id="seat" class="seat occupied"></div>
-                    <div id="seat" class="seat"></div>
-                    <div id="seat" class="seat"></div>
-                    <div id="seat" class="seat"></div>
-                  </div>
-                  <div class="row pl-4">
-                    <div id="seat" class="seat"></div>
-                    <div id="seat" class="seat"></div>
-                    <div id="seat" class="seat"></div>
-                    <div id="seat" class="seat"></div>
-                    <div id="seat" class="seat occupied"></div>
-                    <div id="seat" class="seat occupied"></div>
-                    <div id="seat" class="seat occupied"></div>
-                    <div id="seat" class="seat"></div>
+                 
                   </div>
                 </div>
-              </div>
             </div>
+            <p class="text" style="font-size: 1em;margin:0px 0px 15px 0px">
+                Ha seleccionado <span id="count">0</span> butacas por el precio de $<span id="total">0</span>
+                    
+            </p>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary">Save changes</button>
+              <button type="button" class="btn btn-primary" id="comprar">Comprar</button>
             </div>
+            
           </div>
-        </div>
-      </div>`);
-    nue.appendChild(n);
-    $("#exampleModal").modal();
     
+        </div>
+               <div class="signup-form d-none" id ="mal">
+                      <form>
+                        <h2>Datos requeridos para efectuar la compra</h2>
+                        <div class="input-group form-group mt-5">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                          </div>
+                          <input type="text" class="form-control" placeholder="cedula de identidad" required id="cedula2">
+                          
+                        </div>
+                        <div class="input-group form-group">
+                          <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-key"></i></span>
+                          </div>
+                          <input type="text" class="form-control" placeholder="Tarjeta" required id="tarjeta" pattern="[0-9\s]{13,19}">
+                        </div>
+                        <div class="d-flex justify-content-center">
+                          <input type="button" value="Comprar Tiquetes" class="btn btn-danger" id="compraButton">
+                        </div>
+                      </form>
+                
+                  </div>
+      </div>
+       
+
+
+
+                    `);
+    nue.appendChild(n);
+    filasYcolumnas(sala);
+    $("#compraButton").click(agregarCompra);
+
+    $("#exampleModal").modal();
+
+
+}
+async function filasYcolumnas(sa) {
+    var f = 0;
+    var fechita = "";
+    var salaaa = "";
+    var bandera = false;
+    await recuperarSalas();
+    var contador = 1;
+    for (f; f < sa.length; f++) {
+        if (sa[f - 1] == "/" || bandera == true) {
+            salaaa = salaaa + sa[f];
+            bandera = true;
+        }
+        if(contador == 11){
+            fechita = fechita + "T";
+        }
+        if(bandera == false && sa[f] != "/"){
+            fechita = fechita + sa[f];
+        }
+        
+        contador++;
+    }
+    var dat = new Date(fechita);
+    var hijo = document.getElementById(`${sa}`);
+    var padre = hijo.parentElement;
+    var idd = padre.id;
+    var p = idd.split("-pro").join("");
+    await listarProyecciones(p);
+    var proye = proyecciones.find(z => z.date.toString() == dat.toString());
+    proyeccion.pelicula = proye.pelicula;
+    proyeccion.sala = proye.sala;
+    proyeccion.date = proye.date;
+    proyeccion.precio = proye.precio;
+    var nu = salas.find(p => p.codigo == salaaa);
+    if (nu != undefined) {
+        var asi = document.getElementById("asientos");
+        var i, j = 0;
+
+        for (i = 0; i < nu.fila; i++) {
+            var rows = document.createElement("div");
+            rows.classList.add("row", "pl-4", "justify-content-center", "d-flex");
+            for (j = 0; j < nu.col; j++) {
+                var columns = document.createElement("div");
+                columns.id = `${i},${j}`;
+                columns.classList.add("seat");
+                rows.appendChild(columns);
+            }
+            asi.appendChild(rows);
+        }
+        var count = 0;
+        var seats = document.getElementsByClassName("seat");
+        for (var i = 0; i < seats.length; i++) {
+            var item = seats[i];
+
+            item.addEventListener("click", (event) => {
+                if (!event.target.classList.contains('occupied') && !event.target.classList.contains('selected')) {
+                    count++;
+                    total = count * proyeccion.precio;
+                    event.target.classList.add("selected");
+                    document.getElementById("count").innerText = count;
+                    document.getElementById("total").innerText = total;
+
+                }else if(!event.target.classList.contains('occupied') && event.target.classList.contains('selected')){
+                    count--;
+                    total = count * proyeccion.precio;
+                    event.target.classList.remove("selected");
+                    document.getElementById("count").innerText = count;
+                    document.getElementById("total").innerText = total;
+                }
+                    
+                
+            });
+        }
+        $("#comprar").click(cargarCompra);
+        
+
+    }
+
+}
+function sinCredenciales(){
     
 }

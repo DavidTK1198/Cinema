@@ -105,6 +105,7 @@ function loaded() {
     $("#loginButton").click(login);
     $("#RegButton").click(registro);
 }
+
 $(loaded);
 
 

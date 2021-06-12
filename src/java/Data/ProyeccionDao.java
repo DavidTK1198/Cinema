@@ -133,11 +133,26 @@ public class ProyeccionDao {
             Date fecha = rs.getDate("Date");
            java.util.Date utilDate = new java.util.Date(fecha.getTime());
             r.setDate(utilDate);
+            r.setPrecio(rs.getFloat("Precio"));
             Sala sala = Service.getInstance().buscarSala(rs.getString("Sala_id"));
             r.setSala(sala);
             return r;
         } catch (SQLException ex) {
             return null;
+        }
+    }
+    public int BusquedaEspecifica(Proyeccion pr) throws SQLException, Exception{
+        String sql = "select idProyeccion from Proyeccion where Pelicula_Nombre=? AND Sala_id=? AND date =?";
+        PreparedStatement stm = DataBase.instance().prepareStatement(sql);
+        stm.setString(1, pr.getPelicula().getNombre());
+        stm.setString(2, pr.getSala().getCodigo());
+        Date fecha = new Date(pr.getDate().getTime());
+        stm.setDate(3, fecha);
+        ResultSet rs = DataBase.instance().executeQuery(stm);
+        if (rs.next()) {
+           return rs.getInt("idProyeccion");
+        } else {
+            throw new Exception("No existe proyeccion con easas especificaciones ");
         }
     }
  

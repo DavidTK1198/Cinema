@@ -31,7 +31,8 @@ public class CompraDao {
         if (proyeccionId == null) {
             throw new Exception("No existe proyeccion");
         }
-        stm.setString(2, proyeccionId.getPelicula().getNombre());
+        int n = Service.getInstance().busquedaDePro(o.getP());
+         stm.setInt(2,n);
         stm.setString(3, o.getUser().getIdUsu());
         stm.setFloat(4, o.getTotal());
         int count = DataBase.instance().executeUpdate(stm);

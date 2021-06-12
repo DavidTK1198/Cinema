@@ -118,5 +118,9 @@ public class Service {
      public List<Sala> devolverSalas()throws Exception{
         return salas.findAll();
     }
+     public int busquedaDePro(Proyeccion pr) throws Exception{
+         return proyecciones.BusquedaEspecifica(pr);
+     }
     
+     
 }
