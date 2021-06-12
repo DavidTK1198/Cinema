@@ -81,7 +81,26 @@ public class TiqueteDao {
         }
         return tiquetes;
     }
+      public List<Tiquete> tiquetesPorCompraEspecifica(Compra compra) {
+        List<Tiquete> tiquetes = new ArrayList<>();
+        
+            try {
+                String sql = "select * from Tiquete where compra_id = ?";
+                PreparedStatement stm = DataBase.instance().prepareStatement(sql);
+                stm.setString(1, compra.getCodigo());
+                ResultSet rs = DataBase.instance().executeQuery(stm);
+                if (rs != null) {
+                    while (rs.next()) {
+                        tiquetes.add(from(rs,compra));
+                    }
+                }
 
+            } catch (Exception ex) {
+                return tiquetes;
+            }
+        
+        return tiquetes;
+    }
     public void agregarTiquetes(List<Tiquete> lt) {
         for (Tiquete tiq : lt) {
             try {

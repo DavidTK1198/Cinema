@@ -85,22 +85,23 @@ public class CompraDao {
 
         }
         if(lc.isEmpty()){
-            throw new Exception("La compra no existe");
+            return lc;
         }
         
         return lc;
     }
 
     public Compra from(ResultSet rs, boolean bandera) {
-        Proyeccion p;
-        Usuario us;
+        Proyeccion p = null;
+        Usuario us = null;
         try {
             Compra r = new Compra(); //creamos el usuario
             
             if (bandera == true) {
                 r.setCodigo(rs.getString("id_com"));
-                p = Service.getInstance().buscarProyeccionDevuelvePro(rs.getString("Proyeccion_id"));
-              //  us = Service.getInstance().buscarUsuario(rs.getString("Usuario_id"));
+                p = Service.getInstance().buscarProyeccionDevuelvePro(rs.getInt("Proyeccion_id"));
+                us = Service.getInstance().buscarUsuarioid(rs.getString("Usuario_id"));
+                r.setTotal(rs.getFloat("Precio"));
             } else {
                 r.setCodigo(rs.getString("cod"));
                 p = Service.getInstance().buscarProyeccionDevuelvePro(rs.getInt("proyeccion"));
@@ -108,6 +109,9 @@ public class CompraDao {
             }
 
             r.setP(p);
+            r.setUser(us);
+            
+            
             //r.setUser(us);
 
             return r;

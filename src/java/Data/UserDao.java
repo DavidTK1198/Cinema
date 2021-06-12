@@ -70,7 +70,7 @@ public class UserDao {
             PreparedStatement stm = DataBase.instance().prepareStatement(sql);
             stm.setString(1,id);
             ResultSet rs = DataBase.instance().executeQuery(stm);
-            while (rs.next()) {
+            if (rs.next()) {
                 return from(rs);
             }
         } catch (SQLException ex) {

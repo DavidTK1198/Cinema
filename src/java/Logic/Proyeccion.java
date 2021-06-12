@@ -75,4 +75,9 @@ public class Proyeccion {
         this.date = new SimpleDateFormat("yyyy/MM/dd hh:mm").parse(fe);
     }
 
+    @Override
+    public String toString() {
+            return "Proyeccion{" + "pelicula=" + pelicula.getNombre() + ", sala=" + sala.getCodigo() + ", Fecha y hora de emision=" + date.toString() + '}';
+    }
+
 }

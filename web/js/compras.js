@@ -110,3 +110,28 @@ export function devuelveTiquetes(){
     
     
 }
+export function generarPdfCompras(com){
+    
+      
+    $.ajax({
+        type: "GET",
+        url: "/Cinema/web/api/Compras/"+com.codigo+"/pdf"
+       
+    }).then((response) => {
+       window.location = "datalle.pdf";
+       
+       
+       
+        
+        
+       
+    },
+            (error) => {
+        console.log("fallo generacion de pfg");
+        console.log(error.text);
+       
+
+    });
+
+    
+}

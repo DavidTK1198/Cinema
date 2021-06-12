@@ -105,6 +105,10 @@ public class Service {
     public Usuario buscarUsuario(Usuario p) throws Exception {
         return users.read(p.getIdUsu(),p.getClave());
     }
+     public Usuario buscarUsuarioid(String id) throws Exception {
+        return users.busquedaPorId(id);
+    }
+    
     
     public Compra BuscarCompra(String cod) throws Exception {
         return compras.buscarCompraPorCodigo(cod);
@@ -115,6 +119,10 @@ public class Service {
     public List<Tiquete> tiquetesPorCompras(List<Compra> lc)throws Exception{
         
         return tiquetes.tiquetesPorCompra(lc);
+    }
+    public List<Tiquete> tiquetesPorCompraEspecifica(Compra c)throws Exception{
+        
+        return tiquetes.tiquetesPorCompraEspecifica(c);
     }
      public List<Sala> devolverSalas()throws Exception{
         return salas.findAll();

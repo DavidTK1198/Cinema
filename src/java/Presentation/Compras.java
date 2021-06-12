@@ -100,23 +100,39 @@ public class Compras {
     }
 
     @GET
-    @Path("/pdf")
+    @Path("{com}/pdf")
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces("application/pdf")
-    public Response GenerarComprasAdmin() throws IOException {
+    public Response GenerarComprasAdmin(@PathParam("com") String n) throws IOException {
+        try {
+            int contador = 0;
+            Compra c = Service.getInstance().BuscarCompra(n);
+            List<Tiquete> lc = Service.getInstance().tiquetesPorCompraEspecifica(c);
+            ByteArrayOutputStream salida = new ByteArrayOutputStream();
+            PdfDocument pdfDoc = new PdfDocument(new PdfWriter(salida));
+            Document document = new Document(pdfDoc);
+            document.add(new Paragraph("Datos de la compra"));
+            document.add(new Paragraph(c.getP().toString()));
+            document.add(new Paragraph("Codigo de la compra asignado: " + c.getCodigo()));
+            document.add(new Paragraph("Numero de tiquetes comprados: " +lc.size()));
+            document.add(new Paragraph("Precio designado por tiquete: " +c.getP().getPrecio()));
+            document.add(new Paragraph("Lista de tiquetes asociados a la compras:"));
+           
+            for (Tiquete t : lc) {
+                document.add(new Paragraph("Tiquete#" + contador +": " +" fila#" +t.getFila()+","+"Columna#"+t.getCol()));
+                
+            }
+            document.add(new Paragraph("Monto total cancelado: "+c.getTotal()));
+            document.close();
+            ByteArrayInputStream pdf = new ByteArrayInputStream(salida.toByteArray());
+            Response.ResponseBuilder response = Response.ok().entity(pdf);
+            response.header("Content-Disposition", "filename=datalle.pdf");
+            return response.build();
+           
 
-        ByteArrayOutputStream salida = new ByteArrayOutputStream();
-        PdfDocument pdfDoc = new PdfDocument(new PdfWriter(salida));
-        Document document = new Document(pdfDoc);
-        document.add(new Paragraph("Hola:"));
-        document.add(new Paragraph("Hola:"));
-        document.add(new Paragraph("Madrigal:"));
-        document.add(new Paragraph("Mamadisimo:"));
-        document.add(new Paragraph("Proga IV:"));
-        document.close();
-        ByteArrayInputStream pdf = new ByteArrayInputStream(salida.toByteArray());
-        Response.ResponseBuilder response = Response.ok().entity(pdf);
-        response.header("Content-Disposition", "filename=datalle.pdf");
-        return response.build();
+        } catch (Exception ex) {
+            return null;
+        }
     }
 
     /* @PUT

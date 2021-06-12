@@ -1,6 +1,6 @@
 "use strict";
 
-import {compra} from "../js/compras.js"
+import {compra,generarPdfCompras} from "../js/compras.js"
 export var tiquete;
 
 export var tiquetes = [];
@@ -8,7 +8,7 @@ function restartTiquete(){
     tiquete = {fila: 0, col:0, compra:{}};
 }
 
- export function crearTiquete(){
+export function crearTiquete(){
      return new Promise(function(sol,rechazo){
     var butacas = document.getElementsByClassName("selected");
     var id = "";
@@ -22,14 +22,15 @@ function restartTiquete(){
         fil = Number.parseInt(ayuda2[0]);
         col =  Number.parseInt(ayuda2[1]);
         rellenarObjeto(fil,col);
-        
+       
     }
     mandarTiquetes();
+    generarPdfCompras(compra);
     sol("ok");
     rechazo("error");
      }
      );
-    
+    generarPdfCompras(compra);
    
 }
 function rellenarObjeto(f,c){
