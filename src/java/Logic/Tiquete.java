@@ -11,7 +11,7 @@ package Logic;
  */
 
 public class Tiquete {
-    private String codigo;
+    
     private int fila;
     private int col;
     private Compra compra;
@@ -19,14 +19,14 @@ public class Tiquete {
     public Tiquete(int fil,int col,String cod,Compra c) {
         this.fila=fil;
         this.col=col;
-        this.codigo = cod; 
+      
         this.compra = c;
       
     }
     public Tiquete(){
          this.fila=0;
         this.col=0;
-        this.codigo = "";
+     
         this.compra = new Compra();
     }
 
@@ -38,14 +38,6 @@ public class Tiquete {
         this.compra = compra;
     }
     
-
-    public String getCodigo() {
-        return codigo;
-    }
-
-    public void setCodigo(String codigo) {
-        this.codigo = codigo;
-    }
 
     public int getFila() {
         return fila;

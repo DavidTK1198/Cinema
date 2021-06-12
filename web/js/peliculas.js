@@ -95,7 +95,7 @@ export function recuperarPeliculas() {
         rechazo("error");
 
     });
-})
+});
 }
 
 

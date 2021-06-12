@@ -77,16 +77,17 @@ public class CompraDao {
                 + "p.pelicula_Nombre = ? AND p.Sala_id = s.Codigo AND p.Date = ?";
         PreparedStatement stm = DataBase.instance().prepareStatement(sql);
         stm.setString(1, pr.getPelicula().getNombre());
-        String fechaa = pr.transformarFormatoDato();
-        Date fecha = Date.valueOf(fechaa);
+        Date fecha = new Date(pr.getDate().getTime());
         stm.setDate(2, fecha);
         ResultSet rs = DataBase.instance().executeQuery(stm);
-        if (rs.next()) {
+        while(rs.next()) {
             lc.add(from(rs, false));
 
-        } else {
+        }
+        if(lc.isEmpty()){
             throw new Exception("La compra no existe");
         }
+        
         return lc;
     }
 

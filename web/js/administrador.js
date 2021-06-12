@@ -3,7 +3,7 @@ import { sala } from "../js/Salas.js"
 import { agregarSala } from "../js/Salas.js"
 import { proyeccion, agregarProyeccion, proyecciones, listarProyecciones, fecha, format} from "../js/Proyecciones.js"
 import {agregarPelicula, cargarPeliculas, recuperarPeliculas, peliculas, url} from "../js/peliculas.js"
-import {cargarCompra,agregarCompra} from "../js/compras.js"
+import {cargarCompra,agregarCompra,devuelveTiquetes,x} from "../js/compras.js"
 "use strict";
 var usuario;
 export var total;
@@ -320,7 +320,7 @@ function recuperarSalas() {
         });
 
 
-    })
+    });
 
 }
 
@@ -473,6 +473,8 @@ async function filasYcolumnas(sa) {
     proyeccion.sala = proye.sala;
     proyeccion.date = proye.date;
     proyeccion.precio = proye.precio;
+    await devuelveTiquetes();
+ 
     var nu = salas.find(p => p.codigo == salaaa);
     if (nu != undefined) {
         var asi = document.getElementById("asientos");
@@ -490,6 +492,7 @@ async function filasYcolumnas(sa) {
             asi.appendChild(rows);
         }
         var count = 0;
+        pintarVendidos();
         var seats = document.getElementsByClassName("seat");
         for (var i = 0; i < seats.length; i++) {
             var item = seats[i];
@@ -519,6 +522,9 @@ async function filasYcolumnas(sa) {
     }
 
 }
-function sinCredenciales(){
-    
+function pintarVendidos(){
+    x.forEach((v)=>{
+        var buta = document.getElementById(`${v.fila},${v.col}`);
+        buta.classList.add("occupied");
+    });
 }

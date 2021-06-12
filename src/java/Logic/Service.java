@@ -113,6 +113,7 @@ public class Service {
         return compras.read(pr);
     }
     public List<Tiquete> tiquetesPorCompras(List<Compra> lc)throws Exception{
+        
         return tiquetes.tiquetesPorCompra(lc);
     }
      public List<Sala> devolverSalas()throws Exception{
@@ -121,6 +122,18 @@ public class Service {
      public int busquedaDePro(Proyeccion pr) throws Exception{
          return proyecciones.BusquedaEspecifica(pr);
      }
+     public void TiquetesAlaBase(List<Tiquete> lc){
+          tiquetes.agregarTiquetes(lc);
+     }
+     public List<Compra> devuelveComprasMismaProyeccion(Proyeccion pr) throws Exception{
+         return compras.read(pr);
+         
+     }
+     public List<Tiquete> cargaTiquets(Proyeccion pr) throws Exception{
+         List<Compra> lc =  devuelveComprasMismaProyeccion(pr);
+         return tiquetesPorCompras(lc);
+     }
+     
     
      
 }

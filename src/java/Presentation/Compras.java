@@ -1,6 +1,7 @@
 package Presentation;
 
 import Logic.Compra;
+import Logic.Proyeccion;
 import java.util.List;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -12,6 +13,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import Logic.Service;
+import Logic.Tiquete;
 import Logic.Usuario;
 import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
@@ -24,11 +26,18 @@ import javax.ws.rs.core.Context;
 @Path("/Compras")
 public class Compras {
      
-   // @GET
-    //@Produces({MediaType.APPLICATION_JSON})
-    //public List<Persona> search(@DefaultValue("") @QueryParam("nombre") String nombre) { 
-     //   return Model.instance().personaSearch(nombre);
-    //} 
+   @POST
+   @Consumes({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON})
+   @Path("{listarT}")
+    public List<Tiquete> search(Proyeccion pr)
+    { 
+        try{
+             return Service.getInstance().cargaTiquets(pr);
+        }catch(Exception ex){
+            throw new NotAcceptableException(); 
+        }
+    } 
     
     //@GET
     //@Path("{cedula}")
@@ -45,13 +54,26 @@ public class Compras {
     @Consumes(MediaType.APPLICATION_JSON) 
     public void add(Compra p) {  
         try {
-            p.setCodigo(p.generarCodigo());
+        
+            Service.getInstance().agregarUsuario(p.getUser());
             Service.getInstance().agregarCompra(p);
             
         } catch (Exception ex) {
             throw new NotAcceptableException(); 
         }
     }
+    @POST
+    @Path("tiquetes")
+    @Consumes(MediaType.APPLICATION_JSON) 
+    public void lista(List<Tiquete> lt) {  
+        try {
+          Service.getInstance().TiquetesAlaBase(lt);
+            
+        } catch (Exception ex) {
+            throw new NotAcceptableException(); 
+        }
+    }
+    
 
    /* @PUT
     @Consumes(MediaType.APPLICATION_JSON)
