@@ -339,10 +339,8 @@ export async function proyeccionesApeliculas(nom) {
         $("#nop").remove();
         proyecciones.forEach((p) => {
             var nueva = document.createElement("div");
-
-           
+            p.date = format(p.date);
             var ayuda2 = fecha.split(" ").join("");
-            
             nueva.id = `${ayuda2}/${p.sala.codigo}`;
             nueva.textContent = `${fecha}/${p.sala.codigo}`;
             nueva.classList.add("pointer");
@@ -468,6 +466,9 @@ async function filasYcolumnas(sa) {
     var idd = padre.id;
     var p = idd.split("-pro").join("");
     await listarProyecciones(p);
+    proyecciones.forEach(p=>{
+        p.date=format(p.date);
+    })
     var proye = proyecciones.find(z => z.date.toString() == dat.toString());
     proyeccion.pelicula = proye.pelicula;
     proyeccion.sala = proye.sala;

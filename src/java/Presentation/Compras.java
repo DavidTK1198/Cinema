@@ -46,6 +46,7 @@ import com.itextpdf.layout.property.TextAlignment;
 import java.io.*;
 import com.itextpdf.io.image.ImageDataFactory;
 import com.itextpdf.layout.property.UnitValue;
+import static javafx.scene.text.Font.font;
 
 @Path("/Compras")
 public class Compras {
@@ -110,18 +111,32 @@ public class Compras {
             List<Tiquete> lc = Service.getInstance().tiquetesPorCompraEspecifica(c);
             ByteArrayOutputStream salida = new ByteArrayOutputStream();
             PdfDocument pdfDoc = new PdfDocument(new PdfWriter(salida));
+            PdfFont font = PdfFontFactory.createFont(StandardFonts.TIMES_ROMAN);
             Document document = new Document(pdfDoc);
-            document.add(new Paragraph("Datos de la compra"));
-            document.add(new Paragraph(c.getP().toString()));
-            document.add(new Paragraph("Codigo de la compra asignado: " + c.getCodigo()));
-            document.add(new Paragraph("Numero de tiquetes comprados: " +lc.size()));
-            document.add(new Paragraph("Precio designado por tiquete: " +c.getP().getPrecio()));
-            document.add(new Paragraph("Lista de tiquetes asociados a la compras:"));
-           
+            document.setMargins(20, 20, 20, 20);
+            document.add(new Paragraph("Datos de la compra").setFont(font).setBold().setFontSize(12f).setTextAlignment(TextAlignment.RIGHT));
+            document.add(new Paragraph(c.getP().toString()).setFont(font).setBold().setFontSize(12f).setTextAlignment(TextAlignment.RIGHT));
+            document.add(new Paragraph("Codigo de la compra asignado: " + c.getCodigo()).setFont(font).setBold().setFontSize(12f).setTextAlignment(TextAlignment.RIGHT));
+            document.add(new Paragraph("Numero de tiquetes comprados: " +lc.size()).setFont(font).setBold().setFontSize(12f).setTextAlignment(TextAlignment.RIGHT));
+            document.add(new Paragraph("Precio designado por tiquete: " +c.getP().getPrecio()).setFont(font).setBold().setFontSize(12f).setTextAlignment(TextAlignment.RIGHT));
+            document.add(new Paragraph("Lista de tiquetes asociados a la compras:").setFont(font).setBold().setFontSize(12f).setTextAlignment(TextAlignment.RIGHT));
+            Table table = new Table(2);
+            Color bkg = ColorConstants.BLUE;
+            Color frg = ColorConstants.WHITE;
+            Cell cc=new Cell();
+            cc.add(new Paragraph("#Tiquete")).setBackgroundColor(bkg).setFontColor(frg);
+            table.addHeaderCell(cc);
+            cc=new Cell();
+            cc.add(new Paragraph("#Asiento")).setBackgroundColor(bkg).setFontColor(frg);
+            table.addHeaderCell(cc);
             for (Tiquete t : lc) {
-                document.add(new Paragraph("Tiquete#" + contador +": " +" fila#" +t.getFila()+","+"Columna#"+t.getCol()));
-                
+                contador++;
+                table.addHeaderCell(Integer.toString(contador));
+                String asiento="("+Integer.toString(t.getFila())+","+Integer.toString(t.getCol())+")";
+                table.addHeaderCell(asiento);
             }
+            table.setWidth(UnitValue.createPercentValue(100));
+            document.add(table);
             document.add(new Paragraph("Monto total cancelado: "+c.getTotal()));
             document.close();
             ByteArrayInputStream pdf = new ByteArrayInputStream(salida.toByteArray());

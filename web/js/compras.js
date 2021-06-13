@@ -111,27 +111,11 @@ export function devuelveTiquetes(){
     
 }
 export function generarPdfCompras(com){
-    
-      
-    $.ajax({
-        type: "GET",
-        url: "/Cinema/web/api/Compras/"+com.codigo+"/pdf"
-       
-    }).then((response) => {
-       window.location = "datalle.pdf";
-       
-       
-       
-        
-        
-       
-    },
-            (error) => {
-        console.log("fallo generacion de pfg");
-        console.log(error.text);
-       
-
-    });
-
+    let request = new Request("/Cinema/web/api/Compras/"+com.codigo+"/pdf", {method: 'GET', headers: { }});
+    (async ()=>{
+        const response = await fetch(request);
+        if (!response.ok) {errorMessage(response.status,$("#buscarDiv #errorDiv"));return;}
+        window.open(response.url); 
+    })();         
     
 }

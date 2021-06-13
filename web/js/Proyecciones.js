@@ -49,7 +49,7 @@ export function listarProyecciones(ay) {
 
             proyecciones = [...response];
             proyecciones.forEach((w) => {
-                w.date = format(w.date);
+               
             });
             sol("ok");
         },
@@ -99,7 +99,7 @@ function cargarDatos(c) {
         pelicula: peli,
         sala: sala,
         date: formatofecha($("#fecha").val(), $("#hora").val()),
-        pre: $("#precio").val()
+        precio: $("#precio").val()
 
     };
 }

@@ -77,7 +77,7 @@ public class Proyeccion {
 
     @Override
     public String toString() {
-            return "Proyeccion{" + "pelicula=" + pelicula.getNombre() + ", sala=" + sala.getCodigo() + ", Fecha y hora de emision=" + date.toString() + '}';
+            return "Proyeccion" + "pelicula=" + pelicula.getNombre() + ", sala=" + sala.getCodigo() + ", Fecha y hora de emision=" + date.toString();
     }
 
 }
