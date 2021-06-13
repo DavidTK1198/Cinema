@@ -1,9 +1,10 @@
 
 
 export var compra;
+export var compras = [];
 import {total} from "../js/administrador.js"
-export var x = [];
-import {crearTiquete,tiquetes} from "../js/tiquetes.js"
+        export var x = [];
+import {crearTiquete, tiquetes} from "../js/tiquetes.js"
         import {proyeccion} from "../js/Proyecciones.js"
         "use strict";
 
@@ -42,7 +43,7 @@ export async function agregarCompra() {
     var bandera = false;
     var p = new Promise(function (sol, rechazo) {
         cargarObjeto(1);
-        
+
         $.ajax({
             type: "POST",
             url: "/Cinema/web/api/Compras",
@@ -84,38 +85,62 @@ function cargarObjeto(valor) {
 
     }
 }
-export function devuelveTiquetes(){
-    
-    return new Promise(function(sol,rechazo){
-    $.ajax({
-        type: "POST",
-        url: "/Cinema/web/api/Compras/listarT",
-        data: JSON.stringify(proyeccion),
-        contentType: "application/json"
-    }).then((response) => {
-        x= [...response];
-        
-        
-        
-        sol("ok");
-    },
-            (error) => {
-        console.log("fallo listar");
-        console.log(error.text);
-        rechazo("error");
+export function devuelveTiquetes() {
 
+    return new Promise(function (sol, rechazo) {
+        $.ajax({
+            type: "POST",
+            url: "/Cinema/web/api/Compras/listarT",
+            data: JSON.stringify(proyeccion),
+            contentType: "application/json"
+        }).then((response) => {
+            x = [...response];
+
+
+
+            sol("ok");
+        },
+                (error) => {
+            console.log("fallo listar");
+            console.log(error.text);
+            rechazo("error");
+
+        });
     });
-});
 
-    
-    
+
+
 }
-export function generarPdfCompras(com){
-    let request = new Request("/Cinema/web/api/Compras/"+com.codigo+"/pdf", {method: 'GET', headers: { }});
-    (async ()=>{
+export function generarPdfCompras(com) {
+    let request = new Request("/Cinema/web/api/Compras/" + com.codigo + "/pdf", {method: 'GET', headers: {}});
+    (async () => {
         const response = await fetch(request);
-        if (!response.ok) {errorMessage(response.status,$("#buscarDiv #errorDiv"));return;}
-        window.open(response.url); 
-    })();         
-    
+        if (!response.ok) {
+            errorMessage(response.status, $("#buscarDiv #errorDiv"));
+            return;
+        }
+        window.open(response.url);
+    })();
+
+}
+export function listarCompras() {
+    return new Promise(function (sol, rechazo) {
+        $.ajax({
+            type: "GET",
+            url: "/Cinema/web/api/Compras/listarC"
+        }).then((response) => {
+            compras = [...response];
+           
+            sol("ok")
+        },
+                (error) => {
+            console.log("fallo listarCompras");
+            console.log(error.text);
+            rechazo("error");
+
+        });
+    });
+
+
+
 }

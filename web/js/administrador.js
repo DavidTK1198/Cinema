@@ -1,15 +1,87 @@
 
 import { sala } from "../js/Salas.js"
-import { agregarSala } from "../js/Salas.js"
-import { proyeccion, agregarProyeccion, proyecciones, listarProyecciones, fecha, format} from "../js/Proyecciones.js"
-import {agregarPelicula, cargarPeliculas, recuperarPeliculas, peliculas, url} from "../js/peliculas.js"
-import {cargarCompra,agregarCompra,devuelveTiquetes,x} from "../js/compras.js"
-"use strict";
+        import { agregarSala } from "../js/Salas.js"
+        import { proyeccion, agregarProyeccion, proyecciones, listarProyecciones, fecha, format} from "../js/Proyecciones.js"
+        import {agregarPelicula, cargarPeliculas, recuperarPeliculas, peliculas, url} from "../js/peliculas.js"
+        import {cargarCompra, agregarCompra, devuelveTiquetes, x, compras,listarCompras} from "../js/compras.js"
+        "use strict";
 var usuario;
 export var total;
 export var salas = [];
 function setUsu(id, clav, nomb, ro) {
     usuario = {idUsu: id, clave: clav, nombre: nomb, rol: ro};
+}
+function draw_compras() {
+    $("#cambiar").hide();
+    $("#barra").hide();
+    $("#change").remove();
+
+    try {
+        let bandera = !!document.getElementById("change");
+        throw bandera;
+    } catch (error) {
+        if (!error) {
+            var contenedor = document.getElementById("content");
+            var fila = document.createElement("div");
+            fila.classList.add("text-black", "row", "justify-content-center");
+            contenedor.appendChild(fila);
+            contenedor.classList.add("text-black", "justify-content-center");
+            var d = document.createElement("div");
+            d.id = 'change';
+            d.classList.add("col", "col-sm-8", "col-md-4", "col-xl-4", "d-flex");
+            d.innerHTML = (`
+                <table class="table">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Codigo</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                <tr id="f">
+                    <th scope="row">1</th>
+                    <td>Mark</td>
+                    
+                </tr>
+            
+            </tbody>
+            </table>
+
+        <table class="table">
+        <thead class="thead-light">
+        
+      
+  </tbody>
+</table>
+                        `
+                    );
+            fila.appendChild(d);
+            $("#RegPeli").click(mandarAgregarP);
+            document.getElementById("imagen").addEventListener("change", () => {
+                var file = $("#imagen").get(0).files[0];
+                var img = document.getElementById("prueba");
+                img.src = window.URL.createObjectURL(file);
+                img = document.getElementById("hnone");
+                img.classList.remove("d-none");
+                img.classList.add("d-block");
+            });
+        }
+    }
+}
+async function listarCompras1(){
+    await listarCompras();
+    var fi = $("#f");
+    var contador = 1;
+    compras.forEach((c)=>{
+       var ta = document.createElement("th");
+       ta.scope = "row";
+       ta.textContent = `${contador}`;
+       contador++;
+       
+    });
+    
+    
 }
 function draw_movie() {
     $("#cambiar").hide();
@@ -451,13 +523,13 @@ async function filasYcolumnas(sa) {
             salaaa = salaaa + sa[f];
             bandera = true;
         }
-        if(contador == 11){
+        if (contador == 11) {
             fechita = fechita + "T";
         }
-        if(bandera == false && sa[f] != "/"){
+        if (bandera == false && sa[f] != "/") {
             fechita = fechita + sa[f];
         }
-        
+
         contador++;
     }
     var dat = new Date(fechita);
@@ -466,8 +538,8 @@ async function filasYcolumnas(sa) {
     var idd = padre.id;
     var p = idd.split("-pro").join("");
     await listarProyecciones(p);
-    proyecciones.forEach(p=>{
-        p.date=format(p.date);
+    proyecciones.forEach(p => {
+        p.date = format(p.date);
     })
     var proye = proyecciones.find(z => z.date.toString() == dat.toString());
     proyeccion.pelicula = proye.pelicula;
@@ -475,7 +547,7 @@ async function filasYcolumnas(sa) {
     proyeccion.date = proye.date;
     proyeccion.precio = proye.precio;
     await devuelveTiquetes();
- 
+
     var nu = salas.find(p => p.codigo == salaaa);
     if (nu != undefined) {
         var asi = document.getElementById("asientos");
@@ -506,25 +578,25 @@ async function filasYcolumnas(sa) {
                     document.getElementById("count").innerText = count;
                     document.getElementById("total").innerText = total;
 
-                }else if(!event.target.classList.contains('occupied') && event.target.classList.contains('selected')){
+                } else if (!event.target.classList.contains('occupied') && event.target.classList.contains('selected')) {
                     count--;
                     total = count * proyeccion.precio;
                     event.target.classList.remove("selected");
                     document.getElementById("count").innerText = count;
                     document.getElementById("total").innerText = total;
                 }
-                    
-                
+
+
             });
         }
         $("#comprar").click(cargarCompra);
-        
+
 
     }
 
 }
-function pintarVendidos(){
-    x.forEach((v)=>{
+function pintarVendidos() {
+    x.forEach((v) => {
         var buta = document.getElementById(`${v.fila},${v.col}`);
         buta.classList.add("occupied");
     });
