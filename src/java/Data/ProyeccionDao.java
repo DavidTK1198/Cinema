@@ -144,12 +144,12 @@ public class ProyeccionDao {
         }
     }
     public int BusquedaEspecifica(Proyeccion pr) throws SQLException, Exception{
-        String sql = "select idProyeccion from Proyeccion where Pelicula_Nombre=? AND Sala_id=? AND date =?";
+        String sql = "select idProyeccion from Proyeccion where Pelicula_Nombre=? AND Sala_id=? AND Date =?";
         PreparedStatement stm = DataBase.instance().prepareStatement(sql);
         stm.setString(1, pr.getPelicula().getNombre());
         stm.setString(2, pr.getSala().getCodigo());
-        Date fecha = new Date(pr.getDate().getTime());
-        stm.setDate(3, fecha);
+         Timestamp timestamp = new Timestamp(pr.getDate().getTime());
+        stm.setTimestamp(3, timestamp);
         ResultSet rs = DataBase.instance().executeQuery(stm);
         if (rs.next()) {
            return rs.getInt("idProyeccion");

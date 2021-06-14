@@ -1,11 +1,11 @@
 
 import { sala } from "./Salas.js"
-        import { agregarSala } from "./Salas.js"
-        import { login, registro, logout, data, getCurrentUser } from "./sesion.js"
-        import { proyeccion, agregarProyeccion, proyecciones, listarProyecciones, fecha, format } from "./Proyecciones.js"
-        import { agregarPelicula, cargarPeliculas, recuperarPeliculas, peliculas, url, cambiarEstado, pelicula, setPelicula,BuscarPeliculas } from "./peliculas.js"
-        import { cargarCompra, agregarCompra, devuelveTiquetes, x, compras, listarCompras,listarComprasCliente } from "./compras.js"
-        "use strict";
+import { agregarSala } from "./Salas.js"
+import { login, registro, logout, data, getCurrentUser } from "./sesion.js"
+import { proyeccion, agregarProyeccion, proyecciones, listarProyecciones, fecha, format } from "./Proyecciones.js"
+import { agregarPelicula, cargarPeliculas, recuperarPeliculas, peliculas, url, cambiarEstado, pelicula, setPelicula, BuscarPeliculas } from "./peliculas.js"
+import { cargarCompra, agregarCompra, devuelveTiquetes, x, compras, listarCompras, listarComprasCliente } from "./compras.js"
+"use strict";
 export var total;
 export var salas = [];
 export const opciones = {
@@ -19,7 +19,7 @@ function draw_compras() {
     $("#cambiar").hide();
     $("#barra").hide();
     $("#change").remove();
-    
+
     try {
         let bandera = !!document.getElementById("change");
         throw bandera;
@@ -48,20 +48,20 @@ function draw_compras() {
                 <tbody id="cuerpo">        
             </tbody>
             </table> `
-                    );
+            );
             contenedor.appendChild(n);
-            
+
             listarCompras1();
         }
     }
 }
 async function listarCompras1() {
-    if(data.rol==2){
+    if (data.rol == 2) {
         await listarComprasCliente(data);
-    }else{
+    } else {
         await listarCompras();
     }
-   
+
     var body = document.getElementById("cuerpo");
     var contador = 1;
     var td;
@@ -140,7 +140,7 @@ function draw_movie() {
 </form>
        
 </div>`
-                    );
+            );
             fila.appendChild(d);
             $("#RegPeli").click(mandarAgregarP);
             document.getElementById("imagen").addEventListener("change", () => {
@@ -195,7 +195,7 @@ function drawSala() {
 </form>
        
 </div>`
-                    );
+            );
             fila.appendChild(d);
             $("#RegSala").click(agregarSala);
 
@@ -240,7 +240,7 @@ function drawProyeccion() {
                     nueva.id = "colums";
                     nueva.classList.add("col", "col-sm-8", "col-md-4", "col-xl-4", "mb-5", "border-dark", "ml-2");
                     nueva.innerHTML = (
-                            `
+                        `
                 <div class="card">
                 <div class="embed-responsive embed-responsive-16by9" id="zoom">
                 <img src="${url}api/Peliculas/${p.nombre}/imagen" class="card-img-top embed-responsive-item" alt="..." id="${name}" data-toggle="modal" data-target="#staticBackdrop${contador}">
@@ -292,7 +292,7 @@ function drawProyeccion() {
         
         </div>
       </div>`
-                            );
+                    );
                     let nombre = p.nombre.split(" ").join("-");
                     fila.appendChild(nueva);
 
@@ -335,10 +335,10 @@ function listarSalas() {
         });
         nueva.appendChild(select);
         ayuda[0].appendChild(nueva);
-       
-        
-       
-        
+
+
+
+
         nueva = document.getElementsByName(`nom-${tar}`);
         nueva[0].textContent = `${event.target.id}`;
         nueva[0].classList.remove("d-none");
@@ -356,12 +356,12 @@ function draw_home() {
     var contenedor = document.getElementById("content");
     contenedor.classList.remove("d-flex", "justify-content-center");
 }
-function draw_home_cliente(){
+function draw_home_cliente() {
     $("#cambiar").show();
     $("#barra").show();
     $("#change").remove();
-    
-    
+
+
 }
 
 
@@ -381,11 +381,11 @@ function recuperarSalas() {
             console.log("????");
             sol("ok");
         },
-                (error) => {
-            console.log("fallo listar");
-            console.log(error.text);
-            rechazo("error");
-        });
+            (error) => {
+                console.log("fallo listar");
+                console.log(error.text);
+                rechazo("error");
+            });
 
 
     });
@@ -400,7 +400,7 @@ export async function proyeccionesApeliculas(nom) {
     console.log("Administrador");
     console.log(nom);
     console.log("-----------------");
-    
+
     if (proyecciones.length == 0) {
         ayuda.textContent = `${pel}`;
         ayuda.innerHTML = (`<span id="nop">No hay proyecciones disponibles</span>`);
@@ -419,7 +419,7 @@ export async function proyeccionesApeliculas(nom) {
 
             nueva.addEventListener("click", sillas);
             ayuda.appendChild(nueva);
-           
+
         }
         );
     }
@@ -430,7 +430,11 @@ function sillas() {
     var sala = event.target.id;
     n.id = "del-comp";
     $("#del-comp").remove();
-    var nue = document.getElementById("tarjeta");
+    if (location.pathname == opciones['cliente']) {
+        var nue = document.getElementById("cambiar");
+    } else {
+        var nue = document.getElementById("tarjeta");
+    }
     n.innerHTML = (` 
       <!-- Modal -->
       <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -591,7 +595,7 @@ async function filasYcolumnas(sa) {
             });
         }
         $("#comprar").click(cargarCompra);
-
+        
 
     }
 
@@ -622,7 +626,7 @@ export function inicio_Admin() {
             p.nombre = xx.split(" ").join("-");
             nueva.classList.add("col", "col-sm-8", "col-md-4", "col-xl-4", "mb-5", "border-dark", "ml-5");
             nueva.innerHTML = (
-                    `
+                `
                 <div class="card" id="tarjeta">
                 <div class="embed-responsive embed-responsive-16by9" id="zoom">
                 <img src="${url}api/Peliculas/${estatica}/imagen" class="card-img-top embed-responsive-item" alt="...">
@@ -650,7 +654,7 @@ export function inicio_Admin() {
           </div>
         </div>
       </div>`
-                    );
+            );
             row.appendChild(nueva);
 
         });
@@ -711,14 +715,14 @@ function formatoNormal() {
         z.nombre = m;
     });
 }
-async function extraerDatosBusqueda(){
+async function extraerDatosBusqueda() {
     var texto = document.getElementById("busca").value;
-    if(texto ==""){
+    if (texto == "") {
         texto = "*";
     }
     var solu = await BuscarPeliculas(texto);
     cargarPeliculas();
-    
+
 }
 async function init_Draw() {
     if (location.pathname == opciones["admin"]) {
@@ -733,20 +737,20 @@ async function init_Draw() {
         getCurrentUser();
     }
     if (location.pathname == opciones["cliente"]) {
-       
+
         $("#home").click(draw_home_cliente);
         $("#verCompras").click(draw_compras);
         $("#logout").click(logout);
         getCurrentUser();
         await recuperarPeliculas();
         cargarPeliculas();
-        
+
     }
     if (location.pathname == opciones["inicio"] || location.pathname == opciones["salir"]) {
         $("#loginButton").click(login);
         $("#RegButton").click(registro);
         $("#busqueda").click(extraerDatosBusqueda);
-        
+
         await recuperarPeliculas();
         cargarPeliculas();
     }

@@ -2,14 +2,15 @@
 
 export var compra;
 export var compras = [];
-import {total} from "./draw.js"
-        export var x = [];
-import {crearTiquete, tiquetes} from "../js/tiquetes.js"
-        import {proyeccion} from "../js/Proyecciones.js"
+import { data, getCurrentUser } from "./sesion.js"
+import { total } from "./draw.js"
+export var x = [];
+import { crearTiquete, tiquetes } from "../js/tiquetes.js"
+import { proyeccion } from "../js/Proyecciones.js"
 "use strict";
 
 function resetCompra() {
-    compra = {p: {}, user: {}, total: 0.0, codigo: "", tiquetes: []};
+    compra = { p: {}, user: {}, total: 0.0, codigo: "", tiquetes: [] };
 
 }
 
@@ -24,11 +25,17 @@ function makeid(length) {
     return result;
 }
 export function cargarCompra() {
-    var x = location.href;
+    var x = location.pathname;
     if (x != "/Cinema/web/presentation/cliente.html") {
         var a = document.getElementById("mal");
         a.classList.remove("d-none");
         a.classList.add("d-block");
+
+    } else {
+        var a = document.getElementById("mal");
+        a.classList.remove("d-none");
+        a.classList.add("d-block");
+        $("#cedula2").remove();
     }
 
 
@@ -38,7 +45,12 @@ export function cargarCompra() {
 export async function agregarCompra() {
     var bandera = false;
     var p = new Promise(function (sol, rechazo) {
-        cargarObjeto(1);
+        var x = location.pathname;
+        if (x != "/Cinema/web/presentation/cliente.html") {
+            cargarObjeto(1);
+        } else {
+            cargarObjeto(2);
+        }
 
         $.ajax({
             type: "POST",
@@ -53,10 +65,10 @@ export async function agregarCompra() {
             sol("ok");
 
         },
-                (error) => {
-            console.log("fallo Compra");
-            rechazo("F");
-        });
+            (error) => {
+                console.log("fallo Compra");
+                rechazo("F");
+            });
 
     });
     await p;
@@ -72,7 +84,16 @@ function cargarObjeto(valor) {
         case 1:
             compra = {
                 p: proyeccion,
-                user: {idUsu: document.getElementById("cedula2").value, clave: '', nombre: '', rol: 3},
+                user: { idUsu: document.getElementById("cedula2").value, clave: '', nombre: '', rol: 3 },
+                total: total,
+                codigo: makeid(5),
+                tiquetes: []
+            };
+            break;
+        case 2: getCurrentUser();
+            compra = {
+                p: proyeccion,
+                user: data,
                 total: total,
                 codigo: makeid(5),
                 tiquetes: []
@@ -96,19 +117,19 @@ export function devuelveTiquetes() {
 
             sol("ok");
         },
-                (error) => {
-            console.log("fallo listar");
-            console.log(error.text);
-            rechazo("error");
+            (error) => {
+                console.log("fallo listar");
+                console.log(error.text);
+                rechazo("error");
 
-        });
+            });
     });
 
 
 
 }
 export function generarPdfCompras(com) {
-    let request = new Request("/Cinema/web/api/Compras/" + com.codigo + "/pdf", {method: 'GET', headers: {}});
+    let request = new Request("/Cinema/web/api/Compras/" + com.codigo + "/pdf", { method: 'GET', headers: {} });
     (async () => {
         const response = await fetch(request);
         if (!response.ok) {
@@ -126,22 +147,22 @@ export function listarCompras() {
             url: "/Cinema/web/api/Compras/listarC"
         }).then((response) => {
             compras = [...response];
-           
+
             sol("ok")
         },
-                (error) => {
-            console.log("fallo listarCompras");
-            console.log(error.text);
-            rechazo("error");
+            (error) => {
+                console.log("fallo listarCompras");
+                console.log(error.text);
+                rechazo("error");
 
-        });
+            });
     });
 
 
 
 }
-export function listarComprasCliente(cliente){
-     return new Promise(function (sol, rechazo) {
+export function listarComprasCliente(cliente) {
+    return new Promise(function (sol, rechazo) {
         $.ajax({
             type: "PUT",
             url: "/Cinema/web/api/Compras/",
@@ -151,11 +172,11 @@ export function listarComprasCliente(cliente){
             compras = [...response];
             sol("ok")
         },
-                (error) => {
-            console.log("fallo listarCompras");
-            console.log(error.text);
-            rechazo("error");
+            (error) => {
+                console.log("fallo listarCompras");
+                console.log(error.text);
+                rechazo("error");
 
-        });
+            });
     });
 }
