@@ -30,7 +30,6 @@ export function crearTiquete(){
     rechazo("error");
      }
      );
-    generarPdfCompras(compra);
    
 }
 function rellenarObjeto(f,c){

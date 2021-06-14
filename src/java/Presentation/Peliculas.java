@@ -9,7 +9,6 @@ import javax.ws.rs.NotFoundException;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import Logic.Service;
 import java.io.File;
@@ -17,13 +16,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.DefaultValue;
 import javax.ws.rs.NotAcceptableException;
 import javax.ws.rs.POST;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
@@ -81,26 +75,20 @@ public class Peliculas{
             }
     }
 
-   /* @PUT
+   @PUT
     @Consumes(MediaType.APPLICATION_JSON)
-    public void update(Persona p) {  
+   @Produces({MediaType.APPLICATION_JSON})
+    public List<Pelicula> update(Pelicula p) {  
         try {
-            Model.instance().personaUpdate(p);
+            Service.getInstance().actualizarPelicula(p);
+           
         } catch (Exception ex) {
             throw new NotFoundException(); 
         }
+        return Service.getInstance().devolverPeliculas();
     }
-    
+    /*
 
-    @DELETE
-    @Path("{cedula}")
-    public void del(@PathParam("cedula") String cedula) {
-        try {
-            Model.instance().personaDelete(cedula);
-        } catch (Exception ex) {
-            throw new NotFoundException(); 
-        }
-    }
 
     @GET
     @Produces({MediaType.APPLICATION_JSON})

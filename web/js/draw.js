@@ -1,16 +1,20 @@
 
-import { sala } from "../js/Salas.js"
-        import { agregarSala } from "../js/Salas.js"
-        import { proyeccion, agregarProyeccion, proyecciones, listarProyecciones, fecha, format} from "../js/Proyecciones.js"
-        import {agregarPelicula, cargarPeliculas, recuperarPeliculas, peliculas, url} from "../js/peliculas.js"
-        import {cargarCompra, agregarCompra, devuelveTiquetes, x, compras,listarCompras} from "../js/compras.js"
-        "use strict";
-var usuario;
+import { sala } from "./Salas.js"
+import { agregarSala } from "./Salas.js"
+import { login, registro, logout, data, getCurrentUser } from "./sesion.js"
+import { proyeccion, agregarProyeccion, proyecciones, listarProyecciones, fecha, format } from "./Proyecciones.js"
+import { agregarPelicula, cargarPeliculas, recuperarPeliculas, peliculas, url, cambiarEstado, pelicula, setPelicula } from "./peliculas.js"
+import { cargarCompra, agregarCompra, devuelveTiquetes, x, compras, listarCompras } from "./compras.js"
+"use strict";
 export var total;
 export var salas = [];
-function setUsu(id, clav, nomb, ro) {
-    usuario = {idUsu: id, clave: clav, nombre: nomb, rol: ro};
+const opciones = {
+    'inicio': "/Cinema/web/",
+    'admin': "/Cinema/web/presentation/administrador.html",
+    'cliente': "/Cinema/web/presentation/cliente.html",
+    'salir': "/Cinema/web/presentation/index.html"
 }
+
 function draw_compras() {
     $("#cambiar").hide();
     $("#barra").hide();
@@ -22,66 +26,60 @@ function draw_compras() {
     } catch (error) {
         if (!error) {
             var contenedor = document.getElementById("content");
-            var fila = document.createElement("div");
-            fila.classList.add("text-black", "row", "justify-content-center");
-            contenedor.appendChild(fila);
-            contenedor.classList.add("text-black", "justify-content-center");
             var d = document.createElement("div");
-            d.id = 'change';
-            d.classList.add("col", "col-sm-8", "col-md-4", "col-xl-4", "d-flex");
+            var n = document.createElement("div");
+            contenedor.classList.add("d-flex", "justify-content-center");
+            n.id = 'change';
+            var h2 = document.createElement("h2");
+            h2.textContent = "Lista de Compras";
+            h2.classList.add("text-center", "mt-5");
+            n.appendChild(h2);
+            n.classList.add("container-sm", "w-75");
+            n.appendChild(d);
+            d.classList.add("text-black", "mt-5", "ml-5");
             d.innerHTML = (`
                 <table class="table">
                 <thead class="thead-dark">
                     <tr>
                         <th scope="col">#</th>
                         <th scope="col">Codigo</th>
-                        
                     </tr>
                 </thead>
-                <tbody>
-                <tr id="f">
-                    <th scope="row">1</th>
-                    <td>Mark</td>
-                    
-                </tr>
-            
+                <tbody id="cuerpo">        
             </tbody>
-            </table>
-
-        <table class="table">
-        <thead class="thead-light">
-        
-      
-  </tbody>
-</table>
-                        `
-                    );
-            fila.appendChild(d);
-            $("#RegPeli").click(mandarAgregarP);
-            document.getElementById("imagen").addEventListener("change", () => {
-                var file = $("#imagen").get(0).files[0];
-                var img = document.getElementById("prueba");
-                img.src = window.URL.createObjectURL(file);
-                img = document.getElementById("hnone");
-                img.classList.remove("d-none");
-                img.classList.add("d-block");
-            });
+            </table> `
+            );
+            contenedor.appendChild(n);
+            listarCompras1();
         }
     }
 }
-async function listarCompras1(){
+async function listarCompras1() {
     await listarCompras();
-    var fi = $("#f");
+    var body = document.getElementById("cuerpo");
     var contador = 1;
-    compras.forEach((c)=>{
-       var ta = document.createElement("th");
-       ta.scope = "row";
-       ta.textContent = `${contador}`;
-       contador++;
-       
+    var td;
+    var a;
+    var th;
+    var tr;
+    compras.forEach((c) => {
+        tr = document.createElement("tr");
+        body.appendChild(tr);
+        th = document.createElement("th")
+        th.scope = "row";
+        th.textContent = `${contador}`;
+        td = document.createElement("td");
+        tr.appendChild(th);
+        tr.appendChild(td);
+        a = document.createElement("a");
+        a.href = "/Cinema/web/api/Compras/" + c.codigo + "/pdf";
+        a.textContent = `${c.codigo}`;
+        a.target = "_blank"
+        td.appendChild(a);
+        contador++;
     });
-    
-    
+
+
 }
 function draw_movie() {
     $("#cambiar").hide();
@@ -136,7 +134,7 @@ function draw_movie() {
 </form>
        
 </div>`
-                    );
+            );
             fila.appendChild(d);
             $("#RegPeli").click(mandarAgregarP);
             document.getElementById("imagen").addEventListener("change", () => {
@@ -191,7 +189,7 @@ function drawSala() {
 </form>
        
 </div>`
-                    );
+            );
             fila.appendChild(d);
             $("#RegSala").click(agregarSala);
 
@@ -203,7 +201,7 @@ function drawProyeccion() {
     $("#barra").hide();
     $("#change").remove();
     recuperarSalas();
-    var ban = false;
+    recuperarPeliculas();
     try {
         let bandera = !!document.getElementById("change");
         throw bandera;
@@ -236,7 +234,7 @@ function drawProyeccion() {
                     nueva.id = "colums";
                     nueva.classList.add("col", "col-sm-8", "col-md-4", "col-xl-4", "mb-5", "border-dark", "ml-2");
                     nueva.innerHTML = (
-                            `
+                        `
                 <div class="card">
                 <div class="embed-responsive embed-responsive-16by9" id="zoom">
                 <img src="${url}api/Peliculas/${p.nombre}/imagen" class="card-img-top embed-responsive-item" alt="..." id="${name}" data-toggle="modal" data-target="#staticBackdrop2">
@@ -288,7 +286,7 @@ function drawProyeccion() {
         
         </div>
       </div>`
-                            );
+                    );
                     let nombre = p.nombre.split(" ").join("-");
                     fila.appendChild(nueva);
 
@@ -337,43 +335,22 @@ function listarSalas() {
     }
 
 }
-function getCurrentUser() {
-    $.ajax({
-        type: "GET",
-        url: "/Cinema/web/api/usuarios",
-        contentType: "application/json"
-    }).then(
-            (response) => {
-        setUsu(response.idUsu, response.clave, response.nombre, response.rol);
-        document.getElementById('navbarDropdown').textContent = `${response.nombre}`;
-        document.getElementById('usu').textContent = ` Bienvenido ${response.nombre}`;
-    },
-            (error) => {
-
-    }
-    );
-}
 
 function draw_home() {
     $("#cambiar").show();
     $("#barra").show();
     $("#change").remove();
+    inicio_Admin();
+    var contenedor = document.getElementById("content");
+    contenedor.classList.remove("d-flex", "justify-content-center");
 }
 
-async function loaded() {
-    $("#pelicula").click(draw_movie);
-    $("#home").click(draw_home);
-    $("#salita").click(drawSala);
-    $("#proyeccion").click(drawProyeccion);
-    await recuperarPeliculas();
-    getCurrentUser();
-}
+
 function mandarAgregarP() {
 
     agregarPelicula();
     recuperarPeliculas();
 }
-$(loaded);
 
 function recuperarSalas() {
     return new Promise(function (sol, rechazo) {
@@ -385,11 +362,11 @@ function recuperarSalas() {
             console.log("????");
             sol("ok");
         },
-                (error) => {
-            console.log("fallo listar");
-            console.log(error.text);
-            rechazo("error");
-        });
+            (error) => {
+                console.log("fallo listar");
+                console.log(error.text);
+                rechazo("error");
+            });
 
 
     });
@@ -402,7 +379,6 @@ export async function proyeccionesApeliculas(nom) {
     var pel = nom.split("-pro").join("");
     var x = await listarProyecciones(pel);
     console.log("Administrador");
-    console.log(proyecciones);
     console.log(nom);
     console.log("-----------------");
     if (proyecciones.length == 0) {
@@ -601,3 +577,116 @@ function pintarVendidos() {
         buta.classList.add("occupied");
     });
 }
+
+export function inicio_Admin() {
+    $("#change").remove();
+    recuperarPeliculas();
+    var contenedor = document.getElementById("myChart");
+    if (peliculas.length == 0) {
+        contenedor.innerHTML = (`<span id="mensaje">NO EXISTEN PELICULAS DISPONIBLES</span>`);
+    } else {
+        $("#mensaje").remove();
+        var row = document.createElement("div");
+        row.id = "change";
+        row.classList.add("row");
+        peliculas.forEach((p) => {
+            var nueva = document.createElement("div");
+            nueva.id = "colums";
+            var estatica=p.nombre;
+            var xx=p.nombre;
+            p.nombre=xx.split(" ").join("-");
+            nueva.classList.add("col", "col-sm-8", "col-md-4", "col-xl-4", "mb-5", "border-dark", "ml-5");
+            nueva.innerHTML = (
+                `
+                <div class="card" id="tarjeta">
+                <div class="embed-responsive embed-responsive-16by9" id="zoom">
+                <img src="${url}api/Peliculas/${estatica}/imagen" class="card-img-top embed-responsive-item" alt="...">
+            </div>
+          <div class="card-body border justify-content-center" id="${p.nombre}-pro">
+          <p class="card-text text-black" >
+             ${p.nombre}
+            </p>
+          <div class="mb-2">
+          <div class="flex-container">
+              <label id="${p.nombre}-estado"></label>
+              <div id="flex">
+                  <div class="flex-item">
+                      <input type="radio" name="${p.nombre}-oferta" value="1" checked id="${p.nombre}-si">Disponible
+                  </div>
+              </div>
+
+              <div id="flex">
+                  <div class="flex-item">
+                      <input type="radio" name="${p.nombre}-oferta" value="0" id="${p.nombre}-no">No Disponible
+                  </div>
+              </div>
+          </div>
+      </div>
+          </div>
+        </div>
+      </div>`
+            );
+            row.appendChild(nueva);
+              
+        });
+        contenedor.appendChild(row);
+        peliculas.forEach(p=>{
+            $(`#${p.nombre}-si`).click(nuevoEstado);
+            $(`#${p.nombre}-no`).click(nuevoEstado);
+        });
+        
+       
+    }
+}
+
+async function nuevoEstado() {
+    var id = event.target.id;
+    var peli;
+    var xx;
+    var seleccion = id.split("-si").join("");
+    if (seleccion[seleccion.length - 1] == "o") {
+        seleccion = id.split("-no").join("");
+        peli = peliculas.find(p => p.nombre == seleccion);
+        xx=seleccion.split("-").join(" ");
+        setPelicula(xx, false);
+    } else {
+        peli = peliculas.find(p => p.nombre == seleccion);
+        xx=seleccion.split("-").join(" ");
+        setPelicula(xx, true);
+    }
+    var label = document.getElementById(`${peli.nombre}-estado`);
+    await cambiarEstado();
+    if (pelicula.estado == false) {
+        var boton = document.getElementById(`${seleccion}-no`)
+        label.textContent = "No Disponible";
+        boton.checked = true;
+    } else {
+        var boton = document.getElementById(`${seleccion}-si`)
+        label.textContent = "En Cartelera";
+        boton.checked = true;
+    }
+}
+async function init_Draw() {
+    if (location.pathname == opciones["admin"]) {
+        $("#proyeccion").click(drawProyeccion);
+        $("#pelicula").click(draw_movie);
+        $("#home").click(draw_home);
+        $("#salita").click(drawSala);
+        $("#verCompras").click(draw_compras);
+        $("#logout").click(logout);
+        await recuperarPeliculas();
+        inicio_Admin();
+        getCurrentUser();
+    }
+    if (location.pathname == opciones["inicio"] || location.pathname == opciones["salir"]) {
+        $("#loginButton").click(login);
+        $("#RegButton").click(registro);
+        await recuperarPeliculas();
+        cargarPeliculas();
+    }
+}
+
+function loaded() {
+    init_Draw();
+}
+$(loaded);

@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         <link rel="stylesheet" href="../css/final_user.css">
+        <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
     <link href="https://fonts.googleapis.com/css?family=Muli:300,700&display=swap" rel="stylesheet">
     <link href="https://unpkg.com/ionicons@4.5.10-0/dist/css/ionicons.min.css" rel="stylesheet">
     <title>Panel de Administrador</title>
@@ -34,8 +35,10 @@
 
                     <a href="#" class="d-block text-light p-3 border-0" id="proyeccion"> <i class="icon ion-md-videocam"></i>
                         Agregar Proyección</a>
-                <a href="#" class="d-block text-light p-3 border-0"><i class="icon ion-md-stats lead mr-2"></i>
+                <a href="#" class="d-block text-light p-3 border-0" id="verCompras"><i class="icon ion-md-stats lead mr-2"></i>
                     Ver todas las Compras</a>
+                    <a href="#" class="d-block text-light p-3 border-0" id="logout"><i class="fas fa-sign-out"></i>
+                      Salir</a>
             </div>
         </div>
         <!-- Fin sidebar -->
@@ -92,7 +95,7 @@
                                     <h6 class="font-weight-bold mb-0">Peliculas Disponibles</h6>
                                   </div>
                                   <div class="card-body">
-                                    <canvas id="myChart" width="300" height="150"></canvas>
+                                    <div id="myChart" width="300" height="150"></div>
                                   </div>
                               </div>
                           </div>
@@ -137,10 +140,10 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
-        <script type= "module" src="../js/administrador.js"></script>
+        <script type= "module" src="../js/draw.js"></script>
         <script type="module" src="../js/Salas.js"></script>
         <script type="module" src="../js/Proyecciones.js"></script>
-        <script type="module" src="../js/Compras.js"></script>
+        <script type="module" src="../js/compras.js"></script>
         <script type="module" src="../js/tiquetes.js"></script>
 </body>
 <footer id="footer">

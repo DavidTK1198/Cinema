@@ -1,5 +1,4 @@
-"use strict";
-var data = {
+export var data = {
     /*  Esta variable guarda la  id del usuario.
      *  Se actualiza de manera automática.
      */
@@ -16,12 +15,13 @@ var data = {
 
     rol: 0
 
-            /*  Esta variable guarda el rol del usuario.
-             *  Se actualiza de manera automática.
-             */
+    /*  Esta variable guarda el rol del usuario.
+     *  Se actualiza de manera automática.
+     */
 };
+"use strict";
 function reset() {
-    data = {idUsu: '', clave: '', nombre: '', rol: 0};
+    data = { idUsu: '', clave: '', nombre: '', rol: 0 };
 }
 
 function load(bandera) {
@@ -63,7 +63,7 @@ function validar(bandera) {
     }
     return !error;
 }
-function login() {
+export function login() {
     load(false);
     if (!validar(false))
         return;
@@ -73,20 +73,37 @@ function login() {
         data: JSON.stringify(data),
         contentType: "application/json"
     }).then((response) => {
-        switch(response.rol){
-            case 1: 
-                window.location.href = "/Cinema/web/presentation/administrador.html";
-                break;
-            case 2: location.href = "/Cinema/web/presentation/cliente.html";
-                break
-        }
+        sessionStorage.setItem('user', JSON.stringify(response));
+        location.href = "/Cinema/web/presentation/administrador.html";
     },
-            (error) => {
-        console.log(error);
-    });
+        (error) => {
+            console.log(error);
+        });
 }
-function registro() {
-     load(true);
+export function logout() {
+    $.ajax({
+        type: "DELETE",
+        url: "/Cinema/web/api/usuarios",
+    }).then((response) => {
+        sessionStorage.removeItem('user');
+        window.location.href = "/Cinema/web/";
+    },
+        (error) => {
+            console.log(error);
+        });
+}
+export function getCurrentUser() {
+    data=JSON.parse(sessionStorage.getItem("user"));
+    setUsu(data.idUsu, data.clave, data.nombre, data.rol);
+    document.getElementById('navbarDropdown').textContent = `${data.nombre}`;
+    document.getElementById('usu').textContent =  `Bienvenido  ${data.nombre}`;
+ }
+ function setUsu(id, clav, nomb, ro) {
+    data = {idUsu: id, clave: clav, nombre: nomb, rol: ro};
+}
+ 
+export function registro() {
+    load(true);
     if (!validar(true))
         return;
     $.ajax({
@@ -96,17 +113,10 @@ function registro() {
         contentType: "application/json"
     }).then((response) => {
     },
-            (error) => {
-        console.log(error);
-    });
+        (error) => {
+            console.log(error);
+        });
 }
 
-function loaded() {
-    $("#loginButton").click(login);
-    $("#RegButton").click(registro);
-}
-
-
-$(loaded);
 
 

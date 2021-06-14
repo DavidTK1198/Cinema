@@ -1,12 +1,12 @@
-import {proyeccionesApeliculas} from "../js/administrador.js"
+import {proyeccionesApeliculas,inicio_Admin} from "../js/draw.js"
 export var  peliculas = [];
 "use strict";
-var pelicula;
+export var pelicula;
 export var url = "http://localhost:8080/Cinema/web/";
 function resetPelicula() {
     pelicula = {nombre: '', estado: false};
 }
-function setPelicula(nom, estad) {
+export function setPelicula(nom, estad) {
     pelicula = {nombre: nom, estado: estad};
 }
 function reinicioCamposPelicula() {
@@ -86,7 +86,6 @@ export function recuperarPeliculas() {
         url: "/Cinema/web/api/Peliculas/listar",
     }).then((response) => {
         peliculas = [...response];
-        cargarPeliculas();
         sol("ok")
     },
             (error) => {
@@ -99,7 +98,25 @@ export function recuperarPeliculas() {
 }
 
 
-
+export  function cambiarEstado(){
+    return new Promise(function(sol,rechazo){
+        $.ajax({
+            type: "PUT",
+            url: "/Cinema/web/api/Peliculas",
+            data: JSON.stringify(pelicula),
+            contentType: "application/json"
+        }).then((response) => {
+            peliculas=[...response];
+            sol("ok");
+        },
+                (error) => {
+            console.log("fallo listar");
+            console.log(error.text);
+            rechazo("error");
+    
+        });
+    });  
+}
 
 export function cargarPeliculas() {
 

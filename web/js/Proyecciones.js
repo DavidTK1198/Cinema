@@ -2,7 +2,7 @@ export var proyeccion = {pelicula: {}, sala: {}, date: {}, precio: 0};
 export var proyecciones = [];
 export var fecha = "";
 import {peliculas} from "../js/peliculas.js"
-        import {salas} from '../js/administrador.js'
+        import {salas} from './draw.js'
 
         export function resetProyeccion() {
             proyeccion = {pelicula: {}, sala: {}, date: {}, precio: 0};

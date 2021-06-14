@@ -170,15 +170,14 @@ public class Compras {
             throw new NotFoundException(); 
         }
     }
+*/
 
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    @Path("mujeres")
-    public List<Persona> searchMujeres() { 
-        List<Persona> todos=Model.instance().personaSearch("");
-        List<Persona> mujeres = new ArrayList<>();
-        for(Persona p: todos){ if(p.getSexo().equals("F")) mujeres.add(p);};
-        return mujeres;
+    @Path("listarC")
+    public List<Compra> todasLasCompras() { 
+       return  Service.getInstance().compras_all();
+ 
     } 
-     */
+     
 }

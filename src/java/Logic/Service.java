@@ -142,6 +142,13 @@ public class Service {
          return tiquetesPorCompras(lc);
      }
      
+     public List<Compra> compras_all (){
+         return compras.findAll();
+     }
+     
+     public void actualizarPelicula(Pelicula p){
+         peliculas.updateStatus(p);
+     }
     
      
 }

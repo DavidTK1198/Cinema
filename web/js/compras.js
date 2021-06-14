@@ -2,11 +2,11 @@
 
 export var compra;
 export var compras = [];
-import {total} from "../js/administrador.js"
+import {total} from "./draw.js"
         export var x = [];
 import {crearTiquete, tiquetes} from "../js/tiquetes.js"
         import {proyeccion} from "../js/Proyecciones.js"
-        "use strict";
+"use strict";
 
 function resetCompra() {
     compra = {p: {}, user: {}, total: 0.0, codigo: "", tiquetes: []};
@@ -29,10 +29,6 @@ export function cargarCompra() {
         var a = document.getElementById("mal");
         a.classList.remove("d-none");
         a.classList.add("d-block");
-
-
-
-
     }
 
 
