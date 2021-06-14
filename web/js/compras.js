@@ -74,6 +74,7 @@ export async function agregarCompra() {
     await p;
     if (bandera == true) {
         await crearTiquete();
+        sessionStorage.setItem("compra",compra);
         resetCompra();
     }
 }

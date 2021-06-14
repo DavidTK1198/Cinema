@@ -13,7 +13,9 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -91,8 +93,13 @@ public class CompraDao {
                 + "p.pelicula_Nombre = ? AND p.Sala_id = s.Codigo AND p.Date = ?";
         PreparedStatement stm = DataBase.instance().prepareStatement(sql);
         stm.setString(1, pr.getPelicula().getNombre());
-        Date fecha = new Date(pr.getDate().getTime());
-        stm.setDate(2, fecha);
+         Calendar cal = Calendar.getInstance();
+        cal.setTime(pr.getDate());
+        cal.set(Calendar.HOUR, cal.get(Calendar.HOUR)-6);
+        java.util.Date da = cal.getTime();
+        Timestamp timestamp = new Timestamp(da.getTime());
+
+        stm.setTimestamp(2, timestamp);
         ResultSet rs = DataBase.instance().executeQuery(stm);
         while(rs.next()) {
             lc.add(from(rs, false));

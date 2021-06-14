@@ -1,11 +1,11 @@
 
 import { sala } from "./Salas.js"
-import { agregarSala } from "./Salas.js"
-import { login, registro, logout, data, getCurrentUser } from "./sesion.js"
-import { proyeccion, agregarProyeccion, proyecciones, listarProyecciones, fecha, format } from "./Proyecciones.js"
-import { agregarPelicula, cargarPeliculas, recuperarPeliculas, peliculas, url, cambiarEstado, pelicula, setPelicula, BuscarPeliculas } from "./peliculas.js"
-import { cargarCompra, agregarCompra, devuelveTiquetes, x, compras, listarCompras, listarComprasCliente } from "./compras.js"
-"use strict";
+        import { agregarSala } from "./Salas.js"
+        import { login, registro, logout, data, getCurrentUser } from "./sesion.js"
+        import { proyeccion, agregarProyeccion, proyecciones, listarProyecciones, fecha, format } from "./Proyecciones.js"
+        import { agregarPelicula, cargarPeliculas, recuperarPeliculas, peliculas, url, cambiarEstado, pelicula, setPelicula, BuscarPeliculas } from "./peliculas.js"
+        import { cargarCompra, agregarCompra, devuelveTiquetes, x, compras, listarCompras, listarComprasCliente } from "./compras.js"
+        "use strict";
 export var total;
 export var salas = [];
 export const opciones = {
@@ -43,12 +43,14 @@ function draw_compras() {
                     <tr>
                         <th scope="col">#</th>
                         <th scope="col">Codigo</th>
+                        <th scope="col">Pelicula</th>
+                        <th scope="col">Fecha y hora</th>
                     </tr>
                 </thead>
                 <tbody id="cuerpo">        
             </tbody>
             </table> `
-            );
+                    );
             contenedor.appendChild(n);
 
             listarCompras1();
@@ -71,17 +73,24 @@ async function listarCompras1() {
     compras.forEach((c) => {
         tr = document.createElement("tr");
         body.appendChild(tr);
-        th = document.createElement("th")
+        th = document.createElement("th");
         th.scope = "row";
         th.textContent = `${contador}`;
         td = document.createElement("td");
+        var peliculita = document.createElement("td");
+        var fechaYhora = document.createElement("td");
         tr.appendChild(th);
         tr.appendChild(td);
         a = document.createElement("a");
         a.href = "/Cinema/web/api/Compras/" + c.codigo + "/pdf";
         a.textContent = `${c.codigo}`;
-        a.target = "_blank"
+        a.target = "_blank";
         td.appendChild(a);
+        tr.appendChild(peliculita);
+        tr.appendChild(fechaYhora);
+        peliculita.textContent = `${c.p.pelicula.nombre}`;
+        format(c.p.date);
+        fechaYhora.textContent = `${fecha}`;
         contador++;
     });
 
@@ -140,7 +149,7 @@ function draw_movie() {
 </form>
        
 </div>`
-            );
+                    );
             fila.appendChild(d);
             $("#RegPeli").click(mandarAgregarP);
             document.getElementById("imagen").addEventListener("change", () => {
@@ -195,7 +204,7 @@ function drawSala() {
 </form>
        
 </div>`
-            );
+                    );
             fila.appendChild(d);
             $("#RegSala").click(agregarSala);
 
@@ -240,7 +249,7 @@ function drawProyeccion() {
                     nueva.id = "colums";
                     nueva.classList.add("col", "col-sm-8", "col-md-4", "col-xl-4", "mb-5", "border-dark", "ml-2");
                     nueva.innerHTML = (
-                        `
+                            `
                 <div class="card">
                 <div class="embed-responsive embed-responsive-16by9" id="zoom">
                 <img src="${url}api/Peliculas/${p.nombre}/imagen" class="card-img-top embed-responsive-item" alt="..." id="${name}" data-toggle="modal" data-target="#staticBackdrop${contador}">
@@ -292,7 +301,7 @@ function drawProyeccion() {
         
         </div>
       </div>`
-                    );
+                            );
                     let nombre = p.nombre.split(" ").join("-");
                     fila.appendChild(nueva);
 
@@ -381,11 +390,11 @@ function recuperarSalas() {
             console.log("????");
             sol("ok");
         },
-            (error) => {
-                console.log("fallo listar");
-                console.log(error.text);
-                rechazo("error");
-            });
+                (error) => {
+            console.log("fallo listar");
+            console.log(error.text);
+            rechazo("error");
+        });
 
 
     });
@@ -595,7 +604,7 @@ async function filasYcolumnas(sa) {
             });
         }
         $("#comprar").click(cargarCompra);
-        
+
 
     }
 
@@ -626,7 +635,7 @@ export function inicio_Admin() {
             p.nombre = xx.split(" ").join("-");
             nueva.classList.add("col", "col-sm-8", "col-md-4", "col-xl-4", "mb-5", "border-dark", "ml-5");
             nueva.innerHTML = (
-                `
+                    `
                 <div class="card" id="tarjeta">
                 <div class="embed-responsive embed-responsive-16by9" id="zoom">
                 <img src="${url}api/Peliculas/${estatica}/imagen" class="card-img-top embed-responsive-item" alt="...">
@@ -654,7 +663,7 @@ export function inicio_Admin() {
           </div>
         </div>
       </div>`
-            );
+                    );
             row.appendChild(nueva);
 
         });
@@ -739,8 +748,8 @@ async function init_Draw() {
     if (location.pathname == opciones["cliente"]) {
 
         $("#home").click(draw_home_cliente);
-        $("#verCompras").click(draw_compras);
-        $("#logout").click(logout);
+        $("#misCompritas").click(draw_compras);
+        $("#chaitopapi").click(logout);
         getCurrentUser();
         await recuperarPeliculas();
         cargarPeliculas();

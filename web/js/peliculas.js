@@ -1,4 +1,6 @@
-import {proyeccionesApeliculas, inicio_Admin,opciones} from "../js/draw.js"
+import {proyeccionesApeliculas, inicio_Admin, opciones} from "../js/draw.js"
+        import { listarComprasCliente, compras,compra} from "../js/compras.js"
+        import {data} from "../js/sesion.js"
         export var peliculas = [];
 "use strict";
 export var pelicula;
@@ -119,11 +121,11 @@ export  function cambiarEstado() {
 }
 
 export function cargarPeliculas() {
-    
+
     $("#delpelic").remove();
     var row = document.getElementById("lista");
     var doc = document.createElement("div");
-    doc.classList.add("text-black","row","justify-content-center");
+    doc.classList.add("text-black", "row", "justify-content-center");
     doc.id = "delpelic";
     var contador = 0;
     row.appendChild(doc);
@@ -153,21 +155,32 @@ export function cargarPeliculas() {
 
                 doc.appendChild(nueva);
                 proyeccionesApeliculas(`${p.nombre}-pro`);
-            }else{
-                
+            } else {
+
                 contador++;
-                
+
             }
         });
-        
-        if(contador == peliculas.length){
-            
-             row.innerHTML = (`<span id="mensaje" class="h3 text-white text-center">NO EXISTEN PELICULAS DISPONIBLES</span>`);
-             var z = document.getElementById("mensaje");
-             if(location.href == opciones['cliente']){
+
+        if (contador == peliculas.length) {
+
+            row.innerHTML = (`<span id="mensaje" class="h3 text-white text-center">NO EXISTEN PELICULAS DISPONIBLES</span>`);
+            var z = document.getElementById("mensaje");
+            if (location.pathname == opciones['cliente']) {
                 z.classList.remove("text-white");
                 z.classList.add("text-black");
-             }
+
+
+
+            }
+        }
+        if (location.pathname == opciones['cliente']) {
+            
+            compra = JSON.parse(sessionStorage.getItem("compra"));
+            var dom = document.getElementById("tot");
+            var dom2 = document.getElementById("peliculosky");
+            dom.textContent = `Precio: $${ultima.total}`;
+            dom2.textContent = `${ultima.p.pelicula.nombre}`;
         }
 
     }
@@ -181,8 +194,8 @@ export function BuscarPeliculas(peli) {
     return new Promise(function (sol, rechazo) {
         $.ajax({
             type: "GET",
-            url: "/Cinema/web/api/Peliculas/"+peli
-           
+            url: "/Cinema/web/api/Peliculas/" + peli
+
         }).then((response) => {
             peliculas = [...response];
             sol("ok");
