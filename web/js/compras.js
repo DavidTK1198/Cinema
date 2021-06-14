@@ -140,3 +140,22 @@ export function listarCompras() {
 
 
 }
+export function listarComprasCliente(cliente){
+     return new Promise(function (sol, rechazo) {
+        $.ajax({
+            type: "PUT",
+            url: "/Cinema/web/api/Compras/",
+            data: JSON.stringify(cliente),
+            contentType: "application/json"
+        }).then((response) => {
+            compras = [...response];
+            sol("ok")
+        },
+                (error) => {
+            console.log("fallo listarCompras");
+            console.log(error.text);
+            rechazo("error");
+
+        });
+    });
+}

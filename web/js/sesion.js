@@ -74,7 +74,13 @@ export function login() {
         contentType: "application/json"
     }).then((response) => {
         sessionStorage.setItem('user', JSON.stringify(response));
-        location.href = "/Cinema/web/presentation/administrador.html";
+        switch(response.rol){
+            case 1: location.href = "/Cinema/web/presentation/administrador.html";
+                break;
+            case 2:location.href = "/Cinema/web/presentation/cliente.html";
+                break;
+        }
+       
     },
         (error) => {
             console.log(error);

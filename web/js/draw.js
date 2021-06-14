@@ -4,11 +4,11 @@ import { sala } from "./Salas.js"
         import { login, registro, logout, data, getCurrentUser } from "./sesion.js"
         import { proyeccion, agregarProyeccion, proyecciones, listarProyecciones, fecha, format } from "./Proyecciones.js"
         import { agregarPelicula, cargarPeliculas, recuperarPeliculas, peliculas, url, cambiarEstado, pelicula, setPelicula,BuscarPeliculas } from "./peliculas.js"
-        import { cargarCompra, agregarCompra, devuelveTiquetes, x, compras, listarCompras } from "./compras.js"
+        import { cargarCompra, agregarCompra, devuelveTiquetes, x, compras, listarCompras,listarComprasCliente } from "./compras.js"
         "use strict";
 export var total;
 export var salas = [];
-const opciones = {
+export const opciones = {
     'inicio': "/Cinema/web/",
     'admin': "/Cinema/web/presentation/administrador.html",
     'cliente': "/Cinema/web/presentation/cliente.html",
@@ -19,7 +19,7 @@ function draw_compras() {
     $("#cambiar").hide();
     $("#barra").hide();
     $("#change").remove();
-
+    
     try {
         let bandera = !!document.getElementById("change");
         throw bandera;
@@ -50,12 +50,18 @@ function draw_compras() {
             </table> `
                     );
             contenedor.appendChild(n);
+            
             listarCompras1();
         }
     }
 }
 async function listarCompras1() {
-    await listarCompras();
+    if(data.rol==2){
+        await listarComprasCliente(data);
+    }else{
+        await listarCompras();
+    }
+   
     var body = document.getElementById("cuerpo");
     var contador = 1;
     var td;
@@ -350,6 +356,13 @@ function draw_home() {
     var contenedor = document.getElementById("content");
     contenedor.classList.remove("d-flex", "justify-content-center");
 }
+function draw_home_cliente(){
+    $("#cambiar").show();
+    $("#barra").show();
+    $("#change").remove();
+    
+    
+}
 
 
 function mandarAgregarP() {
@@ -623,13 +636,13 @@ export function inicio_Admin() {
               <label id="${p.nombre}-estado"></label>
               <div id="flex">
                   <div class="flex-item">
-                      <input type="radio" name="${p.nombre}-oferta" value="1"  id="${p.nombre}-si">Disponible
+                      <input type="radio" name="${p.nombre}-oferta" value="1"  id="${p.nombre}-x">Disponible
                   </div>
               </div>
 
               <div id="flex">
                   <div class="flex-item">
-                      <input type="radio" name="${p.nombre}-oferta" value="0" id="${p.nombre}-no">No Disponible
+                      <input type="radio" name="${p.nombre}-oferta" value="0" id="${p.nombre}-w">No Disponible
                   </div>
               </div>
           </div>
@@ -655,8 +668,8 @@ export function inicio_Admin() {
                 ayudoszky.checked = true;
             }
 
-            $(`#${p.nombre}-si`).click(nuevoEstado);
-            $(`#${p.nombre}-no`).click(nuevoEstado);
+            $(`#${p.nombre}-x`).click(nuevoEstado);
+            $(`#${p.nombre}-w`).click(nuevoEstado);
         });
 
 
@@ -667,9 +680,9 @@ async function nuevoEstado() {
     var id = event.target.id;
     var peli;
     var xx;
-    var seleccion = id.split("-si").join("");
-    if (seleccion[seleccion.length - 1] == "o") {
-        seleccion = id.split("-no").join("");
+    var seleccion = id.split("-x").join("");
+    if (seleccion[seleccion.length - 1] == "w") {
+        seleccion = id.split("-w").join("");
         formatoNormal();
         peli = peliculas.find(p => p.nombre == seleccion);
         xx = seleccion.split("-").join(" ");
@@ -683,11 +696,11 @@ async function nuevoEstado() {
     var label = document.getElementById(`${peli.nombre}-estado`);
     await cambiarEstado();
     if (pelicula.estado == false) {
-        var boton = document.getElementById(`${seleccion}-no`);
+        var boton = document.getElementById(`${seleccion}-w`);
         label.textContent = "No Disponible";
         boton.checked = true;
     } else {
-        var boton = document.getElementById(`${seleccion}-si`);
+        var boton = document.getElementById(`${seleccion}-x`);
         label.textContent = "En Cartelera";
         boton.checked = true;
     }
@@ -718,6 +731,16 @@ async function init_Draw() {
         await recuperarPeliculas();
         inicio_Admin();
         getCurrentUser();
+    }
+    if (location.pathname == opciones["cliente"]) {
+       
+        $("#home").click(draw_home_cliente);
+        $("#verCompras").click(draw_compras);
+        $("#logout").click(logout);
+        getCurrentUser();
+        await recuperarPeliculas();
+        cargarPeliculas();
+        
     }
     if (location.pathname == opciones["inicio"] || location.pathname == opciones["salir"]) {
         $("#loginButton").click(login);

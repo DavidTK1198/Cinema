@@ -79,8 +79,11 @@ public class Compras {
     @Consumes(MediaType.APPLICATION_JSON)
     public void add(Compra p) {
         try {
-
-            Service.getInstance().agregarUsuario(p.getUser());
+            Usuario us = Service.getInstance().buscarUsuario(p.getUser());
+            if(us == null){
+                Service.getInstance().agregarUsuario(p.getUser());
+            }
+          
             Service.getInstance().agregarCompra(p);
 
         } catch (Exception ex) {
@@ -150,16 +153,17 @@ public class Compras {
         }
     }
 
-    /* @PUT
+    @PUT
     @Consumes(MediaType.APPLICATION_JSON)
-    public void update(Persona p) {  
+    @Produces({MediaType.APPLICATION_JSON})
+    public List<Compra> ListarC(Usuario us) {  
         try {
-            Model.instance().personaUpdate(p);
+           return Service.getInstance().comprasbyUser(us);
         } catch (Exception ex) {
             throw new NotFoundException(); 
         }
     }
-    
+    /*
 
     @DELETE
     @Path("{cedula}")

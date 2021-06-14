@@ -1,4 +1,4 @@
-import {proyeccionesApeliculas, inicio_Admin} from "../js/draw.js"
+import {proyeccionesApeliculas, inicio_Admin,opciones} from "../js/draw.js"
         export var peliculas = [];
 "use strict";
 export var pelicula;
@@ -83,7 +83,7 @@ export function recuperarPeliculas() {
     return new Promise(function (sol, rechazo) {
         $.ajax({
             type: "GET",
-            url: "/Cinema/web/api/Peliculas/listar",
+            url: "/Cinema/web/api/Peliculas/listar"
         }).then((response) => {
             peliculas = [...response];
             sol("ok")
@@ -119,11 +119,13 @@ export  function cambiarEstado() {
 }
 
 export function cargarPeliculas() {
+    
     $("#delpelic").remove();
     var row = document.getElementById("lista");
     var doc = document.createElement("div");
     doc.classList.add("text-black","row","justify-content-center");
     doc.id = "delpelic";
+    var contador = 0;
     row.appendChild(doc);
     if (peliculas.length == 0) {
         row.innerHTML = (`<span id="mensaje">NO EXISTEN PELICULAS DISPONIBLES</span>`);
@@ -151,8 +153,22 @@ export function cargarPeliculas() {
 
                 doc.appendChild(nueva);
                 proyeccionesApeliculas(`${p.nombre}-pro`);
+            }else{
+                
+                contador++;
+                
             }
         });
+        
+        if(contador == peliculas.length){
+            
+             row.innerHTML = (`<span id="mensaje" class="h3 text-white text-center">NO EXISTEN PELICULAS DISPONIBLES</span>`);
+             var z = document.getElementById("mensaje");
+             if(location.href == opciones['cliente']){
+                z.classList.remove("text-white");
+                z.classList.add("text-black");
+             }
+        }
 
     }
 }

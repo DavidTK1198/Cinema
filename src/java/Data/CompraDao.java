@@ -70,6 +70,20 @@ public class CompraDao {
         }
         return r;
     }
+    public List<Compra> findByUser(Usuario o) {
+        List<Compra> r = new ArrayList<>();
+        String sql = "select * from Compra where Usuario_id=?";
+        try {
+            PreparedStatement stm = DataBase.instance().prepareStatement(sql);
+            stm.setString(1, o.getIdUsu());
+            ResultSet rs = DataBase.instance().executeQuery(stm);
+            while (rs.next()) {
+                r.add(from(rs, true));
+            }
+        } catch (SQLException ex) {
+        }
+        return r;
+    }
 
     public List<Compra> read(Proyeccion pr) throws Exception {
         List<Compra> lc = new ArrayList<>();

@@ -89,7 +89,7 @@ public class UserDao {
             return from(rs);
         }
         else{
-            throw new Exception ("El usuario no Existe");
+            return null;
         }
     }
     

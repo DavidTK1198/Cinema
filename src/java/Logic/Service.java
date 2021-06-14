@@ -152,6 +152,9 @@ public class Service {
      public List<Pelicula> filtrarNombrePeli(String nom){
          return peliculas.findByNombre(nom);
      }
+       public List<Compra> comprasbyUser (Usuario us){
+         return compras.findByUser(us);
+     }
     
      
 }
