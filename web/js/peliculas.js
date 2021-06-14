@@ -1,5 +1,5 @@
-import {proyeccionesApeliculas,inicio_Admin} from "../js/draw.js"
-export var  peliculas = [];
+import {proyeccionesApeliculas, inicio_Admin} from "../js/draw.js"
+        export var peliculas = [];
 "use strict";
 export var pelicula;
 export var url = "http://localhost:8080/Cinema/web/";
@@ -80,59 +80,64 @@ export function agregarPelicula() {
 
 }
 export function recuperarPeliculas() {
-    return new Promise(function(sol,rechazo){
-    $.ajax({
-        type: "GET",
-        url: "/Cinema/web/api/Peliculas/listar",
-    }).then((response) => {
-        peliculas = [...response];
-        sol("ok")
-    },
-            (error) => {
-        console.log("fallo listar");
-        console.log(error.text);
-        rechazo("error");
+    return new Promise(function (sol, rechazo) {
+        $.ajax({
+            type: "GET",
+            url: "/Cinema/web/api/Peliculas/listar",
+        }).then((response) => {
+            peliculas = [...response];
+            sol("ok")
+        },
+                (error) => {
+            console.log("fallo listar");
+            console.log(error.text);
+            rechazo("error");
 
+        });
     });
-});
 }
 
 
-export  function cambiarEstado(){
-    return new Promise(function(sol,rechazo){
+export  function cambiarEstado() {
+    return new Promise(function (sol, rechazo) {
         $.ajax({
             type: "PUT",
             url: "/Cinema/web/api/Peliculas",
             data: JSON.stringify(pelicula),
             contentType: "application/json"
         }).then((response) => {
-            peliculas=[...response];
+            peliculas = [...response];
             sol("ok");
         },
                 (error) => {
             console.log("fallo listar");
             console.log(error.text);
             rechazo("error");
-    
+
         });
-    });  
+    });
 }
 
 export function cargarPeliculas() {
-
+    $("#delpelic").remove();
     var row = document.getElementById("lista");
-
+    var doc = document.createElement("div");
+    doc.classList.add("text-black","row","justify-content-center");
+    doc.id = "delpelic";
+    row.appendChild(doc);
     if (peliculas.length == 0) {
         row.innerHTML = (`<span id="mensaje">NO EXISTEN PELICULAS DISPONIBLES</span>`);
     } else {
 
         $("#mensaje").remove();
         peliculas.forEach((p) => {
-            var nueva = document.createElement("div");
-            nueva.id = "colums";
-            nueva.classList.add("col", "col-sm-8", "col-md-4", "col-xl-4", "mb-5", "border-dark", "ml-5");
-            nueva.innerHTML = (
-                `
+            if (p.estado == true) {
+                var nueva = document.createElement("div");
+                nueva.id = "colums";
+                nueva.classList.add("col", "col-sm-8", "col-md-4", "col-xl-4", "mb-5", "border-dark", "ml-5");
+
+                nueva.innerHTML = (
+                        `
                 <div class="card" id="tarjeta">
                 <div class="embed-responsive embed-responsive-16by9" id="zoom">
                 <img src="${url}api/Peliculas/${p.nombre}/imagen" class="card-img-top embed-responsive-item" alt="...">
@@ -142,10 +147,11 @@ export function cargarPeliculas() {
           </div>
         </div>
       </div>`
-            );
+                        );
 
-            row.appendChild(nueva);
-            proyeccionesApeliculas(`${p.nombre}-pro`);
+                doc.appendChild(nueva);
+                proyeccionesApeliculas(`${p.nombre}-pro`);
+            }
         });
 
     }
@@ -153,4 +159,26 @@ export function cargarPeliculas() {
 function peliculaAgregadaCorrectamente() {
     alert("La pelicula" + pelicula.nombre + " ha sido correctamente ingresada");
 
+}
+
+export function BuscarPeliculas(peli) {
+    return new Promise(function (sol, rechazo) {
+        $.ajax({
+            type: "GET",
+            url: "/Cinema/web/api/Peliculas/"+peli
+           
+        }).then((response) => {
+            peliculas = [...response];
+            sol("ok");
+        },
+                (error) => {
+            console.log("fallo buscar pelicula");
+            console.log(error.text);
+            rechazo("error");
+
+        });
+
+
+
+    });
 }

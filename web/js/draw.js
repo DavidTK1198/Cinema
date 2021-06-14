@@ -1,11 +1,11 @@
 
 import { sala } from "./Salas.js"
-import { agregarSala } from "./Salas.js"
-import { login, registro, logout, data, getCurrentUser } from "./sesion.js"
-import { proyeccion, agregarProyeccion, proyecciones, listarProyecciones, fecha, format } from "./Proyecciones.js"
-import { agregarPelicula, cargarPeliculas, recuperarPeliculas, peliculas, url, cambiarEstado, pelicula, setPelicula } from "./peliculas.js"
-import { cargarCompra, agregarCompra, devuelveTiquetes, x, compras, listarCompras } from "./compras.js"
-"use strict";
+        import { agregarSala } from "./Salas.js"
+        import { login, registro, logout, data, getCurrentUser } from "./sesion.js"
+        import { proyeccion, agregarProyeccion, proyecciones, listarProyecciones, fecha, format } from "./Proyecciones.js"
+        import { agregarPelicula, cargarPeliculas, recuperarPeliculas, peliculas, url, cambiarEstado, pelicula, setPelicula,BuscarPeliculas } from "./peliculas.js"
+        import { cargarCompra, agregarCompra, devuelveTiquetes, x, compras, listarCompras } from "./compras.js"
+        "use strict";
 export var total;
 export var salas = [];
 const opciones = {
@@ -48,7 +48,7 @@ function draw_compras() {
                 <tbody id="cuerpo">        
             </tbody>
             </table> `
-            );
+                    );
             contenedor.appendChild(n);
             listarCompras1();
         }
@@ -134,7 +134,7 @@ function draw_movie() {
 </form>
        
 </div>`
-            );
+                    );
             fila.appendChild(d);
             $("#RegPeli").click(mandarAgregarP);
             document.getElementById("imagen").addEventListener("change", () => {
@@ -189,7 +189,7 @@ function drawSala() {
 </form>
        
 </div>`
-            );
+                    );
             fila.appendChild(d);
             $("#RegSala").click(agregarSala);
 
@@ -212,7 +212,7 @@ function drawProyeccion() {
             var fila = document.createElement("div");
             var h = document.createElement("h2");
             h.classList.add("ml-5", "mt-5");
-            h.textContent = "Peliculas Disponibles"
+            h.textContent = "Peliculas Disponibles";
             container.appendChild(h);
             h = document.createElement("br");
             container.appendChild(h);
@@ -226,7 +226,7 @@ function drawProyeccion() {
             if (peliculas.length == 0) {
                 fila.innerHTML = (`<span id="mensaje">NO EXISTEN PELICULAS DISPONIBLES PARA AGREGAR PROYECCION</span>`);
             } else {
-
+                var contador = 0;
                 $("#mensaje").remove();
                 peliculas.forEach((p) => {
                     let name = p.nombre.split(" ").join("-");
@@ -234,10 +234,10 @@ function drawProyeccion() {
                     nueva.id = "colums";
                     nueva.classList.add("col", "col-sm-8", "col-md-4", "col-xl-4", "mb-5", "border-dark", "ml-2");
                     nueva.innerHTML = (
-                        `
+                            `
                 <div class="card">
                 <div class="embed-responsive embed-responsive-16by9" id="zoom">
-                <img src="${url}api/Peliculas/${p.nombre}/imagen" class="card-img-top embed-responsive-item" alt="..." id="${name}" data-toggle="modal" data-target="#staticBackdrop2">
+                <img src="${url}api/Peliculas/${p.nombre}/imagen" class="card-img-top embed-responsive-item" alt="..." id="${name}" data-toggle="modal" data-target="#staticBackdrop${contador}">
             </div>
             <div class="card-body border justify-content-center">
            
@@ -246,7 +246,7 @@ function drawProyeccion() {
             </p>
           </div>
             </div>
-                <div class="modal fade signup-form" id="staticBackdrop2" data-backdrop="static" data-keyboard="false" tabindex="-1"
+                <div class="modal fade signup-form" id="staticBackdrop${contador}" data-backdrop="static" data-keyboard="false" tabindex="-1"
             aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog">
               <div class="modal-content">
@@ -260,19 +260,19 @@ function drawProyeccion() {
                   <div class="signup-form">
                     <form>
                     <h2>Registro de Proyecciones</h2>
-                    <h2 id="nameP" class="d-none"></h2>
-                        <div class="form-group" id="s">
+                    <h2 id="nameP" class="d-none" name="nom-${name}"></h2>
+                        <div class="form-group" id="s" name="s-${name}">
                     <p>Elegir sala</p>
                     
                         </div>
                         <div class="form-group">
-                        <input type="date" class="form-control" name="fecha" id="fecha" placeholder="fecha" required="required">
+                        <input type="date" class="form-control" name="fecha-${name}" id="fecha" placeholder="fecha" required="required">
                     </div> 
                     <div class="form-group">
-                    <input type="time" class="form-control" name="fecha" id="hora" placeholder="fecha" required="required">
+                    <input type="time" class="form-control" name="hora-${name}" id="hora" placeholder="fecha" required="required">
                 </div> 
                     <div class="form-group">
-                            <input type="number" class="form-control" name="precio" id="precio" placeholder="Precio" required="required" min=0 max=200000>
+                            <input type="number" class="form-control" name="precio-${name}" id="precio" placeholder="Precio" required="required" min=0 max=200000>
                         </div> 
                     <div class="form-group">
 			<input type="button" class="btn btn-success btn-lg btn-block" id="${name}-RegProyeccion" value="Registrar Proyeccion">
@@ -286,13 +286,14 @@ function drawProyeccion() {
         
         </div>
       </div>`
-                    );
+                            );
                     let nombre = p.nombre.split(" ").join("-");
                     fila.appendChild(nueva);
 
                     $(`#${nombre}`).click(listarSalas);
 
                     $(`#${name}-RegProyeccion`).click(agregarProyeccion);
+                    contador++;
 
 
                 });
@@ -304,9 +305,10 @@ function drawProyeccion() {
 function listarSalas() {
     recuperarSalas();
     var contador = 0;
-    var ayuda = document.getElementById("s");
+    var tar = `${event.target.id}`;
+    var ayuda = document.getElementsByName(`s-${tar}`);
     if (salas.length == 0) {
-        ayuda.innerHTML = (`<span id="men">No hay salas disponibles</span>`);
+        ayuda[0].innerHTML = (`<span id="men">No hay salas disponibles</span>`);
     } else {
         $("#men").remove();
         $("#sele").remove();
@@ -326,11 +328,15 @@ function listarSalas() {
             select.appendChild(nuev);
         });
         nueva.appendChild(select);
-        ayuda.appendChild(nueva);
-        nueva = document.getElementById("nameP");
-        nueva.textContent = `${event.target.id}`;
-        nueva.classList.remove("d-none");
-        nueva.classList.add("d-block");
+        ayuda[0].appendChild(nueva);
+       
+        
+       
+        
+        nueva = document.getElementsByName(`nom-${tar}`);
+        nueva[0].textContent = `${event.target.id}`;
+        nueva[0].classList.remove("d-none");
+        nueva[0].classList.add("d-block");
 
     }
 
@@ -362,11 +368,11 @@ function recuperarSalas() {
             console.log("????");
             sol("ok");
         },
-            (error) => {
-                console.log("fallo listar");
-                console.log(error.text);
-                rechazo("error");
-            });
+                (error) => {
+            console.log("fallo listar");
+            console.log(error.text);
+            rechazo("error");
+        });
 
 
     });
@@ -381,10 +387,15 @@ export async function proyeccionesApeliculas(nom) {
     console.log("Administrador");
     console.log(nom);
     console.log("-----------------");
+    
     if (proyecciones.length == 0) {
+        ayuda.textContent = `${pel}`;
         ayuda.innerHTML = (`<span id="nop">No hay proyecciones disponibles</span>`);
     } else {
         $("#nop").remove();
+        var di = document.createElement("div");
+        di.textContent = pel;
+        ayuda.appendChild(di);
         proyecciones.forEach((p) => {
             var nueva = document.createElement("div");
             p.date = format(p.date);
@@ -395,6 +406,7 @@ export async function proyeccionesApeliculas(nom) {
 
             nueva.addEventListener("click", sillas);
             ayuda.appendChild(nueva);
+           
         }
         );
     }
@@ -592,12 +604,12 @@ export function inicio_Admin() {
         peliculas.forEach((p) => {
             var nueva = document.createElement("div");
             nueva.id = "colums";
-            var estatica=p.nombre;
-            var xx=p.nombre;
-            p.nombre=xx.split(" ").join("-");
+            var estatica = p.nombre;
+            var xx = p.nombre;
+            p.nombre = xx.split(" ").join("-");
             nueva.classList.add("col", "col-sm-8", "col-md-4", "col-xl-4", "mb-5", "border-dark", "ml-5");
             nueva.innerHTML = (
-                `
+                    `
                 <div class="card" id="tarjeta">
                 <div class="embed-responsive embed-responsive-16by9" id="zoom">
                 <img src="${url}api/Peliculas/${estatica}/imagen" class="card-img-top embed-responsive-item" alt="...">
@@ -611,7 +623,7 @@ export function inicio_Admin() {
               <label id="${p.nombre}-estado"></label>
               <div id="flex">
                   <div class="flex-item">
-                      <input type="radio" name="${p.nombre}-oferta" value="1" checked id="${p.nombre}-si">Disponible
+                      <input type="radio" name="${p.nombre}-oferta" value="1"  id="${p.nombre}-si">Disponible
                   </div>
               </div>
 
@@ -625,17 +637,29 @@ export function inicio_Admin() {
           </div>
         </div>
       </div>`
-            );
+                    );
             row.appendChild(nueva);
-              
+
         });
         contenedor.appendChild(row);
-        peliculas.forEach(p=>{
+        peliculas.forEach(p => {
+            var b = document.getElementsByName(`${p.nombre}-oferta`);
+            var label = document.getElementById(`${p.nombre}-estado`);
+            if (p.estado == true) {
+                var ayudoszky = b[0];
+                label.textContent = "En Cartelera";
+                ayudoszky.checked = true;
+            } else {
+                var ayudoszky = b[1];
+                label.textContent = "No Disponible";
+                ayudoszky.checked = true;
+            }
+
             $(`#${p.nombre}-si`).click(nuevoEstado);
             $(`#${p.nombre}-no`).click(nuevoEstado);
         });
-        
-       
+
+
     }
 }
 
@@ -646,25 +670,42 @@ async function nuevoEstado() {
     var seleccion = id.split("-si").join("");
     if (seleccion[seleccion.length - 1] == "o") {
         seleccion = id.split("-no").join("");
+        formatoNormal();
         peli = peliculas.find(p => p.nombre == seleccion);
-        xx=seleccion.split("-").join(" ");
+        xx = seleccion.split("-").join(" ");
         setPelicula(xx, false);
     } else {
+        formatoNormal();
         peli = peliculas.find(p => p.nombre == seleccion);
-        xx=seleccion.split("-").join(" ");
+        xx = seleccion.split("-").join(" ");
         setPelicula(xx, true);
     }
     var label = document.getElementById(`${peli.nombre}-estado`);
     await cambiarEstado();
     if (pelicula.estado == false) {
-        var boton = document.getElementById(`${seleccion}-no`)
+        var boton = document.getElementById(`${seleccion}-no`);
         label.textContent = "No Disponible";
         boton.checked = true;
     } else {
-        var boton = document.getElementById(`${seleccion}-si`)
+        var boton = document.getElementById(`${seleccion}-si`);
         label.textContent = "En Cartelera";
         boton.checked = true;
     }
+}
+function formatoNormal() {
+    peliculas.forEach((z) => {
+        var m = z.nombre.split(" ").join("-");
+        z.nombre = m;
+    });
+}
+async function extraerDatosBusqueda(){
+    var texto = document.getElementById("busca").value;
+    if(texto ==""){
+        texto = "*";
+    }
+    var solu = await BuscarPeliculas(texto);
+    cargarPeliculas();
+    
 }
 async function init_Draw() {
     if (location.pathname == opciones["admin"]) {
@@ -681,6 +722,8 @@ async function init_Draw() {
     if (location.pathname == opciones["inicio"] || location.pathname == opciones["salir"]) {
         $("#loginButton").click(login);
         $("#RegButton").click(registro);
+        $("#busqueda").click(extraerDatosBusqueda);
+        
         await recuperarPeliculas();
         cargarPeliculas();
     }
@@ -689,4 +732,5 @@ async function init_Draw() {
 function loaded() {
     init_Draw();
 }
+
 $(loaded);

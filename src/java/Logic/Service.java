@@ -149,6 +149,9 @@ public class Service {
      public void actualizarPelicula(Pelicula p){
          peliculas.updateStatus(p);
      }
+     public List<Pelicula> filtrarNombrePeli(String nom){
+         return peliculas.findByNombre(nom);
+     }
     
      
 }

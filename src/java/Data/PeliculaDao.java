@@ -44,12 +44,12 @@ public class PeliculaDao {
         return r;
     }
 
-    public List<Pelicula> findByNombre(Pelicula o) {
+    public List<Pelicula> findByNombre(String o) {
         List<Pelicula> r = new ArrayList<>();
         String sql = "select * from Pelicula where Nombre like ?";
         try {
             PreparedStatement stm = DataBase.instance().prepareStatement(sql);
-            stm.setString(1, "%" + o.getNombre() + "%");
+            stm.setString(1, "%" + o + "%");
             ResultSet rs = DataBase.instance().executeQuery(stm);
             while (rs.next()) {
                 r.add(from(rs));

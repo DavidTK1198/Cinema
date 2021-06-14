@@ -16,6 +16,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.NotAcceptableException;
 import javax.ws.rs.POST;
 import javax.ws.rs.core.Response;
@@ -24,11 +25,18 @@ import org.glassfish.jersey.media.multipart.FormDataParam;
 @Path("/Peliculas")
 public class Peliculas{
     String location="C:/AAA/images/";
-   // @GET
-    //@Produces({MediaType.APPLICATION_JSON})
-    //public List<Persona> search(@DefaultValue("") @QueryParam("nombre") String nombre) { 
-     //   return Model.instance().personaSearch(nombre);
-    //} 
+    @GET
+    @Path("{peli}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public List<Pelicula> search(@DefaultValue("") @PathParam("peli") String nombre) {
+        
+        List<Pelicula> lp = Service.getInstance().filtrarNombrePeli(nombre);
+        if(lp.isEmpty()){
+            return Service.getInstance().devolverPeliculas();
+        }else{
+            return lp;
+        }
+    } 
     
     @GET
     @Path("listar")

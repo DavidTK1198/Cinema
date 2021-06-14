@@ -12,12 +12,12 @@ import {peliculas} from "../js/peliculas.js"
 export function agregarProyeccion() {
     var nom = `${event.target.id}`;
     var c = nom.split("-RegProyeccion").join("");
+    var segunda = c.split("-").join(" ");
 
-
-    cargarDatos(c);
-    if (!validarDatos()) {
-        return;
-    }
+    cargarDatos(segunda);
+    //if (!validarDatos()) {
+      //  return;
+   // }
     $.ajax({
         type: "POST",
         url: "/Cinema/web/api/Proyecciones",
@@ -91,15 +91,18 @@ function mensaje() {
 function cargarDatos(c) {
 
     var peli = peliculas.find(p => p.nombre == c);
+    var nom = peli.nombre;
+    var zz = nom.split(" ").join("-");
     var s = $("#sele").val();
     var sala = salas.find(p => p.codigo == s);
-
-
+    var fec = document.getElementsByName(`fecha-${zz}`);
+    var hor = document.getElementsByName(`hora-${zz}`);
+    var pre = document.getElementsByName(`precio-${zz}`);
     proyeccion = {
         pelicula: peli,
         sala: sala,
-        date: formatofecha($("#fecha").val(), $("#hora").val()),
-        precio: $("#precio").val()
+        date: formatofecha(fec[0].value, hor[0].value),
+        precio: pre[0].value
 
     };
 }
@@ -111,16 +114,16 @@ function formatofecha(fecha, hora) {
 }
 
 function validarDatos() {
-    var hora = $("#hora");
-    var fec = $("#fecha");
-    var error = false;
-    if (hora.length == 0) {
-        hora.classList.add("invalid");
-        error = true;
-    }
-    if (fec.length == 0) {
-        fec.classList.add("invalid");
-        error = true;
-    }
-    return !error;
+    //var hora = $("#hora");
+    //var fec = $("#fecha");
+    //var error = false;
+    //if (hora.length == 0) {
+      // hora.classList.add("invalid");
+        //error = true;
+    //}
+    //if (fec.length == 0) {
+        //fec.classList.add("invalid");
+        //error = true;
+   // }
+    //return !error;
 }

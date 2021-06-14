@@ -15,6 +15,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.sql.Date;
+import java.sql.Timestamp;
 
 /**
  *
@@ -28,8 +29,9 @@ public class ProyeccionDao {
         PreparedStatement stm = DataBase.instance().prepareStatement(sql);
         stm.setString(1, o.getPelicula().getNombre());
         stm.setString(2, o.getSala().getCodigo());
-        Date fecha = new Date(o.getDate().getTime());
-        stm.setDate(3, fecha);
+        Timestamp timestamp = new Timestamp(o.getDate().getTime());
+        
+        stm.setTimestamp(3, timestamp);
         stm.setFloat(4, o.getPrecio());
         int count = DataBase.instance().executeUpdate(stm);
         if (count == 0) {
@@ -130,8 +132,8 @@ public class ProyeccionDao {
             Proyeccion r = new Proyeccion();
             Pelicula peli = Service.getInstance().buscarPelicula(rs.getString("Pelicula_Nombre"));
             r.setPelicula(peli);
-            Date fecha = rs.getDate("Date");
-           java.util.Date utilDate = new java.util.Date(fecha.getTime());
+            
+           java.util.Date utilDate =rs.getTimestamp("Date");
             r.setDate(utilDate);
             r.setPrecio(rs.getFloat("Precio"));
             Sala sala = Service.getInstance().buscarSala(rs.getString("Sala_id"));
