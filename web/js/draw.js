@@ -1,11 +1,11 @@
 
 import { sala } from "./Salas.js"
-        import { agregarSala } from "./Salas.js"
-        import { login, registro, logout, data, getCurrentUser } from "./sesion.js"
-        import { proyeccion, agregarProyeccion, proyecciones, listarProyecciones, fecha, format } from "./Proyecciones.js"
-        import { agregarPelicula, cargarPeliculas, recuperarPeliculas, peliculas, url, cambiarEstado, pelicula, setPelicula, BuscarPeliculas } from "./peliculas.js"
-        import { cargarCompra, agregarCompra, devuelveTiquetes, x, compras, listarCompras, listarComprasCliente } from "./compras.js"
-        "use strict";
+import { agregarSala } from "./Salas.js"
+import { login, registro, logout, data, getCurrentUser } from "./sesion.js"
+import { proyeccion, agregarProyeccion, proyecciones, listarProyecciones, fecha, format } from "./Proyecciones.js"
+import { agregarPelicula, cargarPeliculas, recuperarPeliculas, peliculas, url, cambiarEstado, pelicula, setPelicula, BuscarPeliculas } from "./peliculas.js"
+import { cargarCompra, agregarCompra, devuelveTiquetes, x, compras, listarCompras, listarComprasCliente } from "./compras.js"
+"use strict";
 export var total;
 export var salas = [];
 export const opciones = {
@@ -50,7 +50,7 @@ function draw_compras() {
                 <tbody id="cuerpo">        
             </tbody>
             </table> `
-                    );
+            );
             contenedor.appendChild(n);
 
             listarCompras1();
@@ -149,7 +149,7 @@ function draw_movie() {
 </form>
        
 </div>`
-                    );
+            );
             fila.appendChild(d);
             $("#RegPeli").click(mandarAgregarP);
             document.getElementById("imagen").addEventListener("change", () => {
@@ -204,7 +204,7 @@ function drawSala() {
 </form>
        
 </div>`
-                    );
+            );
             fila.appendChild(d);
             $("#RegSala").click(agregarSala);
 
@@ -249,7 +249,7 @@ function drawProyeccion() {
                     nueva.id = "colums";
                     nueva.classList.add("col", "col-sm-8", "col-md-4", "col-xl-4", "mb-5", "border-dark", "ml-2");
                     nueva.innerHTML = (
-                            `
+                        `
                 <div class="card">
                 <div class="embed-responsive embed-responsive-16by9" id="zoom">
                 <img src="${url}api/Peliculas/${p.nombre}/imagen" class="card-img-top embed-responsive-item" alt="..." id="${name}" data-toggle="modal" data-target="#staticBackdrop${contador}">
@@ -301,7 +301,7 @@ function drawProyeccion() {
         
         </div>
       </div>`
-                            );
+                    );
                     let nombre = p.nombre.split(" ").join("-");
                     fila.appendChild(nueva);
 
@@ -390,11 +390,11 @@ function recuperarSalas() {
             console.log("????");
             sol("ok");
         },
-                (error) => {
-            console.log("fallo listar");
-            console.log(error.text);
-            rechazo("error");
-        });
+            (error) => {
+                console.log("fallo listar");
+                console.log(error.text);
+                rechazo("error");
+            });
 
 
     });
@@ -448,27 +448,29 @@ function sillas() {
       <!-- Modal -->
       <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
+          <div class="modal-content" style="background:black;">
+            <div class="modal-header" id="m-cuerpo">
+            <br>
               <h5 class="modal-title" id="exampleModalLabel">Comprar boletos</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="loginButton">
                 <span aria-hidden="true">&times;</span>
               </button>
+              <br>
             </div>
             <div class="modal-body">
               <div class="container justify-content-center">
-                <ul class="showcase">
+                <ul class="showcase"  style="background:white;">
                   <li>
                     <div id="seat" class="seat"></div>
-                    <small class="status" style="font-size: 1em;">N/A</small>
+                    <small class="status text-black" style="font-size: 1em;">Libre</small>
                   </li>
                   <li>
                     <div id="seat" class="seat selected"></div>
-                    <small class="status" style="font-size: 1em;">Selected</small>
+                    <small class="status text-black" style="font-size: 1em;">Seleccionado</small>
                   </li>
                   <li>
                     <div id="seat" class="seat occupied"></div>
-                    <small class="status" style="font-size: 1em;">Occupied</small>
+                    <small class="status text-black" style="font-size: 1em;">Ocupado</small>
                   </li>
                 </ul>
                 <div class="w-50 move" id="asientos" >
@@ -477,7 +479,7 @@ function sillas() {
                   </div>
                 </div>
             </div>
-            <p class="text" style="font-size: 1em;margin:0px 0px 15px 0px">
+            <p class="text text-white" style="font-size: 1em;margin:0px 0px 15px 0px">
                 Ha seleccionado <span id="count">0</span> butacas por el precio de $<span id="total">0</span>
                     
             </p>
@@ -561,15 +563,38 @@ async function filasYcolumnas(sa) {
     proyeccion.date = proye.date;
     proyeccion.precio = proye.precio;
     await devuelveTiquetes();
+    var cuerpo = document.getElementById("m-cuerpo");
+    var nueva = document.createElement("div");
+    nueva.id = "colums";
+    nueva.classList.add("col", "col-sm-8", "col-md-4", "col-xl-4", "border-dark");
+    nueva.style.margin=0;
+    nueva.style.padding=0;
+    nueva.style.position="fixed";
+    nueva.innerHTML = (
+        `
+    <div class="card">
+    <div class="embed-responsive embed-responsive-16by9 bg-image" id="zoom">
+    <img src="${url}api/Peliculas/${proyeccion.pelicula.nombre}/imagen" class="card-img-top embed-responsive-item" alt="...">
+</div>
+</div>
+</div>`
+    );
+
+    cuerpo.appendChild(nueva);
+
 
     var nu = salas.find(p => p.codigo == salaaa);
     if (nu != undefined) {
         var asi = document.getElementById("asientos");
+        asi.classList.add("align-self-end")
         var i, j = 0;
 
         for (i = 0; i < nu.fila; i++) {
             var rows = document.createElement("div");
             rows.classList.add("row", "pl-4", "justify-content-center", "d-flex");
+            rows.style.background="white";
+            rows.style.margin=0;
+            rows.style.padding=0;
             for (j = 0; j < nu.col; j++) {
                 var columns = document.createElement("div");
                 columns.id = `${i},${j}`;
@@ -635,7 +660,7 @@ export function inicio_Admin() {
             p.nombre = xx.split(" ").join("-");
             nueva.classList.add("col", "col-sm-8", "col-md-4", "col-xl-4", "mb-5", "border-dark", "ml-5");
             nueva.innerHTML = (
-                    `
+                `
                 <div class="card" id="tarjeta">
                 <div class="embed-responsive embed-responsive-16by9" id="zoom">
                 <img src="${url}api/Peliculas/${estatica}/imagen" class="card-img-top embed-responsive-item" alt="...">
@@ -663,7 +688,7 @@ export function inicio_Admin() {
           </div>
         </div>
       </div>`
-                    );
+            );
             row.appendChild(nueva);
 
         });
