@@ -741,6 +741,7 @@ async function init_Draw() {
         $("#salita").click(drawSala);
         $("#verCompras").click(draw_compras);
         $("#logout").click(logout);
+        $("#busqueda").click(extraerDatosBusqueda);
         await recuperarPeliculas();
         inicio_Admin();
         getCurrentUser();
@@ -750,6 +751,7 @@ async function init_Draw() {
         $("#home").click(draw_home_cliente);
         $("#misCompritas").click(draw_compras);
         $("#chaitopapi").click(logout);
+        $("#busqueda").click(extraerDatosBusqueda);
         getCurrentUser();
         await recuperarPeliculas();
         cargarPeliculas();
@@ -759,7 +761,6 @@ async function init_Draw() {
         $("#loginButton").click(login);
         $("#RegButton").click(registro);
         $("#busqueda").click(extraerDatosBusqueda);
-
         await recuperarPeliculas();
         cargarPeliculas();
     }

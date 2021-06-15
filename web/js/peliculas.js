@@ -120,7 +120,7 @@ export  function cambiarEstado() {
     });
 }
 
-export function cargarPeliculas() {
+export async function cargarPeliculas() {
 
     $("#delpelic").remove();
     var row = document.getElementById("lista");
@@ -176,11 +176,11 @@ export function cargarPeliculas() {
         }
         if (location.pathname == opciones['cliente']) {
             
-            compra = JSON.parse(sessionStorage.getItem("compra"));
+           await  listarComprasCliente(data);
             var dom = document.getElementById("tot");
             var dom2 = document.getElementById("peliculosky");
-            dom.textContent = `Precio: $${ultima.total}`;
-            dom2.textContent = `${ultima.p.pelicula.nombre}`;
+            dom.textContent = `Precio: $${compras[0].total}`;
+            dom2.textContent = `${compras[0].p.pelicula.nombre}`;
         }
 
     }

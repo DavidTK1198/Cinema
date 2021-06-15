@@ -74,7 +74,10 @@ export async function agregarCompra() {
     await p;
     if (bandera == true) {
         await crearTiquete();
-        sessionStorage.setItem("compra",compra);
+        var dom = document.getElementById("tot");
+        var dom2 = document.getElementById("peliculosky");
+        dom.textContent = `Precio: $${compra.total}`;
+        dom2.textContent = `${compra.p.pelicula.nombre}`;
         resetCompra();
     }
 }

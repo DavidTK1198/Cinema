@@ -74,7 +74,7 @@ public class CompraDao {
     }
     public List<Compra> findByUser(Usuario o) {
         List<Compra> r = new ArrayList<>();
-        String sql = "select * from Compra where Usuario_id=?";
+        String sql = "select * from Compra where Usuario_id=?  order by 5 desc";
         try {
             PreparedStatement stm = DataBase.instance().prepareStatement(sql);
             stm.setString(1, o.getIdUsu());
