@@ -26,6 +26,10 @@ public class Usuarios {
     @Consumes(MediaType.APPLICATION_JSON)
     public void add(Usuario p) {
         try {
+            us = Service.getInstance().buscarUsuario(p);
+            if(us != null){
+                throw new Exception("No es posible registrarse");
+            }
             Service.getInstance().agregarUsuario(p);
         } catch (Exception ex) {
             throw new NotAcceptableException();
@@ -39,6 +43,9 @@ public class Usuarios {
     public Usuario login(Usuario p) {
         try {
             us = Service.getInstance().buscarUsuario(p);
+            if(us == null){
+                throw new Exception("Nombre o contrasenia invalidados");
+            }
             request.getSession(true).setAttribute("user", us);
             return us;
         } catch (Exception ex) {

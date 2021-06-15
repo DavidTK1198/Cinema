@@ -22,6 +22,12 @@ export var data = {
 "use strict";
 function reset() {
     data = { idUsu: '', clave: '', nombre: '', rol: 0 };
+    var m = document.getElementById("cedula");
+    var r = document.getElementById("nombre");
+    var b = document.getElementById("contra");
+    m.value = "";
+    r.value = "";
+    b.value = "";
 }
 
 function load(bandera) {
@@ -64,6 +70,10 @@ function validar(bandera) {
     return !error;
 }
 export function login() {
+     var a = document.getElementById("cedulaa");
+     var contraseña = document.getElementById("contraa");
+    
+     
     load(false);
     if (!validar(false))
         return;
@@ -84,6 +94,11 @@ export function login() {
     },
         (error) => {
             console.log(error);
+           
+            a.classList.add("invalid");
+            contraseña.classList.add("invalid");
+            
+            return;
         });
 }
 export function logout() {
@@ -96,8 +111,10 @@ export function logout() {
     },
         (error) => {
             console.log(error);
+            
         });
 }
+
 export function getCurrentUser() {
     data=JSON.parse(sessionStorage.getItem("user"));
     setUsu(data.idUsu, data.clave, data.nombre, data.rol);
@@ -109,6 +126,9 @@ export function getCurrentUser() {
 }
  
 export function registro() {
+     var a = document.getElementById("cedula");
+     var contraseña = document.getElementById("contra");
+     var nom = document.getElementById("nombre");
     load(true);
     if (!validar(true))
         return;
@@ -118,9 +138,17 @@ export function registro() {
         data: JSON.stringify(data),
         contentType: "application/json"
     }).then((response) => {
+        alert("Registro completado exitosamente");
+        reset();
+        
     },
         (error) => {
+            a.classList.add("invalid");
+            contraseña.classList.add("invalid");
+            nom.classList.add("invalid");
             console.log(error);
+            return;
+            
         });
 }
 

@@ -85,9 +85,11 @@ CREATE TABLE IF NOT EXISTS `cinema`.`compra` (
   `Proyeccion_id` INT NOT NULL,
   `Usuario_id` VARCHAR(200) NOT NULL,
   `Precio` FLOAT NULL,
+  `num_com` INT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id_com`),
   INDEX `fk_Historial_Proyeccion1_idx` (`Proyeccion_id` ASC) VISIBLE,
   INDEX `fk_Historial_Usuario1_idx` (`Usuario_id` ASC) VISIBLE,
+  UNIQUE INDEX `num_com_UNIQUE` (`num_com` ASC) VISIBLE,
   CONSTRAINT `fk_Historial_Proyeccion1`
     FOREIGN KEY (`Proyeccion_id`)
     REFERENCES `cinema`.`proyeccion` (`idProyeccion`),
@@ -107,8 +109,8 @@ CREATE TABLE IF NOT EXISTS `cinema`.`tiquete` (
   `id_bu` INT NOT NULL AUTO_INCREMENT,
   `compra_id` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`id_bu`),
-  INDEX `fk_Tiquete_compra1_idx` (`compra_id` ASC) VISIBLE,
-  CONSTRAINT `fk_Tiquete_compra1`
+  INDEX `fk_tiquete_compra1_idx` (`compra_id` ASC) VISIBLE,
+  CONSTRAINT `fk_tiquete_compra1`
     FOREIGN KEY (`compra_id`)
     REFERENCES `cinema`.`compra` (`id_com`)
     ON DELETE NO ACTION
@@ -116,6 +118,7 @@ CREATE TABLE IF NOT EXISTS `cinema`.`tiquete` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 insert into usuario  (id_usu,clave,Rol,Nombre) values (111,111,1,'ElCopias');
+
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;

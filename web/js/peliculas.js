@@ -1,4 +1,4 @@
-import {proyeccionesApeliculas, inicio_Admin, opciones} from "../js/draw.js"
+import {proyeccionesApeliculas, inicio_Admin, opciones,errorMessage} from "../js/draw.js"
         import { listarComprasCliente, compras,compra} from "../js/compras.js"
         import {data} from "../js/sesion.js"
         export var peliculas = [];
@@ -21,6 +21,8 @@ function validarDatos() {
     if (pelicula.nombre.length == 0) {
         nom.classList.add("invalid");
         error = true;
+    }else{
+        nom.classList.remove("invalid");
     }
     return !error;
 
@@ -75,12 +77,15 @@ export function agregarPelicula() {
         reinicioCamposPelicula();
     },
             (error) => {
+        
         console.log("fallo pelicula");
+        errorMessage(error.status,$("#content #errorDiv"),"Pelicula");
         console.log(error.text);
 
     });
 
 }
+ 
 export function recuperarPeliculas() {
     return new Promise(function (sol, rechazo) {
         $.ajax({

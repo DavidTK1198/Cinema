@@ -19,6 +19,7 @@ import javax.ws.rs.DefaultValue;
 import javax.ws.rs.NotAcceptableException;
 import javax.ws.rs.POST;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Response;
 
 @Path("/Salas")
 public class Salas {
@@ -53,9 +54,16 @@ public class Salas {
     @Consumes(MediaType.APPLICATION_JSON)
     public void add(Sala s) {
         try {
+            if (s.getCol() > 9 || s.getFila() > 9) {
+                throw new Exception("No se permite mas de 9 filas y 9 columnas");
+            }
             Service.getInstance().agregarSala(s);
+
         } catch (Exception ex) {
-            throw new NotAcceptableException();
+            String mes = ex.getMessage();
+            String r = ex.toString();
+            
+            throw new NotAcceptableException(ex.getMessage());
         }
     }
 

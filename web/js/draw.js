@@ -1,11 +1,11 @@
 
 import { sala } from "./Salas.js"
-import { agregarSala } from "./Salas.js"
-import { login, registro, logout, data, getCurrentUser } from "./sesion.js"
-import { proyeccion, agregarProyeccion, proyecciones, listarProyecciones, fecha, format } from "./Proyecciones.js"
-import { agregarPelicula, cargarPeliculas, recuperarPeliculas, peliculas, url, cambiarEstado, pelicula, setPelicula, BuscarPeliculas } from "./peliculas.js"
-import { cargarCompra, agregarCompra, devuelveTiquetes, x, compras, listarCompras, listarComprasCliente } from "./compras.js"
-"use strict";
+        import { agregarSala } from "./Salas.js"
+        import { login, registro, logout, data, getCurrentUser } from "./sesion.js"
+        import { proyeccion, agregarProyeccion, proyecciones, listarProyecciones, fecha, format } from "./Proyecciones.js"
+        import { agregarPelicula, cargarPeliculas, recuperarPeliculas, peliculas, url, cambiarEstado, pelicula, setPelicula, BuscarPeliculas } from "./peliculas.js"
+        import { cargarCompra, agregarCompra, devuelveTiquetes, x, compras, listarCompras, listarComprasCliente } from "./compras.js"
+        "use strict";
 export var total;
 export var salas = [];
 export const opciones = {
@@ -50,7 +50,7 @@ function draw_compras() {
                 <tbody id="cuerpo">        
             </tbody>
             </table> `
-            );
+                    );
             contenedor.appendChild(n);
 
             listarCompras1();
@@ -145,11 +145,13 @@ function draw_movie() {
        </div>
 </div>
     <input type="button" value="Registrar" class="btn btn-danger" id="RegPeli">
-      
+      <div id="errorDiv" style="width:80%; margin: auto;"></div>
 </form>
-       
-</div>`
-            );
+  
+</div>
+    `
+
+                    );
             fila.appendChild(d);
             $("#RegPeli").click(mandarAgregarP);
             document.getElementById("imagen").addEventListener("change", () => {
@@ -200,22 +202,27 @@ function drawSala() {
     </div>
    
     <input type="button" value="Registrar" class="btn btn-danger" id="RegSala">
-      
+     <div id="errorDiv" style="width:80%; margin: auto;"></div>  
 </form>
        
 </div>`
-            );
+                    );
             fila.appendChild(d);
             $("#RegSala").click(agregarSala);
 
         }
     }
 }
-function drawProyeccion() {
+async function drawProyeccion() {
+    await recuperarSalas();
+    if (salas.length == 0) {
+        alert("Debe ingresar salas antes de acceder a esta funcionalidad");
+        return;
+    }
     $("#cambiar").hide();
     $("#barra").hide();
     $("#change").remove();
-    recuperarSalas();
+
     recuperarPeliculas();
     try {
         let bandera = !!document.getElementById("change");
@@ -249,7 +256,7 @@ function drawProyeccion() {
                     nueva.id = "colums";
                     nueva.classList.add("col", "col-sm-8", "col-md-4", "col-xl-4", "mb-5", "border-dark", "ml-2");
                     nueva.innerHTML = (
-                        `
+                            `
                 <div class="card">
                 <div class="embed-responsive embed-responsive-16by9" id="zoom">
                 <img src="${url}api/Peliculas/${p.nombre}/imagen" class="card-img-top embed-responsive-item" alt="..." id="${name}" data-toggle="modal" data-target="#staticBackdrop${contador}">
@@ -301,7 +308,7 @@ function drawProyeccion() {
         
         </div>
       </div>`
-                    );
+                            );
                     let nombre = p.nombre.split(" ").join("-");
                     fila.appendChild(nueva);
 
@@ -390,11 +397,11 @@ function recuperarSalas() {
             console.log("????");
             sol("ok");
         },
-            (error) => {
-                console.log("fallo listar");
-                console.log(error.text);
-                rechazo("error");
-            });
+                (error) => {
+            console.log("fallo listar");
+            console.log(error.text);
+            rechazo("error");
+        });
 
 
     });
@@ -567,18 +574,18 @@ async function filasYcolumnas(sa) {
     var nueva = document.createElement("div");
     nueva.id = "colums";
     nueva.classList.add("col", "col-sm-8", "col-md-4", "col-xl-4", "border-dark");
-    nueva.style.margin=0;
-    nueva.style.padding=0;
-    nueva.style.position="fixed";
+    nueva.style.margin = 0;
+    nueva.style.padding = 0;
+    nueva.style.position = "fixed";
     nueva.innerHTML = (
-        `
+            `
     <div class="card">
     <div class="embed-responsive embed-responsive-16by9 bg-image" id="zoom">
     <img src="${url}api/Peliculas/${proyeccion.pelicula.nombre}/imagen" class="card-img-top embed-responsive-item" alt="...">
 </div>
 </div>
 </div>`
-    );
+            );
 
     cuerpo.appendChild(nueva);
 
@@ -592,9 +599,9 @@ async function filasYcolumnas(sa) {
         for (i = 0; i < nu.fila; i++) {
             var rows = document.createElement("div");
             rows.classList.add("row", "pl-4", "justify-content-center", "d-flex");
-            rows.style.background="white";
-            rows.style.margin=0;
-            rows.style.padding=0;
+            rows.style.background = "white";
+            rows.style.margin = 0;
+            rows.style.padding = 0;
             for (j = 0; j < nu.col; j++) {
                 var columns = document.createElement("div");
                 columns.id = `${i},${j}`;
@@ -660,7 +667,7 @@ export function inicio_Admin() {
             p.nombre = xx.split(" ").join("-");
             nueva.classList.add("col", "col-sm-8", "col-md-4", "col-xl-4", "mb-5", "border-dark", "ml-5");
             nueva.innerHTML = (
-                `
+                    `
                 <div class="card" id="tarjeta">
                 <div class="embed-responsive embed-responsive-16by9" id="zoom">
                 <img src="${url}api/Peliculas/${estatica}/imagen" class="card-img-top embed-responsive-item" alt="...">
@@ -688,7 +695,7 @@ export function inicio_Admin() {
           </div>
         </div>
       </div>`
-            );
+                    );
             row.appendChild(nueva);
 
         });
@@ -790,9 +797,56 @@ async function init_Draw() {
         cargarPeliculas();
     }
 }
+function quitarErrores() {
+    var a = document.getElementById("cedulaa");
+    var contraseña = document.getElementById("contraa");
+    a.classList.remove("invalid");
+    a.value = "";
+    contraseña.classList.remove("invalid");
+    contraseña.value = "";
 
+}
+export function errorMessage(status, place, tipo) {
+    var error;
+    switch (status) {
+        case 404:
+            error = `${tipo} no encontrada`;
+            break;
+        case 403:
+        case 405:
+            error = `${tipo} no autorizado`;
+            break;
+        case 406:
+        case 405:
+            if(tipo == "Sala"){
+                 error =`${tipo} ya existe o las salas tienen mas de 9 filas y/o columnas`;
+            }else{
+                 error =`${tipo} ya existe `;
+            }
+           
+            break;
+    }
+    ;
+    place.html('<div class="alert alert-danger fade show">' +
+            '<button type="button" class="close" data-dismiss="alert">' +
+            '&times;</button><h4 class="alert-heading">Error!</h4>' + error + '</div>');
+    return;
+}
+function quitarErroresRegistro() {
+    var a = document.getElementById("cedula");
+    var nom = document.getElementById("nombre");
+    var contraseña = document.getElementById("contra");
+    a.classList.remove("invalid");
+    nom.classList.remove("invalid");
+    a.value = "";
+    nom.value = "";
+    contraseña.classList.remove("invalid");
+    contraseña.value = "";
+}
 function loaded() {
     init_Draw();
+    $("#cerrar").click(quitarErrores);
+    $("#cerrar2").click(quitarErroresRegistro);
 }
 
 $(loaded);
