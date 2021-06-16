@@ -7,6 +7,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import Logic.Service;
 import Logic.Usuario;
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.DELETE;
@@ -15,6 +17,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.core.Context;
 
 @Path("/usuarios")
+@PermitAll
 public class Usuarios {
 
     @Context
@@ -23,7 +26,7 @@ public class Usuarios {
 
    
     @POST
-    @Consumes(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)  
     public void add(Usuario p) {
         try {
             us = Service.getInstance().buscarUsuario(p);
@@ -38,6 +41,7 @@ public class Usuarios {
 
     @POST
     @Path("{login}")
+   
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces({MediaType.APPLICATION_JSON})
     public Usuario login(Usuario p) {
@@ -74,16 +78,4 @@ public class Usuarios {
         session.invalidate();
         us = null;
     }
-/* @PUT
-    @Consumes(MediaType.APPLICATION_JSON)
-    public void update(Persona p) {  
-        try {
-            Model.instance().personaUpdate(p);
-        } catch (Exception ex) {
-            throw new NotFoundException(); 
-        }
-    }
-    
-*/
- 
      }

@@ -16,6 +16,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.NotAcceptableException;
 import javax.ws.rs.POST;
@@ -23,11 +25,13 @@ import javax.ws.rs.core.Response;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
 @Path("/Peliculas")
+
 public class Peliculas{
     String location="C:/AAA/images/";
     @GET
     @Path("{peli}")
-    @Produces({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON})  
+    @PermitAll
     public List<Pelicula> search(@DefaultValue("") @PathParam("peli") String nombre) {
         
         List<Pelicula> lp = Service.getInstance().filtrarNombrePeli(nombre);
@@ -40,6 +44,7 @@ public class Peliculas{
     
     @GET
     @Path("listar")
+    @PermitAll
     @Produces({MediaType.APPLICATION_JSON})
     public List<Pelicula> getPeliculas() {
         try {
@@ -50,6 +55,7 @@ public class Peliculas{
     }
      @GET
     @Path("{nombre}/imagen")
+    @PermitAll
     @Produces("image/png")
     public Response getImge(@PathParam("nombre") String cedula) throws IOException {
         File file = new File(location+cedula);
@@ -59,6 +65,7 @@ public class Peliculas{
     
     @POST
     @Consumes(MediaType.APPLICATION_JSON) 
+     @RolesAllowed({"1"})  
     public void add(Pelicula p) {  
         try {
             Service.getInstance().agregarPelicula(p);
@@ -68,6 +75,7 @@ public class Peliculas{
     }
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA) 
+     @RolesAllowed({"1"})  
     @Path("{nombre}/imagen")
     public void addImage(@PathParam("nombre") String cedula, @FormDataParam("imagen") InputStream imagenStream) {  
         try{
@@ -86,6 +94,7 @@ public class Peliculas{
    @PUT
     @Consumes(MediaType.APPLICATION_JSON)
    @Produces({MediaType.APPLICATION_JSON})
+    @RolesAllowed({"1"})  
     public List<Pelicula> update(Pelicula p) {  
         try {
             Service.getInstance().actualizarPelicula(p);
@@ -95,32 +104,6 @@ public class Peliculas{
         }
         return Service.getInstance().devolverPeliculas();
     }
-    /*
-
-
-    @GET
-    @Produces({MediaType.APPLICATION_JSON})
-    @Path("mujeres")
-    public List<Persona> searchMujeres() { 
-        List<Persona> todos=Model.instance().personaSearch("");
-        List<Persona> mujeres = new ArrayList<>();
-        for(Persona p: todos){ if(p.getSexo().equals("F")) mujeres.add(p);};
-        return mujeres;
-    }  
     
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces({MediaType.APPLICATION_JSON})  
-    @Path("filtrar")    
-    public List<Persona> filtrar(Persona filtro) {  
-        List<Persona> todos=Model.instance().personaSearch("");
-        List<Persona> filtrados = new ArrayList<>();
-        for(Persona p: todos){ 
-            if (    p.getCedula().contains(filtro.getCedula())
-                  && p.getNombre().contains(filtro.getNombre())
-                  && p.getSexo().contains(filtro.getSexo()))  filtrados.add(p);
-        };
-        return filtrados;
-    } 
-*/
+
 }

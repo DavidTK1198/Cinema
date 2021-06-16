@@ -13,6 +13,8 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import Logic.Service;
 import java.util.ArrayList;
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
@@ -23,15 +25,11 @@ import javax.ws.rs.core.Context;
 @Path("/Proyecciones")
 public class Proyecciones{
      
-   // @GET
-    //@Produces({MediaType.APPLICATION_JSON})
-    //public List<Persona> search(@DefaultValue("") @QueryParam("nombre") String nombre) { 
-     //   return Model.instance().personaSearch(nombre);
-    //} 
-    
+  
     @GET
     @Path("listar")
     @Produces({MediaType.APPLICATION_JSON})
+    @PermitAll
     public List<Proyeccion> get() {
         try {
            return Service.getInstance().devolverProyecciones();
@@ -42,6 +40,7 @@ public class Proyecciones{
     @GET
     @Path("{nombre}")
     @Produces({MediaType.APPLICATION_JSON})
+    @PermitAll
     public List<Proyeccion> get2(@PathParam("nombre") String nombre) {
         try {
            return Service.getInstance().devolverProyeccionesPorNombre(nombre);
@@ -52,6 +51,7 @@ public class Proyecciones{
     
     @POST
     @Consumes(MediaType.APPLICATION_JSON) 
+    @RolesAllowed({"1"})  
     public void add(Proyeccion p) {  
         try {
             Service.getInstance().agregarProyeccion(p);
@@ -60,50 +60,4 @@ public class Proyecciones{
         }
     }
 
-   /* @PUT
-    @Consumes(MediaType.APPLICATION_JSON)
-    public void update(Persona p) {  
-        try {
-            Model.instance().personaUpdate(p);
-        } catch (Exception ex) {
-            throw new NotFoundException(); 
-        }
-    }
-    
-
-    @DELETE
-    @Path("{cedula}")
-    public void del(@PathParam("cedula") String cedula) {
-        try {
-            Model.instance().personaDelete(cedula);
-        } catch (Exception ex) {
-            throw new NotFoundException(); 
-        }
-    }
-
-    @GET
-    @Produces({MediaType.APPLICATION_JSON})
-    @Path("mujeres")
-    public List<Persona> searchMujeres() { 
-        List<Persona> todos=Model.instance().personaSearch("");
-        List<Persona> mujeres = new ArrayList<>();
-        for(Persona p: todos){ if(p.getSexo().equals("F")) mujeres.add(p);};
-        return mujeres;
-    }  
-    
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces({MediaType.APPLICATION_JSON})  
-    @Path("filtrar")    
-    public List<Persona> filtrar(Persona filtro) {  
-        List<Persona> todos=Model.instance().personaSearch("");
-        List<Persona> filtrados = new ArrayList<>();
-        for(Persona p: todos){ 
-            if (    p.getCedula().contains(filtro.getCedula())
-                  && p.getNombre().contains(filtro.getNombre())
-                  && p.getSexo().contains(filtro.getSexo()))  filtrados.add(p);
-        };
-        return filtrados;
-    } 
-*/
 }

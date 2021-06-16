@@ -1,4 +1,6 @@
 package Presentation;
+import filter.PageFilter;
+import filter.RestfulFilter;
 import java.util.HashSet;
 import java.util.Set;
 import javax.ws.rs.ApplicationPath;
@@ -18,6 +20,9 @@ public class RegistroApplication extends Application {
         classes.add(Salas.class);
         classes.add(Proyecciones.class);
         classes.add(Compras.class);
+        classes.add(RestfulFilter.class);
+        classes.add(MultiPartFeature.class);
+       classes.add(PageFilter.class);
         return classes;
     }   
 }

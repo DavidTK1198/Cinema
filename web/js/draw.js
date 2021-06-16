@@ -784,6 +784,7 @@ async function init_Draw() {
         $("#misCompritas").click(draw_compras);
         $("#chaitopapi").click(logout);
         $("#busqueda").click(extraerDatosBusqueda);
+        $("#toditas").click(draw_compras);
         getCurrentUser();
         await recuperarPeliculas();
         cargarPeliculas();
@@ -813,17 +814,21 @@ export function errorMessage(status, place, tipo) {
             error = `${tipo} no encontrada`;
             break;
         case 403:
+            error = `${tipo} no autorizado`;
+            location.href="/Cinema/web/presentation/cliente.html";
+            return;
+          
         case 405:
             error = `${tipo} no autorizado`;
             break;
         case 406:
         case 405:
-            if(tipo == "Sala"){
-                 error =`${tipo} ya existe o las salas tienen mas de 9 filas y/o columnas`;
-            }else{
-                 error =`${tipo} ya existe `;
+            if (tipo == "Sala") {
+                error = `${tipo} ya existe o las salas tienen mas de 9 filas y/o columnas`;
+            } else {
+                error = `${tipo} ya existe `;
             }
-           
+
             break;
     }
     ;

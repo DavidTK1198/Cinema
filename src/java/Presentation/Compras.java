@@ -47,6 +47,8 @@ import java.io.*;
 import com.itextpdf.io.image.ImageDataFactory;
 import com.itextpdf.layout.property.UnitValue;
 import static javafx.scene.text.Font.font;
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 
 @Path("/Compras")
 public class Compras {
@@ -56,6 +58,7 @@ public class Compras {
     @POST
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
+    @PermitAll
     @Path("{listarT}")
     public List<Tiquete> search(Proyeccion pr) {
         try {
@@ -65,18 +68,9 @@ public class Compras {
         }
     }
 
-    //@GET
-    //@Path("{cedula}")
-    //@Produces({MediaType.APPLICATION_JSON})
-    //public Persona get(@PathParam("cedula") String cedula) {
-    // try {
-    //   return Model.instance().personaEdit(cedula);
-    //} catch (Exception ex) {
-    //  throw new NotFoundException(); 
-    //}
-    //}
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
+    @PermitAll
     public void add(Compra p) {
         try {
             Usuario us = Service.getInstance().buscarUsuario(p.getUser());
@@ -94,6 +88,7 @@ public class Compras {
     @POST
     @Path("tiquetes")
     @Consumes(MediaType.APPLICATION_JSON)
+    @PermitAll
     public void lista(List<Tiquete> lt) {
         try {
             Service.getInstance().TiquetesAlaBase(lt);
@@ -107,6 +102,7 @@ public class Compras {
     @Path("{com}/pdf")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces("application/pdf")
+    @PermitAll
     public Response GenerarComprasAdmin(@PathParam("com") String n) throws IOException {
         try {
             int contador = 0;
@@ -156,6 +152,7 @@ public class Compras {
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces({MediaType.APPLICATION_JSON})
+    @RolesAllowed({"2"})  
     public List<Compra> ListarC(Usuario us) {  
         try {
            return Service.getInstance().comprasbyUser(us);
@@ -163,22 +160,12 @@ public class Compras {
             throw new NotFoundException(); 
         }
     }
-    /*
 
-    @DELETE
-    @Path("{cedula}")
-    public void del(@PathParam("cedula") String cedula) {
-        try {
-            Model.instance().personaDelete(cedula);
-        } catch (Exception ex) {
-            throw new NotFoundException(); 
-        }
-    }
-*/
 
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     @Path("listarC")
+     @RolesAllowed({"1"})  
     public List<Compra> todasLasCompras() { 
        return  Service.getInstance().compras_all();
  
