@@ -30,8 +30,11 @@ public class ProyeccionDao {
         PreparedStatement stm = DataBase.instance().prepareStatement(sql);
         stm.setString(1, o.getPelicula().getNombre());
         stm.setString(2, o.getSala().getCodigo());
-        Timestamp timestamp = new Timestamp(o.getDate().getTime());
-
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(o.getDate());
+        cal.set(Calendar.HOUR, cal.get(Calendar.HOUR) - 6);
+        java.util.Date da = cal.getTime();
+        Timestamp timestamp = new Timestamp(da.getTime());
         stm.setTimestamp(3, timestamp);
         stm.setFloat(4, o.getPrecio());
         int count = DataBase.instance().executeUpdate(stm);
@@ -154,7 +157,7 @@ public class ProyeccionDao {
 
         Calendar cal = Calendar.getInstance();
         cal.setTime(pr.getDate());
-        cal.set(Calendar.HOUR, cal.get(Calendar.HOUR)-6);
+        cal.set(Calendar.HOUR, cal.get(Calendar.HOUR) - 6);
         java.util.Date da = cal.getTime();
         Timestamp timestamp = new Timestamp(da.getTime());
 

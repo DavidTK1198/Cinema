@@ -45,6 +45,9 @@ import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.property.TextAlignment;
 import java.io.*;
 import com.itextpdf.io.image.ImageDataFactory;
+import com.itextpdf.layout.element.Tab;
+import com.itextpdf.layout.element.TabStop;
+import com.itextpdf.layout.property.TabAlignment;
 import com.itextpdf.layout.property.UnitValue;
 import static javafx.scene.text.Font.font;
 import javax.annotation.security.PermitAll;
@@ -74,10 +77,10 @@ public class Compras {
     public void add(Compra p) {
         try {
             Usuario us = Service.getInstance().buscarUsuario(p.getUser());
-            if(us == null){
+            if (us == null) {
                 Service.getInstance().agregarUsuario(p.getUser());
             }
-          
+
             Service.getInstance().agregarCompra(p);
 
         } catch (Exception ex) {
@@ -113,36 +116,50 @@ public class Compras {
             PdfFont font = PdfFontFactory.createFont(StandardFonts.TIMES_ROMAN);
             Document document = new Document(pdfDoc);
             document.setMargins(20, 20, 20, 20);
-            document.add(new Paragraph("Datos de la compra").setFont(font).setBold().setFontSize(12f).setTextAlignment(TextAlignment.RIGHT));
-            document.add(new Paragraph(c.getP().toString()).setFont(font).setBold().setFontSize(12f).setTextAlignment(TextAlignment.RIGHT));
-            document.add(new Paragraph("Codigo de la compra asignado: " + c.getCodigo()).setFont(font).setBold().setFontSize(12f).setTextAlignment(TextAlignment.RIGHT));
-            document.add(new Paragraph("Numero de tiquetes comprados: " +lc.size()).setFont(font).setBold().setFontSize(12f).setTextAlignment(TextAlignment.RIGHT));
-            document.add(new Paragraph("Precio designado por tiquete: " +c.getP().getPrecio()).setFont(font).setBold().setFontSize(12f).setTextAlignment(TextAlignment.RIGHT));
-            document.add(new Paragraph("Lista de tiquetes asociados a la compras:").setFont(font).setBold().setFontSize(12f).setTextAlignment(TextAlignment.RIGHT));
+            Paragraph p = new Paragraph("Datos de la proyeccion").setFont(font).setBold().setFontSize(12f);
+            p.add(new Tab());
+            p.addTabStops(new TabStop(1000, TabAlignment.RIGHT));
+            p.add("Datos de la compra");
+            document.add(p);
+            Paragraph z = new Paragraph("Pelicula: " + c.getP().getPelicula().getNombre()).setFont(font).setBold().setFontSize(12f);
+            z.add(new Tab());
+            z.addTabStops(new TabStop(1000, TabAlignment.RIGHT));
+            z.add("Codigo de la compra asignado: " + c.getCodigo());
+            document.add(z);
+            Paragraph w = new Paragraph("Sala:" + c.getP().getSala().getCodigo()).setFont(font).setBold().setFontSize(12f);
+            w.add(new Tab());
+            w.addTabStops(new TabStop(1000, TabAlignment.RIGHT));
+            w.add("Numero de tiquetes comprados: " + lc.size());
+            document.add(w);
+            Paragraph y = new Paragraph("Fecha y hora:" + c.getP().getDate().toString()).setFont(font).setBold().setFontSize(12f);
+            y.add(new Tab());
+            y.addTabStops(new TabStop(1000, TabAlignment.RIGHT));
+            y.add("Precio designado por tiquete: " + c.getP().getPrecio());
+            document.add(y);
+            document.add(new Paragraph("Lista de tiquetes asociados a la compras:").setFont(font).setBold().setFontSize(12f).setTextAlignment(TextAlignment.CENTER));
             Table table = new Table(2);
             Color bkg = ColorConstants.BLUE;
             Color frg = ColorConstants.WHITE;
-            Cell cc=new Cell();
+            Cell cc = new Cell();
             cc.add(new Paragraph("#Tiquete")).setBackgroundColor(bkg).setFontColor(frg);
             table.addHeaderCell(cc);
-            cc=new Cell();
+            cc = new Cell();
             cc.add(new Paragraph("#Asiento")).setBackgroundColor(bkg).setFontColor(frg);
             table.addHeaderCell(cc);
             for (Tiquete t : lc) {
                 contador++;
                 table.addHeaderCell(Integer.toString(contador));
-                String asiento="("+Integer.toString(t.getFila())+","+Integer.toString(t.getCol())+")";
+                String asiento = "(" + Integer.toString(t.getFila()) + "," + Integer.toString(t.getCol()) + ")";
                 table.addHeaderCell(asiento);
             }
             table.setWidth(UnitValue.createPercentValue(100));
             document.add(table);
-            document.add(new Paragraph("Monto total cancelado: "+c.getTotal()));
+            document.add(new Paragraph("Monto total cancelado: " + c.getTotal()));
             document.close();
             ByteArrayInputStream pdf = new ByteArrayInputStream(salida.toByteArray());
             Response.ResponseBuilder response = Response.ok().entity(pdf);
             response.header("Content-Disposition", "filename=datalle.pdf");
             return response.build();
-           
 
         } catch (Exception ex) {
             return null;
@@ -152,23 +169,22 @@ public class Compras {
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces({MediaType.APPLICATION_JSON})
-    @RolesAllowed({"2"})  
-    public List<Compra> ListarC(Usuario us) {  
+    @RolesAllowed({"2"})
+    public List<Compra> ListarC(Usuario us) {
         try {
-           return Service.getInstance().comprasbyUser(us);
+            return Service.getInstance().comprasbyUser(us);
         } catch (Exception ex) {
-            throw new NotFoundException(); 
+            throw new NotFoundException();
         }
     }
-
 
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     @Path("listarC")
-     @RolesAllowed({"1"})  
-    public List<Compra> todasLasCompras() { 
-       return  Service.getInstance().compras_all();
- 
-    } 
-     
+    @RolesAllowed({"1"})
+    public List<Compra> todasLasCompras() {
+        return Service.getInstance().compras_all();
+
+    }
+
 }
