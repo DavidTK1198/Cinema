@@ -494,12 +494,12 @@ function sillas() {
                   </div>
                 </div>
             </div>
-            <p class="text" style="font-size: 1em;margin:0px 0px 15px 0px">
+            <p class="text" style="font-size: 1em;margin:0px 0px 15px 0px" id="ojo">
             &nbsp;&nbsp;Ha seleccionado <span id="count">0</span> butacas por el precio de ₡&nbsp;<span id="total">0</span>
                     
             </p>
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
               <button type="button" class="btn btn-primary" id="comprar">Comprar</button>
             </div>
             
@@ -627,15 +627,15 @@ async function filasYcolumnas(sa) {
 
             });
         }
-        nueva=document.createElement("div");
+        var nueva1=document.getElementById("ojo")
         var cols=document.createElement("div");
-        nueva.appendChild(cols);
-        cols.classList.add("col", "col-sm-8", "col-md-4", "col-xl-4", "border-dark");
-        rows.classList.add("row");
-        nueva.style.margin = 0;
-        nueva.style.padding = 0;
-        nueva.style.position = "absolute";
-        nueva.innerHTML = (
+        nueva1.appendChild(cols);
+        cols.textContent=sa;
+        cols.classList.add("text-center","pl-5");
+        cols=document.createElement("div");
+        nueva1.appendChild(cols);
+        cols.style.position = "relative";
+        cols.innerHTML = (
                 `
         <div class="card">
         <div class="embed-responsive embed-responsive-16by9 bg-image" id="zoom">
