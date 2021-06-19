@@ -31,6 +31,8 @@ function draw_compras() {
             contenedor.classList.add("d-flex", "justify-content-center");
             n.id = 'change';
             var h2 = document.createElement("h2");
+            var br=document.createElement("br");
+            n.appendChild(br);
             h2.textContent = "Lista de Compras";
             h2.classList.add("text-center", "mt-5");
             n.appendChild(h2);
@@ -107,12 +109,13 @@ function draw_movie() {
     } catch (error) {
         if (!error) {
             var contenedor = document.getElementById("content");
+            contenedor.classList.remove("d-flex", "justify-content-center");
             var fila = document.createElement("div");
             fila.classList.add("text-black", "row", "justify-content-center");
             contenedor.appendChild(fila);
             contenedor.classList.add("text-black", "justify-content-center");
             var d = document.createElement("div");
-            d.id = 'change';
+            fila.id = 'change';
             d.classList.add("col", "col-sm-8", "col-md-4", "col-xl-4", "d-flex");
             d.innerHTML = (`<div class="d-flex">
     <form> 
@@ -161,6 +164,7 @@ function draw_movie() {
                 img = document.getElementById("hnone");
                 img.classList.remove("d-none");
                 img.classList.add("d-block");
+
             });
         }
     }
@@ -181,12 +185,13 @@ function drawSala() {
             fila.classList.add("text-black", "row", "justify-content-center");
             contenedor.appendChild(fila);
             contenedor.classList.add("text-black", "justify-content-center");
+            contenedor.classList.remove("d-flex", "justify-content-center");
             var d = document.createElement("div");
-            d.id = 'change';
+            fila.id = 'change';
             d.classList.add("col", "col-sm-8", "col-md-4", "col-xl-4", "d-flex");
             d.innerHTML = (`<div class="d-flex">
     <form> 
-    <h3>Registrar Sala</h2>
+    <h3 class="mt-5">Registrar Sala</h2>
     <div class="mb-2">
         <div class="font-weight-bold mb-0">Codigo</div>
         <div class="campo"><input class="form-control" placeholder="Codigo de la sala" type="text" name="salaFld" id="sala"></div>
@@ -230,6 +235,7 @@ async function drawProyeccion() {
     } catch (error) {
         if (!error) {
             var contenedor = document.getElementById("content");
+        contenedor.classList.remove("d-flex", "justify-content-center");
             var container = document.createElement("div");
             var fila = document.createElement("div");
             var h = document.createElement("h2");
@@ -376,7 +382,8 @@ function draw_home_cliente() {
     $("#cambiar").show();
     $("#barra").show();
     $("#change").remove();
-
+    var contenedor = document.getElementById("content");
+    contenedor.classList.remove("d-flex", "justify-content-center");
 
 }
 
@@ -385,6 +392,7 @@ function mandarAgregarP() {
 
     agregarPelicula();
     recuperarPeliculas();
+    draw_movie();
 }
 
 function recuperarSalas() {
@@ -455,10 +463,10 @@ function sillas() {
       <!-- Modal -->
       <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
-          <div class="modal-content" style="background:black;">
+          <div class="modal-content">
             <div class="modal-header" id="m-cuerpo">
             <br>
-              <h5 class="modal-title" id="exampleModalLabel">Comprar boletos</h5>
+              <h5 class="modal-title text-black" id="exampleModalLabel">Comprar boletos</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="loginButton">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -486,8 +494,8 @@ function sillas() {
                   </div>
                 </div>
             </div>
-            <p class="text text-white" style="font-size: 1em;margin:0px 0px 15px 0px">
-                Ha seleccionado <span id="count">0</span> butacas por el precio de $<span id="total">0</span>
+            <p class="text" style="font-size: 1em;margin:0px 0px 15px 0px">
+            &nbsp;&nbsp;Ha seleccionado <span id="count">0</span> butacas por el precio de ₡&nbsp;<span id="total">0</span>
                     
             </p>
             <div class="modal-footer">
@@ -501,7 +509,7 @@ function sillas() {
                <div class="signup-form d-none" id ="mal">
                       <form>
                         <h2>Datos requeridos para efectuar la compra</h2>
-                        <div class="input-group form-group mt-5">
+                        <div class="input-group form-group mt-5" id="usertd">
                           <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-user"></i></span>
                           </div>
@@ -510,7 +518,7 @@ function sillas() {
                         </div>
                         <div class="input-group form-group">
                           <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fas fa-key"></i></span>
+                            <span class="input-group-text"><i class="fad fa-credit-card-front"></i></span>
                           </div>
                           <input type="text" class="form-control" placeholder="Tarjeta" required id="tarjeta" pattern="[0-9\s]{13,19}">
                         </div>
@@ -573,23 +581,7 @@ async function filasYcolumnas(sa) {
     var cuerpo = document.getElementById("m-cuerpo");
     var nueva = document.createElement("div");
     nueva.id = "colums";
-    nueva.classList.add("col", "col-sm-8", "col-md-4", "col-xl-4", "border-dark");
-    nueva.style.margin = 0;
-    nueva.style.padding = 0;
-    nueva.style.position = "fixed";
-    nueva.innerHTML = (
-            `
-    <div class="card">
-    <div class="embed-responsive embed-responsive-16by9 bg-image" id="zoom">
-    <img src="${url}api/Peliculas/${proyeccion.pelicula.nombre}/imagen" class="card-img-top embed-responsive-item" alt="...">
-</div>
-</div>
-</div>`
-            );
-
     cuerpo.appendChild(nueva);
-
-
     var nu = salas.find(p => p.codigo == salaaa);
     if (nu != undefined) {
         var asi = document.getElementById("asientos");
@@ -635,6 +627,24 @@ async function filasYcolumnas(sa) {
 
             });
         }
+        nueva=document.createElement("div");
+        var cols=document.createElement("div");
+        nueva.appendChild(cols);
+        cols.classList.add("col", "col-sm-8", "col-md-4", "col-xl-4", "border-dark");
+        rows.classList.add("row");
+        nueva.style.margin = 0;
+        nueva.style.padding = 0;
+        nueva.style.position = "absolute";
+        nueva.innerHTML = (
+                `
+        <div class="card">
+        <div class="embed-responsive embed-responsive-16by9 bg-image" id="zoom">
+        <img src="${url}api/Peliculas/${proyeccion.pelicula.nombre}/imagen" class="card-img-top embed-responsive-item" alt="...">
+    </div>
+    </div>
+    </div>`
+                );
+                cuerpo.appendChild(nueva);
         $("#comprar").click(cargarCompra);
 
 

@@ -19,6 +19,12 @@ body {
   justify-content: center;
 }
 
+.move{
+  margin-left: 100px!important;
+  position: relative!important;
+  margin-right: 100px!important;
+}
+
 #footer {
   position: absolute;
   right: 0;
@@ -132,6 +138,9 @@ a:hover {
 
   .seat.selected {
     background-color: #6feaf6;
+  }
+  p.text span {
+    color: #6feaf6;
   }
 
   .seat.occupied {

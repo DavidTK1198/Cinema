@@ -35,7 +35,7 @@ export function cargarCompra() {
         var a = document.getElementById("mal");
         a.classList.remove("d-none");
         a.classList.add("d-block");
-        $("#cedula2").remove();
+        $("#usertd").remove();
     }
 
 
@@ -102,6 +102,7 @@ function cargarObjeto(valor) {
                 codigo: makeid(5),
                 tiquetes: []
             };
+
             break;
 
     }
