@@ -164,6 +164,7 @@ function draw_movie() {
                 img = document.getElementById("hnone");
                 img.classList.remove("d-none");
                 img.classList.add("d-block");
+                var file = $("#imagen").get(0).files[0];
 
             });
         }
@@ -388,9 +389,9 @@ function draw_home_cliente() {
 }
 
 
-function mandarAgregarP() {
+async function mandarAgregarP() {
 
-    agregarPelicula();
+    await agregarPelicula();
     recuperarPeliculas();
     draw_movie();
 }

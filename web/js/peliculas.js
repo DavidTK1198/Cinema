@@ -64,25 +64,30 @@ export function agregarPelicula() {
     if (!validarDatos()) {
         return;
     }
-    $.ajax({
-        type: "POST",
-        url: "/Cinema/web/api/Peliculas",
-        data: JSON.stringify(pelicula),
-        contentType: "application/json"
-    }).then((response) => {
-
-        addImagen();
-        peliculaAgregadaCorrectamente();
-        resetPelicula();
-        reinicioCamposPelicula();
-    },
-            (error) => {
-        
-        console.log("fallo pelicula");
-        errorMessage(error.status,$("#content #errorDiv"),"Pelicula");
-        console.log(error.text);
-
-    });
+    return new Promise(function(sol,rechazo){
+        $.ajax({
+            type: "POST",
+            url: "/Cinema/web/api/Peliculas",
+            data: JSON.stringify(pelicula),
+            contentType: "application/json"
+        }).then((response) => {
+    
+            addImagen();
+            peliculaAgregadaCorrectamente();
+            resetPelicula();
+            reinicioCamposPelicula();
+            sol("ok");
+        },
+                (error) => {
+            
+            console.log("fallo pelicula");
+            errorMessage(error.status,$("#content #errorDiv"),"Pelicula");
+            console.log(error.text);
+            rechazo("error");
+    
+        });
+    })
+   
 
 }
  
