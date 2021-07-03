@@ -52,9 +52,7 @@ function mandarTiquetes(){
     }).then((response) => {
          tiquetes = [];
          $("#exampleModal").modal("toggle");
-
     },
             (error) => {
-        console.log("fallo listartiquetes");
     });
 }

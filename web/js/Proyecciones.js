@@ -15,9 +15,6 @@ export function agregarProyeccion() {
     var segunda = c.split("-").join(" ");
 
     cargarDatos(segunda);
-    //if (!validarDatos()) {
-      //  return;
-   // }
     $.ajax({
         type: "POST",
         url: "/Cinema/web/api/Proyecciones",
@@ -30,7 +27,6 @@ export function agregarProyeccion() {
 
     },
             (error) => {
-        console.log("fallo agregar proyeccion");
     });
 
 
@@ -54,7 +50,6 @@ export function listarProyecciones(ay) {
             sol("ok");
         },
                 (error) => {
-            console.log("fallo listar proyecciones");
             rechazo("error");
         });
 

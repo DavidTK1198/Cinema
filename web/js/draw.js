@@ -403,12 +403,9 @@ function recuperarSalas() {
             url: "/Cinema/web/api/Salas/listar"
         }).then((response) => {
             salas = [...response];
-            console.log("????");
             sol("ok");
         },
                 (error) => {
-            console.log("fallo listar");
-            console.log(error.text);
             rechazo("error");
         });
 
@@ -422,10 +419,6 @@ export async function proyeccionesApeliculas(nom) {
     var ayuda = document.getElementById(`${nom}`);
     var pel = nom.split("-pro").join("");
     var x = await listarProyecciones(pel);
-    console.log("Administrador");
-    console.log(nom);
-    console.log("-----------------");
-
     if (proyecciones.length == 0) {
         ayuda.textContent = `${pel}`;
         ayuda.innerHTML = (`<span id="nop">No hay proyecciones disponibles</span>`);

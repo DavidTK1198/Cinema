@@ -59,14 +59,10 @@ export async function agregarCompra() {
             contentType: "application/json"
 
         }).then((response) => {
-
-            console.log("si hizo la compra");
             bandera = true;
             sol("ok");
-
         },
             (error) => {
-                console.log("fallo Compra");
                 rechazo("F");
             });
 
@@ -123,8 +119,6 @@ export function devuelveTiquetes() {
             sol("ok");
         },
             (error) => {
-                console.log("fallo listar");
-                console.log(error.text);
                 rechazo("error");
 
             });
@@ -156,8 +150,6 @@ export function listarCompras() {
             sol("ok")
         },
             (error) => {
-                console.log("fallo listarCompras");
-                console.log(error.text);
                 rechazo("error");
 
             });
@@ -178,8 +170,6 @@ export function listarComprasCliente(cliente) {
             sol("ok")
         },
             (error) => {
-                console.log("fallo listarCompras");
-                console.log(error.text);
                 rechazo("error");
 
             });

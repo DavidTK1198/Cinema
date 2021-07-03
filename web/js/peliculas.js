@@ -49,7 +49,6 @@ function addImagen() {
     (async () => {
         const response = await fetch(request);
         if (!response.ok) {
-            console.log("fallo imagen");
             return;
         }
     })();
@@ -79,10 +78,7 @@ export function agregarPelicula() {
             sol("ok");
         },
                 (error) => {
-            
-            console.log("fallo pelicula");
             errorMessage(error.status,$("#content #errorDiv"),"Pelicula");
-            console.log(error.text);
             rechazo("error");
     
         });
@@ -101,8 +97,6 @@ export function recuperarPeliculas() {
             sol("ok")
         },
                 (error) => {
-            console.log("fallo listar");
-            console.log(error.text);
             rechazo("error");
 
         });
@@ -122,8 +116,6 @@ export  function cambiarEstado() {
             sol("ok");
         },
                 (error) => {
-            console.log("fallo listar");
-            console.log(error.text);
             rechazo("error");
 
         });
@@ -211,8 +203,6 @@ export function BuscarPeliculas(peli) {
             sol("ok");
         },
                 (error) => {
-            console.log("fallo buscar pelicula");
-            console.log(error.text);
             rechazo("error");
 
         });

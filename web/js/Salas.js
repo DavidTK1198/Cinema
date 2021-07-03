@@ -26,7 +26,6 @@ export function agregarSala() {
             (error) => {
        
         errorMessage(error.status,$("#content #errorDiv"),"Sala");
-        console.log("Fallo el ingreso de sala");
         return;
 
     });

@@ -93,8 +93,6 @@ export function login() {
        
     },
         (error) => {
-            console.log(error);
-           
             a.classList.add("invalid");
             contraseña.classList.add("invalid");
             
@@ -110,7 +108,6 @@ export function logout() {
         window.location.href = "/Cinema/web/";
     },
         (error) => {
-            console.log(error);
             
         });
 }
@@ -146,9 +143,7 @@ export function registro() {
             a.classList.add("invalid");
             contraseña.classList.add("invalid");
             nom.classList.add("invalid");
-            console.log(error);
             return;
-            
         });
 }
 
